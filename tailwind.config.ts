@@ -36,7 +36,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        inter: ["Inter", "sans-serif"], 
+        inter: ["var(--font-inter)", "sans-serif"],
       },
       fontSize: {
         custom: ["32px", "40px"], // The second value is for line-height
@@ -45,7 +45,7 @@ const config: Config = {
         custom_3: ["10px", "12px"],
       },
       letterSpacing: {
-        custom: "-0.02em", 
+        custom: "-0.02em",
       },
       backgroundImage: {
         "custom-gradient":
