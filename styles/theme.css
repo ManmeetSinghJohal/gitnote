@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .display-1-bold {
+    @apply font-inter font-bold text-custom tracking-custom text-white-300;
+  }
+  .display-2-bold {
+    @apply font-inter font-bold text-custom_1 tracking-custom text-white-300;
+  }
+  .heading-1-medium {
+    @apply font-inter font-medium text-custom_2 text-white-300;
+  }
+  .heading-2-medium {
+    @apply font-inter font-medium text-base text-white-300;
+  }
+  .paragraph-1-bold {
+    @apply font-inter font-bold text-lg text-white-300;
+  }
+  .paragraph-2-bold {
+    @apply font-inter font-bold text-base text-white-300;
+  }
+  .paragraph-3-bold {
+    @apply font-inter font-bold text-sm text-white-300;
+  }
+  .paragraph-1-medium {
+    @apply font-inter font-medium text-lg text-white-300;
+  }
+  .paragraph-3-medium {
+    @apply font-inter font-medium text-sm text-white-300;
+  }
+  .paragraph-4-medium {
+    @apply font-inter font-medium text-xs text-white-300;
+  }
+  .paragraph-1-regular {
+    @apply font-inter font-normal text-lg text-white-300;
+  }
+  .paragraph-2-regular {
+    @apply font-inter font-normal text-base text-white-300;
+  }
+  .paragraph-3-regular {
+    @apply font-inter font-normal text-sm text-white-300;
+  }
+  .paragraph-4-regular {
+    @apply font-inter font-normal text-xs text-white-300;
+  }
+  .subtitle-small {
+    @apply font-inter font-normal text-custom_3 text-white-300;
+  }
+}
