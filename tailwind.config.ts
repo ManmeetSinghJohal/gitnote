@@ -8,10 +8,17 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      fontFamily: {
+        inter: ["Inter", "sans-serif"], // Assuming 'Inter' is available in your project
+      },
+      fontSize: {
+        custom: ["32px", "40px"], // The second value is for line-height
+        custom_1: ["24px", "32px"],
+        custom_2: ["20px", "28px"],
+        custom_3: ["10px", "12px"],
+      },
+      letterSpacing: {
+        custom: "-0.02em", // Adjust based on visual similarity
       },
     },
   },
