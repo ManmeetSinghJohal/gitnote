@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { getServerSession } from "next-auth";
+// import { getServerSession } from "next-auth";
 import React from "react";
 
-import SessionProvider from "@/components/SessionProvider";
+import { AuthProvider } from "@/components/SessionProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,12 +22,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
+  // const session = await getServerSession();
 
   return (
     <html lang="en">
       <body className={`${inter.variable}`}>
-        <SessionProvider session={session}>{children}</SessionProvider>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

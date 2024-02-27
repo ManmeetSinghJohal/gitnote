@@ -16,7 +16,7 @@ const LoginButton = () => {
       onClick={onClick}
       className="cursor-pointer"
     >
-      Sign in
+      Sign Up With Github or Gmail
     </Button>
   );
 };

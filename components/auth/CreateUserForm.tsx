@@ -1,7 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -18,44 +17,60 @@ import {
 import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
+  name: z.string().min(2).max(50),
+  username: z.string().min(2).max(50),
   email: z.string().min(2).max(50),
   password: z.string().min(8).max(50),
 });
 
-const LoginForm = () => {
+const CreateUserForm = () => {
   const [error, setError] = useState("");
-
+  
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
+      username: "",
       email: "",
       password: "",
     },
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     try {
-      // Call your login action here.
-      // await login({ email: values.email, password: values.password });
-      const res = await signIn("credentials", {
-        email: values.email,
-        password: values.password,
-        redirect: false,
+      const resUserExists = await fetch("/api/userexists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: values.email }),
       });
 
-      if (res?.error) {
-        setError("Invalid email or password");
+      const { user } = await resUserExists.json();
+
+      if (user) {
+        setError("User with this email already exists.");
         return;
       }
 
-      router.replace('dashboard');
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (res.ok) {
+        console.log("User created successfully");
+        router.push("/");
+      } else {
+        console.log("Error creating user");
+      }
     } catch (error) {
-      console.log(error);
+      console.log("Error connecting to database", error);
     }
 
     console.log(values);
@@ -65,6 +80,40 @@ const LoginForm = () => {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Full Name</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Enter your Full Name"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>User Name</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    placeholder="Enter a User Name"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="email"
@@ -100,7 +149,7 @@ const LoginForm = () => {
             )}
           />
           <Button className="w-full" type="submit">
-            Login
+            Sign Up
           </Button>
         </form>
       </Form>
@@ -109,4 +158,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default CreateUserForm;
