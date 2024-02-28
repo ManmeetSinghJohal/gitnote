@@ -17,13 +17,15 @@ type LoginButtonProps = {
 const LoginButton: React.FC<LoginButtonProps> = ({ providers }) => {
   return (
     <>
-      {Object.values(providers).map((provider) => (
-        <div key={provider.name}>
-          <Button onClick={() => signIn(provider.id)}>
-            Sign in with {provider.name}
-          </Button>
-        </div>
-      ))}
+      {Object.values(providers)
+        .filter((provider) => provider.id !== "credentials") // Exclude the "credentials" provider
+        .map((provider) => (
+          <div key={provider.name}>
+            <Button className="w-full" onClick={() => signIn(provider.id)}>
+              Sign in with {provider.name}
+            </Button>
+          </div>
+        ))}
     </>
   );
 };
