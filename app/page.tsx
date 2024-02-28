@@ -7,8 +7,6 @@ import React from "react";
 import LoginButton from "@/components/auth/LoginButton";
 import LoginForm from "@/components/auth/LoginForm";
 
-// import { authOptions } from "./api/auth/[...nextauth]/route";
-
 const LoginPage = async () => {
   const session = await getServerSession();
   const providers = await getProviders();

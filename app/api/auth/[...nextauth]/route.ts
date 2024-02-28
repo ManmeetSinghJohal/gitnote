@@ -13,7 +13,7 @@ export const authOptions = {
       clientId: process.env.GITHUB_ID ?? "",
       clientSecret: process.env.GITHUB_SECRET ?? "",
       profile(profile) {
-        console.log("profile", profile);
+        // console.log("profile", profile);
         return {
           id: profile.id.toString(),
           name: profile.name,
@@ -25,7 +25,7 @@ export const authOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
       profile(profile) {
-        console.log("profile", profile);
+        // console.log("profile", profile);
         return {
           id: profile.sub,
           name: profile.name,

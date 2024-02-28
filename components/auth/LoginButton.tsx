@@ -5,7 +5,16 @@ import React from "react";
 
 import { Button } from "../ui/button";
 
-const LoginButton = ({ providers }) => {
+type Provider = {
+  id: string;
+  name: string;
+};
+
+type LoginButtonProps = {
+  providers: Record<string, Provider>;
+};
+
+const LoginButton: React.FC<LoginButtonProps> = ({ providers }) => {
   return (
     <>
       {Object.values(providers).map((provider) => (

@@ -5,10 +5,8 @@ import React from "react";
 
 import CreateUserForm from "@/components/auth/CreateUserForm";
 
-import { authOptions } from "../api/auth/[...nextauth]/route";
-
 const Signup = async () => {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession();
 
   if (session) {
     redirect("/dashboard");
