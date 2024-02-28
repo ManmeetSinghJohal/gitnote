@@ -1,23 +1,21 @@
 "use client";
-import { useRouter } from "next/navigation";
+
+import { signIn } from "next-auth/react";
 import React from "react";
 
 import { Button } from "../ui/button";
 
-const LoginButton = () => {
-  const router = useRouter();
-  const onClick = () => {
-    router.push("/api/auth/signin");
-  };
+const LoginButton = ({ providers }) => {
   return (
-    <Button
-      variant="secondary"
-      size="lg"
-      onClick={onClick}
-      className="cursor-pointer"
-    >
-      Sign Up With Github or Gmail
-    </Button>
+    <>
+      {Object.values(providers).map((provider) => (
+        <div key={provider.name}>
+          <Button onClick={() => signIn(provider.id)}>
+            Sign in with {provider.name}
+          </Button>
+        </div>
+      ))}
+    </>
   );
 };
 

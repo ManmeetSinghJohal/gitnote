@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
+import { getProviders, signIn } from "next-auth/react";
 import React from "react";
 
 import LoginButton from "@/components/auth/LoginButton";
@@ -10,6 +11,7 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 
 const LoginPage = async () => {
   const session = await getServerSession(authOptions);
+  const providers = await getProviders();
 
   if (session) {
     redirect("/dashboard");
@@ -23,7 +25,7 @@ const LoginPage = async () => {
           Don&apos;t have an account?{" "}
           <span className="underline">Register</span>
         </Link>
-        <LoginButton />
+        <LoginButton providers={providers}/>
       </div>
     </div>
   );

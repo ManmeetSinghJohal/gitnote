@@ -23,9 +23,3 @@ export const POST = async (request: Request) => {
   }
 };
 
-// await createUser({
-//   name: values.name,
-//   username: values.username,
-//   email: values.email,
-//   password: values.password,
-// });
