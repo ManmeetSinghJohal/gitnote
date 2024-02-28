@@ -18,7 +18,6 @@ import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
-  username: z.string().min(2).max(50),
   email: z.string().min(2).max(50),
   password: z.string().min(8).max(50),
 });
@@ -32,7 +31,6 @@ const CreateUserForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      username: "",
       email: "",
       password: "",
     },
@@ -90,23 +88,6 @@ const CreateUserForm = () => {
                   <Input
                     type="text"
                     placeholder="Enter your Full Name"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>User Name</FormLabel>
-                <FormControl>
-                  <Input
-                    type="text"
-                    placeholder="Enter a User Name"
                     {...field}
                   />
                 </FormControl>

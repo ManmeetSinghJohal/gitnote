@@ -6,10 +6,10 @@ import { connectToDatabase } from "@/lib/mongoose";
 
 export const POST = async (request: Request) => {
   try {
-    const { name, username, email, password } = await request.json();
+    const { name, email, password } = await request.json();
     const hashedPassword = await bcrypt.hash(password, 10);
     await connectToDatabase();
-    await User.create({ name, username, email, password:hashedPassword });
+    await User.create({ name, email, password:hashedPassword });
 
     return NextResponse.json(
       { message: "User created successfully" },

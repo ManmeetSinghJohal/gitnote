@@ -9,12 +9,12 @@ import { CreateUserParams } from "./shared.types";
 export async function createUser(userData: CreateUserParams) {
   try {
     await connectToDatabase();
-    const { name, username, email, password } = userData;
+    const { name, email, password } = userData;
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       throw new Error("User with this email already exists.");
     }
-    const newUser = await User.create({ name, username, email, password });
+    const newUser = await User.create({ name, email, password });
     console.log("newUser", newUser);
     return JSON.stringify(newUser);
   } catch (error) {

@@ -35,13 +35,8 @@ const LoginForm = () => {
     },
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     try {
-      // Call your login action here.
-      // await login({ email: values.email, password: values.password });
       const res = await signIn("credentials", {
         email: values.email,
         password: values.password,

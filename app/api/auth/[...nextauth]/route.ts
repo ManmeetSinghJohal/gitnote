@@ -12,10 +12,26 @@ export const authOptions = {
     GitHubProvider({
       clientId: process.env.GITHUB_ID ?? "",
       clientSecret: process.env.GITHUB_SECRET ?? "",
+      profile(profile) {
+        console.log("profile", profile);
+        return {
+          id: profile.id.toString(),
+          name: profile.name,
+          email: profile.email,
+        };
+      },
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      profile(profile) {
+        console.log("profile", profile);
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+        };
+      }
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -47,7 +63,29 @@ export const authOptions = {
       },
     }),
   ],
-  callback: {},
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      await connectToDatabase(); // Ensure the database connection is established
+      if (account.provider === "github" || account.provider === "google") {
+        // For OAuth providers, `user` might not have all the information, so use `profile` instead
+        const email = profile.email;
+        let userDoc = await User.findOne({ email });
+
+        if (!userDoc) {
+          // Create a new user if one doesn't exist
+          userDoc = new User({
+            email,
+            name: profile.name,
+          });
+          await userDoc.save();
+        } else {
+          // Update existing user information if necessary
+          // For example, update the profile picture if it has changed
+        }
+      }
+      return true; // Return true to allow the sign-in
+    },
+  },
   session: {
     strategy: "jwt",
   },
