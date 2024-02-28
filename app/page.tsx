@@ -23,7 +23,7 @@ const LoginPage = async () => {
           Don&apos;t have an account?{" "}
           <span className="underline">Register</span>
         </Link>
-        <LoginButton providers={providers}/>
+        {providers && <LoginButton providers={providers} />}
       </div>
     </div>
   );
