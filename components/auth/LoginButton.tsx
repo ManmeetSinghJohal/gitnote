@@ -21,7 +21,16 @@ const LoginButton: React.FC<LoginButtonProps> = ({ providers }) => {
         .filter((provider) => provider.id !== "credentials") // Exclude the "credentials" provider
         .map((provider) => (
           <div key={provider.name}>
-            <Button className="w-full" onClick={() => signIn(provider.id)}>
+            <Button className="w-full" onClick={() => {
+              try {
+                signIn(provider.id)
+                
+              } catch (error) {
+                console.log("Error signing in with provider", provider.id);
+              }
+            }}
+
+            >
               Sign in with {provider.name}
             </Button>
           </div>

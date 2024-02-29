@@ -1,8 +1,8 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -27,6 +27,15 @@ const LoginForm = () => {
 
   const router = useRouter();
 
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const search = searchParams.get("error");
+    if (search === "OAuthAccountNotLinked") {
+      setError("The email address is already linked to an account. Please log in with that account.");
+    }
+  }, [searchParams]); 
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,7 +57,7 @@ const LoginForm = () => {
         return;
       }
 
-      router.replace('dashboard');
+      router.replace("dashboard");
     } catch (error) {
       console.log(error);
     }

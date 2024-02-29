@@ -1,14 +1,11 @@
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import bycrpy from "bcryptjs";
-import { Account, User as AuthUser } from "next-auth";
+import bycrypt from "bcryptjs";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
-import User from "@/database/user.model";
 import clientPromise from "@/lib/mongodb";
-import { connectToDatabase } from "@/lib/mongoose";
 
 export const authOptions = {
   providers: [
@@ -36,74 +33,47 @@ export const authOptions = {
         };
       },
     }),
+
     CredentialsProvider({
-      name: "Credentials",
+      name: "credentials",
       credentials: {
-        email: { label: "email", type: "email" },
-        password: { label: "password", type: "password" },
+        email: {
+          label: "Email",
+          type: "email",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+        },
       },
-      async authorize(credentials) {
-        const { email, password } = credentials as {
-          email: string;
-          password: string;
-        };
+      async authorize(credentials, req) {
+        if (!credentials || !credentials.email || !credentials.password)
+          return null;
 
-        try {
-          await connectToDatabase();
-          const user = await User.findOne({ email });
+        const adapter = authOptions.adapter;
 
-          if (!user) {
-            return null;
-          }
+        // adapter's functionality is available here
+        const user: any = await adapter?.getUserByEmail(credentials.email);
 
-          const passwordsMatch = await bycrpy.compare(password, user.password);
-
-          if (!passwordsMatch) {
-            return null;
-          }
-
-          return user;
-        } catch (error) {
-          console.log("Error: ", error);
+        // here i am using bcryptjs for password hashing and comparing
+        if (user) {
+          const match = await bycrypt.compare(
+            credentials.password,
+            user.password
+          );
+          return match ? user : null;
+        } else {
+          return null;
         }
       },
     }),
   ],
-  adapter: MongoDBAdapter(clientPromise),
-  callbacks: {
-    async signIn({ user, account, profile }: { user: AuthUser; account: Account; profile: any }) {
-      await connectToDatabase(); // Ensure the database connection is established
-      
-      if(account.provider === "credentials") {  
-        return true;
-      }
-
-      if (account.provider === "github" || account.provider === "google") {
-        // For OAuth providers, `user` might not have all the information, so use `profile` instead
-        const email = profile.email;
-        let userDoc = await User.findOne({ email });
-
-        if (!userDoc) {
-          // Create a new user if one doesn't exist
-          userDoc = new User({
-            email,
-            name: profile.name,
-          });
-          await userDoc.save();
-        } else {
-          // Update existing user information if necessary
-          // For example, update the profile picture if it has changed
-        }
-      }
-      return true; // Return true to allow the sign-in
-    },
-  },
+  adapter: MongoDBAdapter(clientPromise, {
+    databaseName: "gitnote",
+  }),
   session: {
     strategy: "jwt",
   },
-  // jwt: {
-  //   secret: process.env.NEXTAUTH_SECRET,
-  // },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/",
