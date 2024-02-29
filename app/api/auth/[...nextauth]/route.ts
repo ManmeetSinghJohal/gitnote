@@ -1,10 +1,13 @@
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import bycrpy from "bcryptjs";
+import { Account, User as AuthUser } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
 import User from "@/database/user.model";
+import clientPromise from "@/lib/mongodb";
 import { connectToDatabase } from "@/lib/mongoose";
 
 export const authOptions = {
@@ -31,11 +34,14 @@ export const authOptions = {
           name: profile.name,
           email: profile.email,
         };
-      }
+      },
     }),
     CredentialsProvider({
       name: "Credentials",
-      credentials: {},
+      credentials: {
+        email: { label: "email", type: "email" },
+        password: { label: "password", type: "password" },
+      },
       async authorize(credentials) {
         const { email, password } = credentials as {
           email: string;
@@ -63,9 +69,15 @@ export const authOptions = {
       },
     }),
   ],
+  adapter: MongoDBAdapter(clientPromise),
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account, profile }: { user: AuthUser; account: Account; profile: any }) {
       await connectToDatabase(); // Ensure the database connection is established
+      
+      if(account.provider === "credentials") {  
+        return true;
+      }
+
       if (account.provider === "github" || account.provider === "google") {
         // For OAuth providers, `user` might not have all the information, so use `profile` instead
         const email = profile.email;
@@ -89,10 +101,14 @@ export const authOptions = {
   session: {
     strategy: "jwt",
   },
+  // jwt: {
+  //   secret: process.env.NEXTAUTH_SECRET,
+  // },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/",
   },
+  debug: process.env.NODE_ENV === "development",
 };
 
 const handler = NextAuth(authOptions);
