@@ -59,7 +59,7 @@ export const authOptions = {
         if (user) {
           const match = await bycrypt.compare(
             credentials.password,
-            user.password
+            user.passwordHashed
           );
           return match ? user : null;
         } else {

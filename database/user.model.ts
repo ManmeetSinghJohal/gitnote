@@ -14,7 +14,7 @@ const UserSchema = new Schema(
       required: true,
       unique: true,
     },
-    password: { type: String },
+    passwordHashed: { type: String },
   },
   {
     timestamps: true,
