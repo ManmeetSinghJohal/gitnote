@@ -5,19 +5,19 @@ import React from "react";
 
 import CreateUserForm from "@/components/auth/CreateUserForm";
 
-const Signup = async () => {
+const SignUp = async () => {
   const session = await getServerSession();
 
   if (session) {
     redirect("/dashboard");
   }
-  
+
   return (
     <div className="flex justify-center p-10">
       <div className="flex w-96 flex-col gap-2">
         <h1>Create Account</h1>
         <CreateUserForm />
-        <Link className="mt-3 text-right text-sm" href={"/"}>
+        <Link className="mt-3 text-right text-sm" href={"/signin"}>
           Already have an account? <span className="underline">Login</span>
         </Link>
       </div>
@@ -25,4 +25,4 @@ const Signup = async () => {
   );
 };
 
-export default Signup;
+export default SignUp;

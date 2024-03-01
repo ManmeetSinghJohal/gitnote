@@ -63,15 +63,13 @@ const CreateUserForm = () => {
 
       if (res.ok) {
         console.log("User created successfully");
-        router.push("/");
+        router.push("/signin");
       } else {
         console.log("Error creating user");
       }
     } catch (error) {
       console.log("Error connecting to database", error);
     }
-
-    console.log(values);
   }
 
   return (
