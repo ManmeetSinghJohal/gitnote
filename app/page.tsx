@@ -1,9 +1,32 @@
-import Image from "next/image";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { getProviders } from "next-auth/react";
+import React from "react";
 
-export default function Home() {
+import LoginButton from "@/components/auth/LoginButton";
+import LoginForm from "@/components/auth/LoginForm";
+
+const LoginPage = async () => {
+  const session = await getServerSession();
+  const providers = await getProviders();
+
+  if (session) {
+    redirect("/dashboard");
+  }
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div>hello</div>
-    </main>
+    <div className="grid h-screen place-items-center">
+      <div className="flex w-96 flex-col gap-2 rounded-lg border-t-4 border-black-600 p-5 shadow-lg">
+        <h1 className="my-4 text-xl font-bold">Login</h1>
+        <LoginForm />
+        <Link className="mt-3 text-right text-sm" href={"/signup"}>
+          Don&apos;t have an account?{" "}
+          <span className="underline">Register</span>
+        </Link>
+        {providers && <LoginButton providers={providers} />}
+      </div>
+    </div>
   );
-}
+};
+
+export default LoginPage;
