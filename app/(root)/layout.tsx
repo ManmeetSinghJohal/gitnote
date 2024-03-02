@@ -1,6 +1,7 @@
 import React from "react";
 
 import LeftSideBar from "@/components/shared/LeftSideBar";
+import RightSideBar from "@/components/shared/RightSideBar";
 import { Toaster } from "@/components/ui/toaster";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -8,10 +9,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <main className=" relative">
       <div className="flex">
         <LeftSideBar />
-        <section className="flex min-h-screen flex-1 flex-col px-6 pb-6 pt-36 max-md:pb-14 sm:px-14">
-          <div className="mx-auto w-full max-w-5xl">{children}</div>
+        <section className="flex min-h-screen flex-1 bg-black-900">
+          <div className="w-full px-[30px] py-10">{children}</div>
         </section>
-        RightSidebar
+        <RightSideBar />
       </div>
       <Toaster />
     </main>

@@ -1,4 +1,6 @@
+"use client";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 import React from "react";
 
 import { Button } from "../ui/button";
@@ -11,7 +13,7 @@ const LeftSideBar = () => {
         <Image src="/assets/icons/logo.svg" alt="logo" width={20} height={24} />
         <h3 className="text-2xl font-bold text-white-100">GitNote</h3>
       </div>
-      <div className="mb-6 space-y-4">
+      <div className="space-y-4">
         <Button className="w-[235px] bg-custom-gradient">
           <Image
             src="/assets/icons/plus.svg"
@@ -22,7 +24,7 @@ const LeftSideBar = () => {
           />
           <div className="paragraph-4-medium text-white-100">Create Post</div>
         </Button>
-        <div className="relative flex min-h-[36px] w-[235px] grow items-center gap-1 rounded-xl bg-black-700 px-4">
+        <div className="relative flex min-h-[36px] w-[235px] grow items-center gap-1 rounded-lg bg-black-700 px-4">
           <Image
             src="/assets/icons/search.svg"
             alt="search"
@@ -43,9 +45,134 @@ const LeftSideBar = () => {
           />
         </div>
       </div>
-      <div className="mb-6 h-[1px] w-[235px] bg-white-500"></div>
+      <div className="my-6 h-[1px] w-[235px] bg-white-500"></div>
       <div>
-        <h4 className="text-[10px] font-normal text-white-500">POST</h4>
+        <h4 className="mb-5 text-[10px] font-normal text-white-500">POST</h4>
+        <div>
+          <div className="space-y-5">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/assets/icons/workflow.svg"
+                alt="workflow"
+                width={16}
+                height={16}
+              />
+              <h4 className="paragraph-3-medium">Project Setup</h4>
+            </div>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/assets/icons/workflow.svg"
+                alt="workflow"
+                width={16}
+                height={16}
+              />
+              <h4 className="paragraph-3-medium">NextAuth OAuth Setup</h4>
+            </div>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/assets/icons/component.svg"
+                alt="component"
+                width={16}
+                height={16}
+              />
+              <h4 className="paragraph-3-medium">Mobile Navigation</h4>
+            </div>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/assets/icons/component.svg"
+                alt="component"
+                width={16}
+                height={16}
+              />
+              <h4 className="paragraph-3-medium">Header</h4>
+            </div>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/assets/icons/component.svg"
+                alt="component"
+                width={16}
+                height={16}
+              />
+              <h4 className="paragraph-3-medium">Modal</h4>
+            </div>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/assets/icons/component.svg"
+                alt="component"
+                width={16}
+                height={16}
+              />
+              <h4 className="paragraph-3-medium">Search Command</h4>
+            </div>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/assets/icons/knowledge.svg"
+                alt="knowledge"
+                width={16}
+                height={16}
+              />
+              <h4 className="paragraph-3-medium">Design System</h4>
+            </div>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/assets/icons/knowledge.svg"
+                alt="knowledge"
+                width={16}
+                height={16}
+              />
+              <h4 className="paragraph-3-medium">Naming Convention</h4>
+            </div>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/assets/icons/knowledge.svg"
+                alt="knowledge"
+                width={16}
+                height={16}
+              />
+              <h4 className="paragraph-3-medium">Best Practices</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="my-6 h-[1px] w-[235px] bg-white-500"></div>
+      <div>
+        <h4 className="mb-5 text-[10px] font-normal text-white-500">
+          QUICK LINKS
+        </h4>
+        <div>
+          <div className="space-y-5">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/assets/icons/jsm.svg"
+                alt="jsm icon"
+                width={22}
+                height={16}
+              />
+              <h4 className="paragraph-3-medium">JSM Courses</h4>
+            </div>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/assets/icons/github.svg"
+                alt="github"
+                width={16}
+                height={16}
+              />
+              <h4 className="paragraph-3-medium">GitHub Organization</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="hover: mt-[194px] flex cursor-pointer items-center gap-3"
+        onClick={() => signOut()}
+      >
+        <Image
+          src="/assets/icons/logout.svg"
+          alt="logout"
+          width={20}
+          height={20}
+        />
+        <h4 className="paragraph-3-medium">Logout</h4>
       </div>
     </div>
   );
