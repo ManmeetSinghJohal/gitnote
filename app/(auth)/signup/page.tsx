@@ -13,8 +13,8 @@ const SignUp = async () => {
   }
 
   return (
-    <div className="flex justify-center p-10">
-      <div className="flex w-96 flex-col gap-2">
+    <div className="grid h-screen place-items-center">
+      <div className="flex max-w-96 flex-col gap-2 rounded-lg border-t-4 border-black-600 p-5 shadow-lg">
         <h1>Create Account</h1>
         <CreateUserForm />
         <Link className="mt-3 text-right text-sm" href={"/signin"}>

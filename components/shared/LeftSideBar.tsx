@@ -1,29 +1,37 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { signOut } from "next-auth/react";
 import React from "react";
 
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
+import Logo from "./Logo";
+import UserDetails from "./UserDetails";
+
 const LeftSideBar = () => {
   return (
-    <div className="w-[290px] bg-black-800 px-7 pt-10">
-      <div className="mb-12 flex gap-1">
-        <Image src="/assets/icons/logo.svg" alt="logo" width={20} height={24} />
-        <h3 className="text-2xl font-bold text-white-100">GitNote</h3>
+    <div className="w-[290px] bg-black-800 pt-10 lg:px-7 ">
+      <div className="mb-12 hidden lg:flex">
+        <Logo />
+      </div>
+      <div className="mt-[-40px] lg:hidden">
+        <UserDetails />
       </div>
       <div className="space-y-4">
-        <Button className="w-[235px] bg-custom-gradient">
-          <Image
-            src="/assets/icons/plus.svg"
-            alt="plus"
-            width={14}
-            height={14}
-            className="mr-1"
-          />
-          <div className="paragraph-4-medium text-white-100">Create Post</div>
-        </Button>
+        <Link href="/createpost">
+          <Button className="w-[235px] bg-custom-gradient">
+            <Image
+              src="/assets/icons/plus.svg"
+              alt="plus"
+              width={14}
+              height={14}
+              className="mr-1"
+            />
+            <div className="paragraph-4-medium text-white-100">Create Post</div>
+          </Button>
+        </Link>
         <div className="relative flex min-h-[36px] w-[235px] grow items-center gap-1 rounded-lg bg-black-700 px-4">
           <Image
             src="/assets/icons/search.svg"
