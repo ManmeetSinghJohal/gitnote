@@ -1,9 +1,9 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,28 +15,23 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  email: z.string().min(2).max(50),
-  password: z.string().min(8).max(50),
-});
+import { TSignUpSchema, signUpSchema } from "@/lib/types";
 
 const CreateUserForm = () => {
-  const [error, setError] = useState("");
   
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<TSignUpSchema>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: TSignUpSchema) {
     try {
       const resUserExists = await fetch("/api/userexists", {
         method: "POST",
@@ -49,7 +44,9 @@ const CreateUserForm = () => {
       const { user } = await resUserExists.json();
 
       if (user) {
-        setError("User with this email already exists.");
+        form.setError("root", {
+          message: "User with this email already exists.",
+        });
         return;
       }
 
@@ -68,7 +65,9 @@ const CreateUserForm = () => {
         console.log("Error creating user");
       }
     } catch (error) {
-      console.log("Error connecting to database", error);
+      form.setError("root", {
+        message: "Something went wrong. Please try again later.",
+      });
     }
   }
 
@@ -130,15 +129,34 @@ const CreateUserForm = () => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="paragraph-3-medium">Confirm Password</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Confirm your password"
+                    className="paragraph-3-regular rounded border-none bg-black-700 pl-3"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <Button
             className="paragraph-3-bold w-full rounded bg-primary1-500 text-black-900"
             type="submit"
+            disabled={form.formState.isSubmitting}
           >
-            Login
+            {form.formState.isSubmitting ? "Registering..." : "Register"}
           </Button>
         </form>
       </Form>
-      {error && <p>{error}</p>}
+      {form.formState.errors.root && <p className="text-red-500">{form.formState.errors.root.message}</p>}
     </>
   );
 };
