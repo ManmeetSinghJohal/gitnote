@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
-  email: z.string().min(2).max(50),
+  email: z.string().email(),
   password: z.string().min(8).max(50),
 });
 
@@ -106,14 +106,15 @@ const LoginForm = () => {
             )}
           />
           <Button
-            className="paragraph-3-bold w-full rounded bg-primary1-500 text-black-900"
+            className="paragraph-3-bold w-full rounded bg-primary1-500 text-black-900 disabled:bg-gray-500"
             type="submit"
+            disabled={form.formState.isSubmitting}
           >
-            Login
+            {form.formState.isSubmitting ? "Logging In..." : "Login"}
           </Button>
         </form>
       </Form>
-      {error && <p>{error}</p>}
+      {error && <p className="text-red-500">{error}</p>}
     </>
   );
 };
