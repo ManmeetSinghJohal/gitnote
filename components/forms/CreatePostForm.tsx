@@ -28,11 +28,11 @@ import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   title: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+    message: "Title must be at least 2 characters.",
   }),
   createtype: z
     .string()
-    .min(2, { message: "Create type must be at least 2 characters." }),
+    .min(2, { message: "You must select a type." }),
   tags: z.string().min(2, { message: "Tags must be at least 2 characters." }),
   description: z
     .string()
@@ -211,8 +211,10 @@ const CreatePostForm = () => {
           <input
             key={field.id} // important to include key with field's id
             {...form.register(`learned.${index}.lesson`)}
+            className="text-black-900"
           />
         ))}
+
         <Button
           className="h-9 w-full rounded bg-black-600"
           type="button"
@@ -335,8 +337,9 @@ const CreatePostForm = () => {
           <Button
             className="paragraph-3-bold h-11 w-full rounded bg-primary1-500 text-black-900"
             type="submit"
+            disabled={form.formState.isSubmitting}
           >
-            Create Post
+            {form.formState.isSubmitting ? "Creating Post..." : "Create Post"}
           </Button>
         </div>
       </form>
