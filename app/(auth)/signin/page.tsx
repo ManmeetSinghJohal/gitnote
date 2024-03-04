@@ -15,14 +15,17 @@ const SignIn = async () => {
     redirect("/dashboard");
   }
   return (
-    <div className="grid h-screen place-items-center">
-      <div className="flex max-w-96 flex-col gap-2 rounded-lg border-t-4 border-black-600 p-5 shadow-lg">
-        <h1 className="my-4 text-xl font-bold">Login</h1>
+    <div className="mt-16 w-full max-w-[400px] lg:mt-[100px]">
+      <div className="flex flex-col gap-2">
+        <h1 className="display-2-bold mb-[22px] text-white-100">Login</h1>
         <LoginForm />
-        <Link className="mt-3 text-right text-sm" href={"/signup"}>
-          Don&apos;t have an account?{" "}
-          <span className="underline">Register</span>
+        <Link
+          className="paragraph-3-medium mt-3 text-center underline"
+          href={"/signup"}
+        >
+          I don&apos;t have an account?
         </Link>
+        <div className="paragraph-4-regular my-[22px] text-center">or</div>
         {providers && <LoginButton providers={providers} />}
       </div>
     </div>

@@ -14,7 +14,7 @@ const LeftSideBar = () => {
   return (
     <div className="w-[290px] bg-black-800 pt-10 lg:px-7 ">
       <div className="mb-12 hidden lg:flex">
-        <Logo />
+        <Logo textSize="text-2xl" width={20} height={24} />
       </div>
       <div className="mt-[-40px] lg:hidden">
         <UserDetails />
@@ -167,11 +167,23 @@ const LeftSideBar = () => {
               />
               <h4 className="paragraph-3-medium">GitHub Organization</h4>
             </div>
+            <div
+              className="flex cursor-pointer items-center gap-3 lg:hidden"
+              onClick={() => signOut()}
+            >
+              <Image
+                src="/assets/icons/logout.svg"
+                alt="logout"
+                width={20}
+                height={20}
+              />
+              <h4 className="paragraph-3-medium">Logout</h4>
+            </div>
           </div>
         </div>
       </div>
       <div
-        className="hover: mt-[194px] flex cursor-pointer items-center gap-3"
+        className="my-[194px] hidden cursor-pointer items-center gap-3 lg:flex"
         onClick={() => signOut()}
       >
         <Image

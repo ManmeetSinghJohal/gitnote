@@ -23,7 +23,7 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable}`}>
+      <body className={`${inter.variable} bg-black-900`}>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

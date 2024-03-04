@@ -15,7 +15,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="hidden lg:flex">
           <LeftSideBar />
         </div>
-        <section className="flex min-h-screen flex-1 bg-black-900">
+        <section className="flex min-h-full flex-1 bg-black-900">
           <div className="w-full px-5 py-[30px] lg:px-[30px] lg:py-10">
             {children}
           </div>

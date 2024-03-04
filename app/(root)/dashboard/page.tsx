@@ -5,7 +5,7 @@ import React from "react";
 const Dashboard = () => {
   const { data: session } = useSession();
   return (
-    <div className="h-screen">
+    <div className="h-full">
       <div className="space-y-[10px]">
         <div className="display-1-bold text-white-100">
           Hello {session?.user?.name},

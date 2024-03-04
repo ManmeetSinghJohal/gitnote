@@ -14,7 +14,7 @@ const Navbar = () => {
   return (
     <div className="h-[70px] bg-black-800">
       <div className="flex items-center justify-between px-[18px] py-6">
-        <Logo />
+        <Logo textSize="text-2xl" width={20} height={24} />
         <Sheet>
           <SheetTrigger asChild>
             <Image

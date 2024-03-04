@@ -32,9 +32,11 @@ const LoginForm = () => {
   useEffect(() => {
     const search = searchParams.get("error");
     if (search === "OAuthAccountNotLinked") {
-      setError("The email address is already linked to an account. Please log in with that account.");
+      setError(
+        "The email address is already linked to an account. Please log in with that account."
+      );
     }
-  }, [searchParams]); 
+  }, [searchParams]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,17 +68,18 @@ const LoginForm = () => {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-[22px]">
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className="paragraph-3-medium">Email</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
                     placeholder="Enter your email address"
+                    className="paragraph-3-regular rounded border-none bg-black-700 pl-3"
                     {...field}
                   />
                 </FormControl>
@@ -89,11 +92,12 @@ const LoginForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel className="paragraph-3-medium">Password</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
                     placeholder="Enter your password"
+                    className="paragraph-3-regular rounded border-none bg-black-700 pl-3"
                     {...field}
                   />
                 </FormControl>
@@ -101,7 +105,10 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
-          <Button className="w-full" type="submit">
+          <Button
+            className="paragraph-3-bold w-full rounded bg-primary1-500 text-black-900"
+            type="submit"
+          >
             Login
           </Button>
         </form>
