@@ -16,26 +16,26 @@ type LoginButtonProps = {
 
 const LoginButton: React.FC<LoginButtonProps> = ({ providers }) => {
   return (
-    <>
+    <div className="space-y-4">
       {Object.values(providers)
         .filter((provider) => provider.id !== "credentials") // Exclude the "credentials" provider
         .map((provider) => (
           <div key={provider.name}>
-            <Button className="w-full" onClick={() => {
-              try {
-                signIn(provider.id)
-                
-              } catch (error) {
-                console.log("Error signing in with provider", provider.id);
-              }
-            }}
-
+            <Button
+              className="w-full rounded bg-black-700"
+              onClick={() => {
+                try {
+                  signIn(provider.id);
+                } catch (error) {
+                  console.log("Error signing in with provider", provider.id);
+                }
+              }}
             >
-              Sign in with {provider.name}
+              <div className="paragraph-3-medium">Continue with {provider.name}</div>
             </Button>
           </div>
         ))}
-    </>
+    </div>
   );
 };
 

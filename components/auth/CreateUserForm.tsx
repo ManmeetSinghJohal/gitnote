@@ -63,15 +63,13 @@ const CreateUserForm = () => {
 
       if (res.ok) {
         console.log("User created successfully");
-        router.push("/");
+        router.push("/signin");
       } else {
         console.log("Error creating user");
       }
     } catch (error) {
       console.log("Error connecting to database", error);
     }
-
-    console.log(values);
   }
 
   return (
@@ -83,11 +81,12 @@ const CreateUserForm = () => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Full Name</FormLabel>
+                <FormLabel className="paragraph-3-medium">Full Name</FormLabel>
                 <FormControl>
                   <Input
                     type="text"
                     placeholder="Enter your Full Name"
+                    className="paragraph-3-regular rounded border-none bg-black-700 pl-3"
                     {...field}
                   />
                 </FormControl>
@@ -100,11 +99,12 @@ const CreateUserForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className="paragraph-3-medium">Email</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
                     placeholder="Enter your email address"
+                    className="paragraph-3-regular rounded border-none bg-black-700 pl-3"
                     {...field}
                   />
                 </FormControl>
@@ -117,11 +117,12 @@ const CreateUserForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel className="paragraph-3-medium">Password</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
                     placeholder="Enter your password"
+                    className="paragraph-3-regular rounded border-none bg-black-700 pl-3"
                     {...field}
                   />
                 </FormControl>
@@ -129,8 +130,11 @@ const CreateUserForm = () => {
               </FormItem>
             )}
           />
-          <Button className="w-full" type="submit">
-            Sign Up
+          <Button
+            className="paragraph-3-bold w-full rounded bg-primary1-500 text-black-900"
+            type="submit"
+          >
+            Login
           </Button>
         </form>
       </Form>

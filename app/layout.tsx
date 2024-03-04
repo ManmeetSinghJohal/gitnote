@@ -18,12 +18,12 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className={`${inter.variable}`}>
+      <body className={`${inter.variable} bg-black-900`}>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

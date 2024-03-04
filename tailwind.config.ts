@@ -92,7 +92,7 @@ const config = {
       },
       backgroundImage: {
         "custom-gradient":
-          "linear-gradient(to right, #43B7FE 100%, #4F48E6 100%)",
+          "linear-gradient(to right, #43B7FE, #4F48E6)",
       },
       borderRadius: {
         lg: "var(--radius)",

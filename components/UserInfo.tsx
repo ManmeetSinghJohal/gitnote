@@ -8,7 +8,7 @@ import { Button } from "./ui/button";
 const UserInfo = () => {
   const { data: session } = useSession();
   return (
-    <div className="grid h-screen place-items-center">
+    <div className="grid h-full place-items-center">
       <div className="my-6 flex flex-col gap-2 bg-zinc-300/10 p-8 shadow-lg">
         <div>
           Name: <span className="font-bold">{session?.user?.name}</span>
