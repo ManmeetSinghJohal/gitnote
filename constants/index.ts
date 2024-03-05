@@ -1,0 +1,1 @@
+// contains the app’s constant variables
