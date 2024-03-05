@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,7 +17,6 @@ import { Input } from "@/components/ui/input";
 import { TSignUpSchema, signUpSchema } from "@/lib/types";
 
 const CreateUserForm = () => {
-  
   const router = useRouter();
 
   const form = useForm<TSignUpSchema>({
@@ -134,7 +132,9 @@ const CreateUserForm = () => {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="paragraph-3-medium">Confirm Password</FormLabel>
+                <FormLabel className="paragraph-3-medium">
+                  Confirm Password
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="password"
@@ -156,7 +156,9 @@ const CreateUserForm = () => {
           </Button>
         </form>
       </Form>
-      {form.formState.errors.root && <p className="text-red-500">{form.formState.errors.root.message}</p>}
+      {form.formState.errors.root && (
+        <p className="text-red-500">{form.formState.errors.root.message}</p>
+      )}
     </>
   );
 };
