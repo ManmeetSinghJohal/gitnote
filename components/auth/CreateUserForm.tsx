@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { TSignUpSchema, signUpSchema } from "@/lib/types";
+import { TSignUpSchema, signUpSchema } from "@/lib/validations";
 
 const CreateUserForm = () => {
   const router = useRouter();
