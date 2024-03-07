@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Editor } from "@tinymce/tinymce-react";
 import Image from "next/image";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -41,8 +41,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { postTags } from "@/constants/index";
 import { cn } from "@/lib/utils";
 
-import { Badge } from "../ui/badge";
-
 const formSchema = z.object({
   title: z.string().min(2, {
     message: "Title must be at least 2 characters.",
@@ -74,6 +72,8 @@ const formSchema = z.object({
 });
 
 const CreatePostForm = () => {
+  const [isPopOverOpen, setIsPopOverOpen] = useState(false);
+
   const editorRef = useRef(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -197,7 +197,7 @@ const CreatePostForm = () => {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel className="paragraph-3-medium">Tags</FormLabel>
-              <Popover>
+              <Popover open={isPopOverOpen} onOpenChange={setIsPopOverOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <div
@@ -230,6 +230,7 @@ const CreatePostForm = () => {
                           value={tag.label}
                           key={tag.value}
                           onSelect={() => {
+                            setIsPopOverOpen(false);
                             const shouldAppendTag = !tagsFields.some(
                               (tagField) => tagField.value === tag.value
                             );
