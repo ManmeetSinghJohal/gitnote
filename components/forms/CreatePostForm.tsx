@@ -83,7 +83,7 @@ const CreatePostForm = () => {
       description: "",
       learned: [{ lesson: "" }],
       content: "",
-      resources: [{label: "", resource: ""}],
+      resources: [{ label: "", resource: "" }],
       tags: [],
     },
   });
@@ -93,8 +93,8 @@ const CreatePostForm = () => {
     append: learnedAppend,
     remove: learnedRemove,
   } = useFieldArray({
-    control: form.control, 
-    name: "learned", 
+    control: form.control,
+    name: "learned",
   });
 
   const {
@@ -102,8 +102,8 @@ const CreatePostForm = () => {
     append: resourcesAppend,
     remove: resourcesRemove,
   } = useFieldArray({
-    control: form.control, 
-    name: "resources", 
+    control: form.control,
+    name: "resources",
   });
 
   const {
@@ -111,8 +111,8 @@ const CreatePostForm = () => {
     append: tagsAppend,
     remove: tagsRemove,
   } = useFieldArray({
-    control: form.control, 
-    name: "tags", 
+    control: form.control,
+    name: "tags",
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -208,10 +208,10 @@ const CreatePostForm = () => {
                         <div className="paragraph-3-regular text-xs text-muted-foreground">
                           Search tags
                         </div>
-                        {field.value
+                        {/* {field.value
                           ? postTags.find((tag) => tag.value === field.value)
                               ?.label
-                          : "Select tag"}
+                          : "Select tag"} */}
                         <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
                       </div>
                     </div>
@@ -413,7 +413,7 @@ const CreatePostForm = () => {
             <FormField
               control={form.control}
               name={`resources.${index}.label`}
-              key={field.id + "label"} 
+              key={field.id + "label"}
               render={({ field }) => (
                 <FormItem>
                   <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
@@ -423,7 +423,7 @@ const CreatePostForm = () => {
                           className="paragraph-3-regular h-12 border-none pl-3"
                           placeholder="Label"
                           {...field}
-                          // value={field.value.label} 
+                          // value={field.value.label}
                         />
                         <Image
                           src="/assets/icons/close.svg"
@@ -442,7 +442,7 @@ const CreatePostForm = () => {
             <FormField
               control={form.control}
               name={`resources.${index}.resource`}
-              key={field.id + "resource"} 
+              key={field.id + "resource"}
               render={({ field }) => (
                 <FormItem>
                   <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
@@ -452,7 +452,7 @@ const CreatePostForm = () => {
                           className="paragraph-3-regular h-12 border-none pl-3"
                           placeholder="Resource Link"
                           {...field}
-                          // value={field.value.resource} 
+                          // value={field.value.resource}
                         />
                         <Image
                           src="/assets/icons/close.svg"
