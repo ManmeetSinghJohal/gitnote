@@ -58,14 +58,19 @@ const formSchema = z.object({
     .string()
     .min(2, { message: "Description must be at least 2 characters." }),
   learned: z.array(
-    z.string().min(2, { message: "Each string must be at least 2 characters." })
+    z.object({
+      lesson: z.string(),
+    })
   ),
   content: z
     .string()
     .min(2, { message: "Content must be at least 2 characters." }),
-  resources: z
-    .string()
-    .min(2, { message: "Resources must be at least 2 characters." }),
+  resources: z.array(
+    z.object({
+      label: z.string(),
+      resource: z.string(),
+    })
+  ),
 });
 
 const CreatePostForm = () => {
@@ -76,9 +81,9 @@ const CreatePostForm = () => {
       title: "",
       createtype: "",
       description: "",
-      learned: [{ lesson: "" }, { lesson: "" }],
+      learned: [{ lesson: "" }],
       content: "",
-      resources: [],
+      resources: [{label: "", resource: ""}],
       tags: [],
     },
   });
@@ -88,8 +93,8 @@ const CreatePostForm = () => {
     append: learnedAppend,
     remove: learnedRemove,
   } = useFieldArray({
-    control: form.control, // control props comes from useForm (optional: if you are using FormContext)
-    name: "learned", // unique name for your Field Array
+    control: form.control, 
+    name: "learned", 
   });
 
   const {
@@ -97,8 +102,8 @@ const CreatePostForm = () => {
     append: resourcesAppend,
     remove: resourcesRemove,
   } = useFieldArray({
-    control: form.control, // control props comes from useForm (optional: if you are using FormContext)
-    name: "resources", // unique name for your Field Array
+    control: form.control, 
+    name: "resources", 
   });
 
   const {
@@ -106,8 +111,8 @@ const CreatePostForm = () => {
     append: tagsAppend,
     remove: tagsRemove,
   } = useFieldArray({
-    control: form.control, // control props comes from useForm (optional: if you are using FormContext)
-    name: "tags", // unique name for your Field Array
+    control: form.control, 
+    name: "tags", 
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -224,7 +229,6 @@ const CreatePostForm = () => {
                         <CommandItem
                           value={tag.label}
                           key={tag.value}
-                          className=""
                           onSelect={() => {
                             const shouldAppendTag = !tagsFields.some(
                               (tagField) => tagField.value === tag.value
@@ -300,7 +304,7 @@ const CreatePostForm = () => {
           <FormField
             control={form.control}
             name={`learned.${index}.lesson`}
-            key={field.id} // important to include key with field's id
+            key={field.id}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -405,53 +409,66 @@ const CreatePostForm = () => {
           RESOURCES & LINKS
         </div>
         {resourcesFields.map((field, index) => (
-          <FormField
-            control={form.control}
-            name="resources"
-            key={field.id} // important to include key with field's id
-            {...form.register(`resources.${index}.resource`)}
-            render={({ field }) => (
-              <FormItem>
-                <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
-                  <FormControl>
-                    <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
-                      <Input
-                        className="paragraph-3-regular h-12 border-none pl-3"
-                        placeholder="Label"
-                        {...field}
-                        value={field.value.resource} // Update the value prop to be a string
-                      />
-                      <Image
-                        src="/assets/icons/close.svg"
-                        alt="close"
-                        width={9}
-                        height={9}
-                        onClick={() => resourcesRemove(index)}
-                      />
-                    </div>
-                  </FormControl>
-                  <FormControl>
-                    <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
-                      <Input
-                        className="paragraph-3-regular h-12 border-none pl-3"
-                        placeholder="Resource Link"
-                        {...field}
-                        value={field.value.resource} // Update the valu
-                      />
-                      <Image
-                        src="/assets/icons/close.svg"
-                        alt="close"
-                        width={9}
-                        height={9}
-                        onClick={() => resourcesRemove(index)}
-                      />
-                    </div>
-                  </FormControl>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <>
+            <FormField
+              control={form.control}
+              name={`resources.${index}.label`}
+              key={field.id} 
+              render={({ field }) => (
+                <FormItem>
+                  <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
+                    <FormControl>
+                      <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
+                        <Input
+                          className="paragraph-3-regular h-12 border-none pl-3"
+                          placeholder="Label"
+                          {...field}
+                          // value={field.value.label} 
+                        />
+                        <Image
+                          src="/assets/icons/close.svg"
+                          alt="close"
+                          width={9}
+                          height={9}
+                          onClick={() => resourcesRemove(index)}
+                        />
+                      </div>
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`resources.${index}.resource`}
+              key={field.id} 
+              render={({ field }) => (
+                <FormItem>
+                  <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
+                    <FormControl>
+                      <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
+                        <Input
+                          className="paragraph-3-regular h-12 border-none pl-3"
+                          placeholder="Resource Link"
+                          {...field}
+                          // value={field.value.resource} 
+                        />
+                        <Image
+                          src="/assets/icons/close.svg"
+                          alt="close"
+                          width={9}
+                          height={9}
+                          onClick={() => resourcesRemove(index)}
+                        />
+                      </div>
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
         ))}
 
         <Button
