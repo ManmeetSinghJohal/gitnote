@@ -396,6 +396,8 @@ const CreatePostForm = () => {
                       "codesample | bold italic forecolor | alignleft aligncenter " +
                       "alignright alignjustify | bullist numlist",
                     content_style: "body { font-family:Inter; font-size:16px }",
+                    skin: "oxide-dark",
+                    content_css: "dark",
                   }}
                 />
               </FormControl>
