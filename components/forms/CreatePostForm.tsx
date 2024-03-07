@@ -426,7 +426,6 @@ const CreatePostForm = () => {
                           className="paragraph-3-regular h-12 border-none pl-3"
                           placeholder="Label"
                           {...field}
-                          // value={field.value.label}
                         />
                         <Image
                           src="/assets/icons/close.svg"
@@ -455,7 +454,6 @@ const CreatePostForm = () => {
                           className="paragraph-3-regular h-12 border-none pl-3"
                           placeholder="Resource Link"
                           {...field}
-                          // value={field.value.resource}
                         />
                         <Image
                           src="/assets/icons/close.svg"
