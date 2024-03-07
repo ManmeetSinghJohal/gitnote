@@ -413,7 +413,7 @@ const CreatePostForm = () => {
             <FormField
               control={form.control}
               name={`resources.${index}.label`}
-              key={field.id} 
+              key={field.id + "label"} 
               render={({ field }) => (
                 <FormItem>
                   <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
@@ -442,7 +442,7 @@ const CreatePostForm = () => {
             <FormField
               control={form.control}
               name={`resources.${index}.resource`}
-              key={field.id} 
+              key={field.id + "resource"} 
               render={({ field }) => (
                 <FormItem>
                   <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
@@ -474,7 +474,7 @@ const CreatePostForm = () => {
         <Button
           className="h-9 w-full rounded bg-black-600"
           type="button"
-          onClick={() => resourcesAppend({ resource: "" })}
+          onClick={() => resourcesAppend({ label: "", resource: "" })}
         >
           <div className="flex gap-2">
             <Image
