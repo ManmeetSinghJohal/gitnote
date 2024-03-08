@@ -38,14 +38,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { postTags } from "@/constants/index";
-import { cn } from "@/lib/utils";
+// import { postTags } from "@/constants/index";
+// import { ITag } from "@/database/tag.model";
+// import { createTag, getTags } from "@/lib/actions/tag.actions";
+// import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   title: z.string().min(2, {
     message: "Title must be at least 2 characters.",
   }),
-  createtype: z.string(),
+  createType: z.string(),
   tags: z.array(
     z.object({
       value: z.string(),
@@ -61,8 +63,7 @@ const formSchema = z.object({
     })
   ),
   content: z
-    .string()
-    .min(2, { message: "Content must be at least 2 characters." }),
+    .string(),
   resources: z.array(
     z.object({
       label: z.string(),
@@ -71,13 +72,7 @@ const formSchema = z.object({
   ),
 });
 
-// const containsKeyValuePair = (arr1, arr2, keyToCheck) => {
-//   return arr1.some((obj1) =>
-//     arr2.find((obj2) => obj1[keyToCheck] === obj2[keyToCheck])
-//   );
-// };
-
-const CreatePostForm = () => {
+const CreatePostForm = ({ postTags }) => {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
 
   const editorRef = useRef(null);
@@ -85,7 +80,7 @@ const CreatePostForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      createtype: "",
+      createType: "",
       description: "",
       learned: [{ lesson: "" }],
       content: "",
@@ -121,36 +116,40 @@ const CreatePostForm = () => {
     name: "tags",
   });
 
-   const handleInputKeyDown = (
-     e: React.KeyboardEvent<HTMLInputElement>,
-     field: any
-   ) => {
-     if (e.key === "Enter" && field.name === "tags") {
-       e.preventDefault();
+  const handleInputKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    field: any
+  ) => {
+    if (e.key === "Enter" && field.name === "tags") {
+      e.preventDefault();
 
-       const tagInput = e.target as HTMLInputElement;
-       const tagValue = tagInput.value.trim();
+      const tagInput = e.target as HTMLInputElement;
+      const tagValue = tagInput.value.trim();
 
-       if (tagValue !== "") {
-         if (tagValue.length > 15) {
-           return form.setError("tags", {
-             message: "Tag cannot be longer than 15 characters.",
-           });
-         }
+      if (tagValue !== "") {
+        if (tagValue.length > 15) {
+          return form.setError("tags", {
+            message: "Tag cannot be longer than 15 characters.",
+          });
+        }
 
-         if (!field.value.includes(tagValue as never)) {
+        if (!field.value.includes(tagValue as never)) {
           tagsAppend({
             label: tagValue,
             value: tagValue,
           });
-           tagInput.value = "";
-           form.clearErrors("tags");
-         }
-       } else {
-         form.trigger();
-       }
-     }
-   };
+          tagInput.value = "";
+          form.clearErrors("tags");
+        }
+      } else {
+        form.trigger();
+      }
+    }
+  };
+
+  // async function newTag(tag: any) {
+  //   await createTag(tag);
+  // }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("values", values);
@@ -177,12 +176,15 @@ const CreatePostForm = () => {
         />
         <FormField
           control={form.control}
-          name="createtype"
+          name="createType"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="paragraph-3-medium">Create Type</FormLabel>
               <FormControl>
-                <Select>
+                <Select 
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <SelectTrigger className="paragraph-3-regular h-[48px] w-full border-none bg-black-700 text-xs text-muted-foreground">
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
@@ -245,11 +247,6 @@ const CreatePostForm = () => {
                         <div className="paragraph-3-regular text-xs text-muted-foreground">
                           Search tags
                         </div>
-                        {/* {field.value
-                          ? postTags.find((tag) => tag.value === field.value)
-                              ?.label
-                          : "Select tag"} */}
-                        {/* {field.value.length > 0 ? containsKeyValuePair(postTags, field.value, field.value) ?.label : "Select tag"} */}
                         <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
                       </div>
                     </div>
@@ -282,14 +279,14 @@ const CreatePostForm = () => {
                           }}
                         >
                           {tag.label}
-                          <CheckIcon
+                          {/* <CheckIcon
                             className={cn(
                               "ml-auto h-4 w-4",
                               tag.value === field.value
                                 ? "opacity-100"
                                 : "opacity-0"
                             )}
-                          />
+                          /> */}
                         </CommandItem>
                       ))}
                     </CommandGroup>
@@ -409,7 +406,7 @@ const CreatePostForm = () => {
                     editorRef.current = editor;
                   }}
                   onBlur={field.onBlur}
-                  onEditorChange={(content) => console.log(content)}
+                  onEditorChange={field.onChange}
                   initialValue=""
                   init={{
                     height: 350,
@@ -451,11 +448,12 @@ const CreatePostForm = () => {
           RESOURCES & LINKS
         </div>
         {resourcesFields.map((field, index) => (
-          <>
+          <React.Fragment
+            key={field.id}
+          >
             <FormField
               control={form.control}
               name={`resources.${index}.label`}
-              key={field.id + "label"}
               render={({ field }) => (
                 <FormItem>
                   <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
@@ -483,7 +481,6 @@ const CreatePostForm = () => {
             <FormField
               control={form.control}
               name={`resources.${index}.resource`}
-              key={field.id + "resource"}
               render={({ field }) => (
                 <FormItem>
                   <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
@@ -508,7 +505,7 @@ const CreatePostForm = () => {
                 </FormItem>
               )}
             />
-          </>
+          </React.Fragment>
         ))}
 
         <Button
