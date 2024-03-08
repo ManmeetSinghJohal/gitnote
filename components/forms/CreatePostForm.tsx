@@ -71,6 +71,12 @@ const formSchema = z.object({
   ),
 });
 
+// const containsKeyValuePair = (arr1, arr2, keyToCheck) => {
+//   return arr1.some((obj1) =>
+//     arr2.find((obj2) => obj1[keyToCheck] === obj2[keyToCheck])
+//   );
+// };
+
 const CreatePostForm = () => {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
 
@@ -114,6 +120,37 @@ const CreatePostForm = () => {
     control: form.control,
     name: "tags",
   });
+
+   const handleInputKeyDown = (
+     e: React.KeyboardEvent<HTMLInputElement>,
+     field: any
+   ) => {
+     if (e.key === "Enter" && field.name === "tags") {
+       e.preventDefault();
+
+       const tagInput = e.target as HTMLInputElement;
+       const tagValue = tagInput.value.trim();
+
+       if (tagValue !== "") {
+         if (tagValue.length > 15) {
+           return form.setError("tags", {
+             message: "Tag cannot be longer than 15 characters.",
+           });
+         }
+
+         if (!field.value.includes(tagValue as never)) {
+          tagsAppend({
+            label: tagValue,
+            value: tagValue,
+          });
+           tagInput.value = "";
+           form.clearErrors("tags");
+         }
+       } else {
+         form.trigger();
+       }
+     }
+   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("values", values);
@@ -212,6 +249,7 @@ const CreatePostForm = () => {
                           ? postTags.find((tag) => tag.value === field.value)
                               ?.label
                           : "Select tag"} */}
+                        {/* {field.value.length > 0 ? containsKeyValuePair(postTags, field.value, field.value) ?.label : "Select tag"} */}
                         <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
                       </div>
                     </div>
@@ -222,6 +260,7 @@ const CreatePostForm = () => {
                     <CommandInput
                       placeholder="Search tags..."
                       className="h-9 text-white-100"
+                      onKeyDown={(e) => handleInputKeyDown(e, field)}
                     />
                     <CommandEmpty>No tag found.</CommandEmpty>
                     <CommandGroup className="">
