@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Editor } from "@tinymce/tinymce-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -38,46 +39,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { createPost } from "@/lib/actions/post.action";
+import { queryTags } from "@/lib/actions/tag.actions";
+import { PostSchema } from "@/lib/validations";
+
 // import { postTags } from "@/constants/index";
 // import { ITag } from "@/database/tag.model";
 // import { createTag, getTags } from "@/lib/actions/tag.actions";
 // import { cn } from "@/lib/utils";
 
-const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "Title must be at least 2 characters.",
-  }),
-  createType: z.string(),
-  tags: z.array(
-    z.object({
-      value: z.string(),
-      label: z.string(),
-    })
-  ),
-  description: z
-    .string()
-    .min(2, { message: "Description must be at least 2 characters." }),
-  learned: z.array(
-    z.object({
-      lesson: z.string(),
-    })
-  ),
-  content: z
-    .string(),
-  resources: z.array(
-    z.object({
-      label: z.string(),
-      resource: z.string(),
-    })
-  ),
-});
-
-const CreatePostForm = ({ postTags }) => {
+const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
+  const router = useRouter();
 
   const editorRef = useRef(null);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof PostSchema>>({
+    resolver: zodResolver(PostSchema),
     defaultValues: {
       title: "",
       createType: "",
@@ -122,6 +99,7 @@ const CreatePostForm = ({ postTags }) => {
   ) => {
     if (e.key === "Enter" && field.name === "tags") {
       e.preventDefault();
+      setIsPopOverOpen(false);
 
       const tagInput = e.target as HTMLInputElement;
       const tagValue = tagInput.value.trim();
@@ -133,10 +111,14 @@ const CreatePostForm = ({ postTags }) => {
           });
         }
 
-        if (!field.value.includes(tagValue as never)) {
+        const verifyOrCreateBadge = !tagsFields.some(
+          (tagField) => tagField.value === tagValue
+        );
+
+        if (verifyOrCreateBadge) {
           tagsAppend({
-            label: tagValue,
-            value: tagValue,
+            label: tagValue.toLowerCase(),
+            value: tagValue.toLowerCase(),
           });
           tagInput.value = "";
           form.clearErrors("tags");
@@ -147,13 +129,28 @@ const CreatePostForm = ({ postTags }) => {
     }
   };
 
-  // async function newTag(tag: any) {
-  //   await createTag(tag);
-  // }
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("values", values);
+  async function onSubmit(values: z.infer<typeof PostSchema>) {
+    try {
+      console.log("postTags", postTags);
+      const tagsIdArray = await queryTags(values.tags);
+      console.log("tagsIdArray", tagsIdArray);
+      await createPost({
+        title: values.title,
+        createType: values.createType,
+        description: values.description,
+        learned: values.learned,
+        content: values.content,
+        resources: values.resources,
+        tags: tagsIdArray,
+      });
+      router.push("/dashboard");
+      console.log("values", values);
+    } catch (error) {
+      console.log("error", error);
+    }
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-[30px]">
@@ -181,7 +178,7 @@ const CreatePostForm = ({ postTags }) => {
             <FormItem>
               <FormLabel className="paragraph-3-medium">Create Type</FormLabel>
               <FormControl>
-                <Select 
+                <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
@@ -448,9 +445,7 @@ const CreatePostForm = ({ postTags }) => {
           RESOURCES & LINKS
         </div>
         {resourcesFields.map((field, index) => (
-          <React.Fragment
-            key={field.id}
-          >
+          <React.Fragment key={field.id}>
             <FormField
               control={form.control}
               name={`resources.${index}.label`}
@@ -541,3 +536,5 @@ const CreatePostForm = ({ postTags }) => {
 };
 
 export default CreatePostForm;
+
+// send tags to the db

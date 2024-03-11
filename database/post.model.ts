@@ -5,11 +5,9 @@ export interface IPost extends Document {
   createType: string;
   tags: Schema.Types.ObjectId[];
   description: string;
-  views: number;
-  upvotes: Schema.Types.ObjectId[];
-  downvotes: Schema.Types.ObjectId[];
-  author: Schema.Types.ObjectId;
-  createdAt: Date;
+  learned: object[];
+  content: string;
+  resources: object[];
 }
 
 const PostSchema = new Schema({
@@ -17,11 +15,9 @@ const PostSchema = new Schema({
   createType: { type: String, required: true },
   tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
   description: { type: String, required: true },
-  views: { type: Number, default: 0 },
-  upvotes: [{ type: Schema.Types.ObjectId, ref: "User" }],
-  downvotes: [{ type: Schema.Types.ObjectId, ref: "User" }],
-  author: { type: Schema.Types.ObjectId, ref: "User" },
-  createdAt: { type: Date, default: Date.now },
+  learned: { type: Array, required: true },
+  content: { type: String, required: true },
+  resources: { type: Array, required: true },
 });
 
 const Post = models.Post || model("Post", PostSchema);
