@@ -4,8 +4,10 @@ import LeftSideBar from "@/components/shared/LeftSideBar";
 import Navbar from "@/components/shared/Navbar";
 import RightSideBar from "@/components/shared/RightSideBar";
 import { Toaster } from "@/components/ui/toaster";
+import { getTags } from "@/lib/actions/tag.actions";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = async ({ children }: { children: React.ReactNode }) => {
+    const postTags = await getTags();
   return (
     <main className=" relative">
       <div className="lg:hidden">
@@ -21,7 +23,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </div>
         </section>
         <div className="hidden xl:flex">
-          <RightSideBar />
+          <RightSideBar postTags={postTags}/>
         </div>
       </div>
       <Toaster />
