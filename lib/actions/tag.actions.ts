@@ -14,16 +14,6 @@ export async function getTags() {
   }
 }
 
-// export async function createTag(tag: ITag) {
-//     try {
-//         await connectToDatabase();
-//         const newtag = await Tag.create(tag);
-//         await newtag.save();
-//     } catch (error) {
-//         console.log("Error creating tag", error);
-//     }
-// }
-
 export async function queryTags(tags: { value: string }[]): Promise<string[]> {
     const tagsArray: string[] = [];
   try {
