@@ -195,7 +195,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                           width={12}
                           height={12}
                         />
-                        <div className="text-purple-500">Component</div>
+                        <div className="text-xs text-purple-500">Component</div>
                       </div>
                     </SelectItem>
                     <SelectItem value="knowledge">
@@ -206,7 +206,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                           width={12}
                           height={12}
                         />
-                        <div className="text-green-500">Knowledge</div>
+                        <div className="text-xs text-green-500">Knowledge</div>
                       </div>
                     </SelectItem>
                     <SelectItem value="workflow">
@@ -217,7 +217,9 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                           width={12}
                           height={12}
                         />
-                        <div className="text-primary1-500">WorkFlow</div>
+                        <div className="text-xs text-primary1-500">
+                          WorkFlow
+                        </div>
                       </div>
                     </SelectItem>
                   </SelectContent>
@@ -325,7 +327,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
               <FormControl>
                 <Textarea
                   placeholder="Enter a short description"
-                  className="paragraph-3-regular h-[100px] resize-none rounded border-none bg-black-700 text-xs"
+                  className="paragraph-3-regular h-[100px] resize-none rounded border-none bg-black-700 py-[14px] text-xs"
                   {...field}
                 />
               </FormControl>
@@ -335,7 +337,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
         />
 
         {isCreateType !== "component" && (
-          <div >
+          <div>
             <div className="paragraph-3-medium">What you learned</div>
             {learnedFields.map((field, index) => (
               <FormField
@@ -392,11 +394,51 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
           </div>
         )}
 
+           {isCreateType === "component" && (
+        <div>
+          <div className="mb-[10px] flex gap-2">
+            <Button className="h-9 w-28 rounded bg-black-700">
+              <div className="flex gap-2">
+                <Image
+                  src="/assets/icons/codeArrows.svg"
+                  alt="plus"
+                  width={16}
+                  height={16}
+                />
+                <div className="paragraph-3-medium">Code</div>
+              </div>
+            </Button>
+            <Button className="h-9 w-28 rounded bg-black-700">
+              <div className="flex gap-2">
+                <Image
+                  src="/assets/icons/eye.png"
+                  alt="plus"
+                  width={16}
+                  height={16}
+                />
+                <div className="paragraph-3-medium">Preview</div>
+              </div>
+            </Button>
+          </div>
+          <FormField
+            control={form.control}
+            name="content"
+            render={({ field }) => (
+              <FormItem className="flex w-full flex-col gap-3 ">
+                <FormControl className=""></FormControl>
+
+                <FormMessage className="text-red-500" />
+              </FormItem>
+            )}
+          />
+        </div>
+           )}
+
         <FormField
           control={form.control}
           name="content"
           render={({ field }) => (
-            <FormItem className="flex w-full flex-col gap-3">
+            <FormItem className="flex w-full flex-col gap-3 pt-[30px]">
               <FormLabel className="paragraph-3-medium text-white-500">
                 CONTENT
               </FormLabel>
@@ -411,7 +453,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                   onEditorChange={field.onChange}
                   initialValue=""
                   init={{
-                    height: 350,
+                    height: 216,
                     menubar: false,
                     plugins: [
                       "advlist",
@@ -446,11 +488,11 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
           )}
         />
 
-        <div className="paragraph-3-medium mb-[30px] text-white-500">
+        <div className="paragraph-3-medium mb-[30px] pt-[30px] text-white-500">
           RESOURCES & LINKS
         </div>
         {resourcesFields.map((field, index) => (
-          <React.Fragment key={field.id}>
+          <div key={field.id}>
             <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
               <div className="grow">
                 <FormField
@@ -461,7 +503,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                       <FormControl>
                         <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
                           <Input
-                            className="paragraph-3-regular h-12 border-none pl-3"
+                            className="paragraph-3-regular h-12 border-none"
                             placeholder="Label"
                             {...field}
                           />
@@ -488,7 +530,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                       <FormControl>
                         <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
                           <Input
-                            className="paragraph-3-regular h-12 border-none pl-3"
+                            className="paragraph-3-regular h-12 border-none"
                             placeholder="Resource Link"
                             {...field}
                           />
@@ -507,26 +549,25 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                 />
               </div>
             </div>
-          </React.Fragment>
-        ))}
-
-        <Button
-          className="h-9 w-full rounded bg-black-600"
-          type="button"
-          onClick={() => resourcesAppend({ label: "", resource: "" })}
-        >
-          <div className="flex gap-2">
-            <Image
-              src="/assets/icons/plusblue.svg"
-              alt="plus"
-              width={16}
-              height={16}
-            />
-            <div className="paragraph-4-medium text-white-100 ">
-              New Resource
-            </div>
+            <Button
+              className="mt-[14px] h-9 w-full rounded bg-black-600"
+              type="button"
+              onClick={() => resourcesAppend({ label: "", resource: "" })}
+            >
+              <div className="flex gap-2">
+                <Image
+                  src="/assets/icons/plusblue.svg"
+                  alt="plus"
+                  width={16}
+                  height={16}
+                />
+                <div className="paragraph-4-medium text-white-100 ">
+                  New Resource
+                </div>
+              </div>
+            </Button>
           </div>
-        </Button>
+        ))}
 
         <div className="pt-11">
           <Button
