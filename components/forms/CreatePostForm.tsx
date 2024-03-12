@@ -446,60 +446,62 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
         </div>
         {resourcesFields.map((field, index) => (
           <React.Fragment key={field.id}>
-            <FormField
-              control={form.control}
-              name={`resources.${index}.label`}
-              render={({ field }) => (
-                <FormItem>
-                  <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
-                    <FormControl>
-                      <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
-                        <Input
-                          className="paragraph-3-regular h-12 border-none pl-3"
-                          placeholder="Label"
-                          {...field}
-                        />
-                        <Image
-                          src="/assets/icons/close.svg"
-                          alt="close"
-                          width={9}
-                          height={9}
-                          onClick={() => resourcesRemove(index)}
-                        />
-                      </div>
-                    </FormControl>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={`resources.${index}.resource`}
-              render={({ field }) => (
-                <FormItem>
-                  <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
-                    <FormControl>
-                      <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
-                        <Input
-                          className="paragraph-3-regular h-12 border-none pl-3"
-                          placeholder="Resource Link"
-                          {...field}
-                        />
-                        <Image
-                          src="/assets/icons/close.svg"
-                          alt="close"
-                          width={9}
-                          height={9}
-                          onClick={() => resourcesRemove(index)}
-                        />
-                      </div>
-                    </FormControl>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
+              <div className="grow">
+                <FormField
+                  control={form.control}
+                  name={`resources.${index}.label`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
+                          <Input
+                            className="paragraph-3-regular h-12 border-none pl-3"
+                            placeholder="Label"
+                            {...field}
+                          />
+                          <Image
+                            src="/assets/icons/close.svg"
+                            alt="close"
+                            width={9}
+                            height={9}
+                            onClick={() => resourcesRemove(index)}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grow">
+                <FormField
+                  control={form.control}
+                  name={`resources.${index}.resource`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
+                          <Input
+                            className="paragraph-3-regular h-12 border-none pl-3"
+                            placeholder="Resource Link"
+                            {...field}
+                          />
+                          <Image
+                            src="/assets/icons/close.svg"
+                            alt="close"
+                            width={9}
+                            height={9}
+                            onClick={() => resourcesRemove(index)}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
           </React.Fragment>
         ))}
 
