@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import React from "react";
 
@@ -11,6 +12,7 @@ import Logo from "./Logo";
 import UserDetails from "./UserDetails";
 
 const LeftSideBar = () => {
+  const pathname = usePathname();
   return (
     <div className="w-[290px] bg-black-800 pt-10 lg:px-7 ">
       <div className="mb-12 hidden lg:flex">
@@ -20,18 +22,20 @@ const LeftSideBar = () => {
         <UserDetails />
       </div>
       <div className="space-y-4">
-        <Link href="/createpost">
-          <Button className="w-[235px] bg-custom-gradient">
-            <Image
-              src="/assets/icons/plus.svg"
-              alt="plus"
-              width={14}
-              height={14}
-              className="mr-1"
-            />
-            <div className="paragraph-4-medium text-white-100">Create Post</div>
-          </Button>
-        </Link>
+        {pathname !== "/createpost" && (
+          <Link href="/createpost">
+            <Button className="w-[235px] bg-custom-gradient">
+              <Image
+                src="/assets/icons/plus.svg"
+                alt="plus"
+                width={14}
+                height={14}
+                className="mr-1"
+              />
+              <div className="paragraph-4-medium text-white-100">Create Post</div>
+            </Button>
+          </Link>
+        )}
         <div className="relative flex min-h-[36px] w-[235px] grow items-center gap-1 rounded-lg bg-black-700 px-4">
           <Image
             src="/assets/icons/search.svg"

@@ -1,4 +1,6 @@
-export const postTags = [
+import { PostTags } from "@/types";
+
+export const postTags: PostTags[] = [
   {
     value: "api",
     label: "API",

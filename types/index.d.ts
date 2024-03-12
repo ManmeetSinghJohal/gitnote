@@ -1,2 +1,5 @@
-// contains the app’s global type declarations
+export interface PostTags {
+    value: string;
+    label: string;
+}
 

@@ -4,7 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Editor } from "@tinymce/tinymce-react";
 import Image from "next/image";
-import React, { useRef } from "react";
+import { useRouter } from "next/navigation";
+import React, { useRef, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -38,47 +39,29 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { postTags } from "@/constants/index";
-import { cn } from "@/lib/utils";
+import { createPost } from "@/lib/actions/post.action";
+import { queryTags } from "@/lib/actions/tag.actions";
+import { PostSchema } from "@/lib/validations";
 
-import { Badge } from "../ui/badge";
+// import { postTags } from "@/constants/index";
+// import { ITag } from "@/database/tag.model";
+// import { createTag, getTags } from "@/lib/actions/tag.actions";
+// import { cn } from "@/lib/utils";
 
-const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "Title must be at least 2 characters.",
-  }),
-  createtype: z.string(),
-  tags: z.array(
-    z.object({
-      value: z.string(),
-      label: z.string(),
-    })
-  ),
-  description: z
-    .string()
-    .min(2, { message: "Description must be at least 2 characters." }),
-  learned: z.array(
-    z.string().min(2, { message: "Each string must be at least 2 characters." })
-  ),
-  content: z
-    .string()
-    .min(2, { message: "Content must be at least 2 characters." }),
-  resources: z
-    .string()
-    .min(2, { message: "Resources must be at least 2 characters." }),
-});
+const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
+  const [isPopOverOpen, setIsPopOverOpen] = useState(false);
+  const router = useRouter();
 
-const CreatePostForm = () => {
   const editorRef = useRef(null);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof PostSchema>>({
+    resolver: zodResolver(PostSchema),
     defaultValues: {
       title: "",
-      createtype: "",
+      createType: "",
       description: "",
-      learned: [{ lesson: "" }, { lesson: "" }],
+      learned: [{ lesson: "" }],
       content: "",
-      resources: [],
+      resources: [{ label: "", resource: "" }],
       tags: [],
     },
   });
@@ -88,8 +71,8 @@ const CreatePostForm = () => {
     append: learnedAppend,
     remove: learnedRemove,
   } = useFieldArray({
-    control: form.control, // control props comes from useForm (optional: if you are using FormContext)
-    name: "learned", // unique name for your Field Array
+    control: form.control,
+    name: "learned",
   });
 
   const {
@@ -97,8 +80,8 @@ const CreatePostForm = () => {
     append: resourcesAppend,
     remove: resourcesRemove,
   } = useFieldArray({
-    control: form.control, // control props comes from useForm (optional: if you are using FormContext)
-    name: "resources", // unique name for your Field Array
+    control: form.control,
+    name: "resources",
   });
 
   const {
@@ -106,13 +89,69 @@ const CreatePostForm = () => {
     append: tagsAppend,
     remove: tagsRemove,
   } = useFieldArray({
-    control: form.control, // control props comes from useForm (optional: if you are using FormContext)
-    name: "tags", // unique name for your Field Array
+    control: form.control,
+    name: "tags",
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("values", values);
+  const handleInputKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    field: any
+  ) => {
+    if (e.key === "Enter" && field.name === "tags") {
+      e.preventDefault();
+      setIsPopOverOpen(false);
+
+      const tagInput = e.target as HTMLInputElement;
+      const tagValue = tagInput.value.trim();
+
+      if (tagValue !== "") {
+        if (tagValue.length > 15) {
+          return form.setError("tags", {
+            message: "Tag cannot be longer than 15 characters.",
+          });
+        }
+
+        const verifyOrCreateBadge = !tagsFields.some(
+          (tagField) => tagField.value === tagValue
+        );
+
+        if (verifyOrCreateBadge) {
+          tagsAppend({
+            label: tagValue.toLowerCase(),
+            value: tagValue.toLowerCase(),
+          });
+          tagInput.value = "";
+          form.clearErrors("tags");
+        }
+      } else {
+        form.trigger();
+      }
+    }
+  };
+
+  async function onSubmit(values: z.infer<typeof PostSchema>) {
+    try {
+      console.log("postTags", postTags);
+      const tagsIdArray = await queryTags(values.tags);
+      console.log("tagsIdArray", tagsIdArray);
+      await createPost({
+        title: values.title,
+        createType: values.createType,
+        description: values.description,
+        learned: values.learned,
+        content: values.content,
+        resources: values.resources,
+        tags: tagsIdArray,
+      });
+      router.push("/dashboard");
+      console.log("values", values);
+    } catch (error) {
+      console.log("error", error);
+    }
   }
+
+  const isCreateType = form.watch("createType");
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-[30px]">
@@ -135,12 +174,15 @@ const CreatePostForm = () => {
         />
         <FormField
           control={form.control}
-          name="createtype"
+          name="createType"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="paragraph-3-medium">Create Type</FormLabel>
               <FormControl>
-                <Select>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <SelectTrigger className="paragraph-3-regular h-[48px] w-full border-none bg-black-700 text-xs text-muted-foreground">
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
@@ -153,7 +195,7 @@ const CreatePostForm = () => {
                           width={12}
                           height={12}
                         />
-                        <div className="text-purple-500">Component</div>
+                        <div className="text-xs text-purple-500">Component</div>
                       </div>
                     </SelectItem>
                     <SelectItem value="knowledge">
@@ -164,7 +206,7 @@ const CreatePostForm = () => {
                           width={12}
                           height={12}
                         />
-                        <div className="text-green-500">Knowledge</div>
+                        <div className="text-xs text-green-500">Knowledge</div>
                       </div>
                     </SelectItem>
                     <SelectItem value="workflow">
@@ -175,7 +217,9 @@ const CreatePostForm = () => {
                           width={12}
                           height={12}
                         />
-                        <div className="text-primary1-500">WorkFlow</div>
+                        <div className="text-xs text-primary1-500">
+                          WorkFlow
+                        </div>
                       </div>
                     </SelectItem>
                   </SelectContent>
@@ -192,7 +236,7 @@ const CreatePostForm = () => {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel className="paragraph-3-medium">Tags</FormLabel>
-              <Popover>
+              <Popover open={isPopOverOpen} onOpenChange={setIsPopOverOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <div
@@ -203,10 +247,6 @@ const CreatePostForm = () => {
                         <div className="paragraph-3-regular text-xs text-muted-foreground">
                           Search tags
                         </div>
-                        {field.value
-                          ? postTags.find((tag) => tag.value === field.value)
-                              ?.label
-                          : "Select tag"}
                         <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
                       </div>
                     </div>
@@ -217,6 +257,7 @@ const CreatePostForm = () => {
                     <CommandInput
                       placeholder="Search tags..."
                       className="h-9 text-white-100"
+                      onKeyDown={(e) => handleInputKeyDown(e, field)}
                     />
                     <CommandEmpty>No tag found.</CommandEmpty>
                     <CommandGroup className="">
@@ -224,8 +265,8 @@ const CreatePostForm = () => {
                         <CommandItem
                           value={tag.label}
                           key={tag.value}
-                          className=""
                           onSelect={() => {
+                            setIsPopOverOpen(false);
                             const shouldAppendTag = !tagsFields.some(
                               (tagField) => tagField.value === tag.value
                             );
@@ -238,14 +279,14 @@ const CreatePostForm = () => {
                           }}
                         >
                           {tag.label}
-                          <CheckIcon
+                          {/* <CheckIcon
                             className={cn(
                               "ml-auto h-4 w-4",
                               tag.value === field.value
                                 ? "opacity-100"
                                 : "opacity-0"
                             )}
-                          />
+                          /> */}
                         </CommandItem>
                       ))}
                     </CommandGroup>
@@ -286,7 +327,7 @@ const CreatePostForm = () => {
               <FormControl>
                 <Textarea
                   placeholder="Enter a short description"
-                  className="paragraph-3-regular h-[100px] resize-none rounded border-none bg-black-700 text-xs"
+                  className="paragraph-3-regular h-[100px] resize-none rounded border-none bg-black-700 py-[14px] text-xs"
                   {...field}
                 />
               </FormControl>
@@ -295,65 +336,109 @@ const CreatePostForm = () => {
           )}
         />
 
-        <div className="paragraph-3-medium">What you learned</div>
-        {learnedFields.map((field, index) => (
+        {isCreateType !== "component" && (
+          <div>
+            <div className="paragraph-3-medium">What you learned</div>
+            {learnedFields.map((field, index) => (
+              <FormField
+                control={form.control}
+                name={`learned.${index}.lesson`}
+                key={field.id}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className="relative my-2 flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
+                        <Image
+                          src="/assets/icons/checkmark.svg"
+                          alt="checkmark"
+                          width={16}
+                          height={16}
+                        />
+                        <Input
+                          className="paragraph-3-regular h-12 border-none pl-3"
+                          placeholder="Enter what you learned"
+                          {...field}
+                        />
+                        <Image
+                          src="/assets/icons/close.svg"
+                          alt="close"
+                          width={9}
+                          height={9}
+                          onClick={() => learnedRemove(index)}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+
+            <Button
+              className="mt-[6px] h-9 w-full rounded bg-black-600"
+              type="button"
+              onClick={() => learnedAppend({ lesson: "" })}
+            >
+              <div className="flex gap-2">
+                <Image
+                  src="/assets/icons/plusblue.svg"
+                  alt="plus"
+                  width={16}
+                  height={16}
+                />
+                <div className="paragraph-4-medium text-white-100">
+                  Add checkmark
+                </div>
+              </div>
+            </Button>
+          </div>
+        )}
+
+           {isCreateType === "component" && (
+        <div>
+          <div className="mb-[10px] flex gap-2">
+            <Button className="h-9 w-28 rounded bg-black-700">
+              <div className="flex gap-2">
+                <Image
+                  src="/assets/icons/codeArrows.svg"
+                  alt="plus"
+                  width={16}
+                  height={16}
+                />
+                <div className="paragraph-3-medium">Code</div>
+              </div>
+            </Button>
+            <Button className="h-9 w-28 rounded bg-black-700">
+              <div className="flex gap-2">
+                <Image
+                  src="/assets/icons/eye.png"
+                  alt="plus"
+                  width={16}
+                  height={16}
+                />
+                <div className="paragraph-3-medium">Preview</div>
+              </div>
+            </Button>
+          </div>
           <FormField
             control={form.control}
-            name={`learned.${index}.lesson`}
-            key={field.id} // important to include key with field's id
+            name="content"
             render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
-                    <Image
-                      src="/assets/icons/checkmark.svg"
-                      alt="checkmark"
-                      width={16}
-                      height={16}
-                    />
-                    <Input
-                      className="paragraph-3-regular h-12 border-none pl-3"
-                      placeholder="Enter what you learned"
-                      {...field}
-                    />
-                    <Image
-                      src="/assets/icons/close.svg"
-                      alt="close"
-                      width={9}
-                      height={9}
-                      onClick={() => learnedRemove(index)}
-                    />
-                  </div>
-                </FormControl>
-                <FormMessage />
+              <FormItem className="flex w-full flex-col gap-3 ">
+                <FormControl className=""></FormControl>
+
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
-        ))}
-
-        <Button
-          className="h-9 w-full rounded bg-black-600"
-          type="button"
-          onClick={() => learnedAppend({ lesson: "" })}
-        >
-          <div className="flex gap-2">
-            <Image
-              src="/assets/icons/plusblue.svg"
-              alt="plus"
-              width={16}
-              height={16}
-            />
-            <div className="paragraph-4-medium text-white-100">
-              Add checkmark
-            </div>
-          </div>
-        </Button>
+        </div>
+           )}
 
         <FormField
           control={form.control}
           name="content"
           render={({ field }) => (
-            <FormItem className="flex w-full flex-col gap-3">
+            <FormItem className="flex w-full flex-col gap-3 pt-[30px]">
               <FormLabel className="paragraph-3-medium text-white-500">
                 CONTENT
               </FormLabel>
@@ -365,10 +450,10 @@ const CreatePostForm = () => {
                     editorRef.current = editor;
                   }}
                   onBlur={field.onBlur}
-                  onEditorChange={(content) => console.log(content)}
+                  onEditorChange={field.onChange}
                   initialValue=""
                   init={{
-                    height: 350,
+                    height: 216,
                     menubar: false,
                     plugins: [
                       "advlist",
@@ -392,6 +477,8 @@ const CreatePostForm = () => {
                       "codesample | bold italic forecolor | alignleft aligncenter " +
                       "alignright alignjustify | bullist numlist",
                     content_style: "body { font-family:Inter; font-size:16px }",
+                    skin: "oxide-dark",
+                    content_css: "dark",
                   }}
                 />
               </FormControl>
@@ -401,76 +488,86 @@ const CreatePostForm = () => {
           )}
         />
 
-        <div className="paragraph-3-medium mb-[30px] text-white-500">
+        <div className="paragraph-3-medium mb-[30px] pt-[30px] text-white-500">
           RESOURCES & LINKS
         </div>
         {resourcesFields.map((field, index) => (
-          <FormField
-            control={form.control}
-            name="resources"
-            key={field.id} // important to include key with field's id
-            {...form.register(`resources.${index}.resource`)}
-            render={({ field }) => (
-              <FormItem>
-                <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
-                  <FormControl>
-                    <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
-                      <Input
-                        className="paragraph-3-regular h-12 border-none pl-3"
-                        placeholder="Label"
-                        {...field}
-                        value={field.value.resource} // Update the value prop to be a string
-                      />
-                      <Image
-                        src="/assets/icons/close.svg"
-                        alt="close"
-                        width={9}
-                        height={9}
-                        onClick={() => resourcesRemove(index)}
-                      />
-                    </div>
-                  </FormControl>
-                  <FormControl>
-                    <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
-                      <Input
-                        className="paragraph-3-regular h-12 border-none pl-3"
-                        placeholder="Resource Link"
-                        {...field}
-                        value={field.value.resource} // Update the valu
-                      />
-                      <Image
-                        src="/assets/icons/close.svg"
-                        alt="close"
-                        width={9}
-                        height={9}
-                        onClick={() => resourcesRemove(index)}
-                      />
-                    </div>
-                  </FormControl>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        ))}
-
-        <Button
-          className="h-9 w-full rounded bg-black-600"
-          type="button"
-          onClick={() => resourcesAppend({ resource: "" })}
-        >
-          <div className="flex gap-2">
-            <Image
-              src="/assets/icons/plusblue.svg"
-              alt="plus"
-              width={16}
-              height={16}
-            />
-            <div className="paragraph-4-medium text-white-100 ">
-              New Resource
+          <div key={field.id}>
+            <div className="gap-2 space-y-2 lg:flex lg:space-y-0">
+              <div className="grow">
+                <FormField
+                  control={form.control}
+                  name={`resources.${index}.label`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
+                          <Input
+                            className="paragraph-3-regular h-12 border-none"
+                            placeholder="Label"
+                            {...field}
+                          />
+                          <Image
+                            src="/assets/icons/close.svg"
+                            alt="close"
+                            width={9}
+                            height={9}
+                            onClick={() => resourcesRemove(index)}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grow">
+                <FormField
+                  control={form.control}
+                  name={`resources.${index}.resource`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
+                          <Input
+                            className="paragraph-3-regular h-12 border-none"
+                            placeholder="Resource Link"
+                            {...field}
+                          />
+                          <Image
+                            src="/assets/icons/close.svg"
+                            alt="close"
+                            width={9}
+                            height={9}
+                            onClick={() => resourcesRemove(index)}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
+            <Button
+              className="mt-[14px] h-9 w-full rounded bg-black-600"
+              type="button"
+              onClick={() => resourcesAppend({ label: "", resource: "" })}
+            >
+              <div className="flex gap-2">
+                <Image
+                  src="/assets/icons/plusblue.svg"
+                  alt="plus"
+                  width={16}
+                  height={16}
+                />
+                <div className="paragraph-4-medium text-white-100 ">
+                  New Resource
+                </div>
+              </div>
+            </Button>
           </div>
-        </Button>
+        ))}
 
         <div className="pt-11">
           <Button
@@ -487,3 +584,5 @@ const CreatePostForm = () => {
 };
 
 export default CreatePostForm;
+
+// send tags to the db

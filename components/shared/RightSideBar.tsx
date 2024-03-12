@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 
 import UserDetails from "./UserDetails";
 
-const RightSideBar = () => {
+const RightSideBar = ({postTags}) => {
   return (
     <div className="min-w-[290px] bg-black-800 px-7 pt-10">
       <UserDetails />
@@ -13,78 +13,15 @@ const RightSideBar = () => {
 
         <div className="space-y-5">
           <div className="flex flex-col items-start gap-3">
-            <Badge
-              variant="secondary"
-              className="paragraph-3-medium bg-black-700 text-white-300"
-            >
-              Authentication
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="paragraph-3-medium bg-black-700 text-white-300"
-            >
-              Authentication
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="paragraph-3-medium bg-black-700 text-white-300"
-            >
-              Authentication
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="paragraph-3-medium bg-black-700 text-white-300"
-            >
-              Authentication
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="paragraph-3-medium bg-black-700 text-white-300"
-            >
-              Authentication
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="paragraph-3-medium bg-black-700 text-white-300"
-            >
-              Authentication
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="paragraph-3-medium bg-black-700 text-white-300"
-            >
-              Authentication
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="paragraph-3-medium bg-black-700 text-white-300"
-            >
-              Authentication
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="paragraph-3-medium bg-black-700 text-white-300"
-            >
-              Authentication
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="paragraph-3-medium bg-black-700 text-white-300"
-            >
-              Authentication
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="paragraph-3-medium bg-black-700 text-white-300"
-            >
-              Authentication
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="paragraph-3-medium bg-black-700 text-white-300"
-            >
-              Authentication
-            </Badge>
+            {postTags.map((tag) => (
+              <Badge
+                variant="secondary"
+                className="paragraph-3-medium bg-black-700 text-white-300"
+                key={tag.value}
+              >
+                {tag.label}
+              </Badge>
+            ))}
           </div>
         </div>
       </div>
