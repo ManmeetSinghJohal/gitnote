@@ -129,7 +129,6 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
     }
   };
 
-
   async function onSubmit(values: z.infer<typeof PostSchema>) {
     try {
       console.log("postTags", postTags);
@@ -150,6 +149,8 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
       console.log("error", error);
     }
   }
+
+  const isCreateType = form.watch("createType");
 
   return (
     <Form {...form}>
@@ -333,59 +334,63 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
           )}
         />
 
-        <div className="paragraph-3-medium">What you learned</div>
-        {learnedFields.map((field, index) => (
-          <FormField
-            control={form.control}
-            name={`learned.${index}.lesson`}
-            key={field.id}
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <div className="relative flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
-                    <Image
-                      src="/assets/icons/checkmark.svg"
-                      alt="checkmark"
-                      width={16}
-                      height={16}
-                    />
-                    <Input
-                      className="paragraph-3-regular h-12 border-none pl-3"
-                      placeholder="Enter what you learned"
-                      {...field}
-                    />
-                    <Image
-                      src="/assets/icons/close.svg"
-                      alt="close"
-                      width={9}
-                      height={9}
-                      onClick={() => learnedRemove(index)}
-                    />
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        ))}
+        {isCreateType !== "component" && (
+          <div >
+            <div className="paragraph-3-medium">What you learned</div>
+            {learnedFields.map((field, index) => (
+              <FormField
+                control={form.control}
+                name={`learned.${index}.lesson`}
+                key={field.id}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className="relative my-2 flex h-[48px] w-full items-center gap-1 rounded bg-black-700 px-4">
+                        <Image
+                          src="/assets/icons/checkmark.svg"
+                          alt="checkmark"
+                          width={16}
+                          height={16}
+                        />
+                        <Input
+                          className="paragraph-3-regular h-12 border-none pl-3"
+                          placeholder="Enter what you learned"
+                          {...field}
+                        />
+                        <Image
+                          src="/assets/icons/close.svg"
+                          alt="close"
+                          width={9}
+                          height={9}
+                          onClick={() => learnedRemove(index)}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
 
-        <Button
-          className="h-9 w-full rounded bg-black-600"
-          type="button"
-          onClick={() => learnedAppend({ lesson: "" })}
-        >
-          <div className="flex gap-2">
-            <Image
-              src="/assets/icons/plusblue.svg"
-              alt="plus"
-              width={16}
-              height={16}
-            />
-            <div className="paragraph-4-medium text-white-100">
-              Add checkmark
-            </div>
+            <Button
+              className="mt-[6px] h-9 w-full rounded bg-black-600"
+              type="button"
+              onClick={() => learnedAppend({ lesson: "" })}
+            >
+              <div className="flex gap-2">
+                <Image
+                  src="/assets/icons/plusblue.svg"
+                  alt="plus"
+                  width={16}
+                  height={16}
+                />
+                <div className="paragraph-4-medium text-white-100">
+                  Add checkmark
+                </div>
+              </div>
+            </Button>
           </div>
-        </Button>
+        )}
 
         <FormField
           control={form.control}
