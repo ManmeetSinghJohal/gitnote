@@ -93,3 +93,11 @@ input:-webkit-autofill:active{
     @apply bg-background text-foreground;
   }
 }
+
+.tox-statusbar{
+  display: none !important;
+}
+
+.tox-toolbar__primary {
+	background-color: #2E3757 !important;
+}

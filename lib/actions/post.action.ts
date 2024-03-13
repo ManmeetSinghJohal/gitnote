@@ -38,3 +38,13 @@ export async function createPost(params: CreatePostParams) {
     throw new Error("Error creating post");
   }
 }
+
+export async function getPosts() {
+  try {
+    await connectToDatabase();
+    const posts = await Post.find();
+    return posts;
+  } catch (error) {
+    console.log("Error getting posts", error);
+  }
+}

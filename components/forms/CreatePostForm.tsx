@@ -5,9 +5,14 @@ import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Editor } from "@tinymce/tinymce-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useRef, useState } from "react";
+import Prism from "prismjs";
+import React, { useEffect, useRef, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
+import "prismjs/components/prism-jsx";
+import "prism-themes/themes/prism-one-dark.css";
+import "prismjs/plugins/line-numbers/prism-line-numbers";
+import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -38,6 +43,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { createPost } from "@/lib/actions/post.action";
 import { queryTags } from "@/lib/actions/tag.actions";
@@ -47,6 +53,7 @@ import { PostSchema } from "@/lib/validations";
 // import { ITag } from "@/database/tag.model";
 // import { createTag, getTags } from "@/lib/actions/tag.actions";
 // import { cn } from "@/lib/utils";
+
 
 const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
@@ -59,6 +66,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
       title: "",
       createType: "",
       description: "",
+      code: "",
       learned: [{ lesson: "" }],
       content: "",
       resources: [{ label: "", resource: "" }],
@@ -92,6 +100,9 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
     control: form.control,
     name: "tags",
   });
+
+  const highlightCode = () =>
+    Prism.highlightAll();
 
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -151,6 +162,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
   }
 
   const isCreateType = form.watch("createType");
+  const code = form.watch("code");
 
   return (
     <Form {...form}>
@@ -393,46 +405,78 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
             </Button>
           </div>
         )}
+        <Tabs defaultValue="preview" className="w-full">
+          <TabsList>
+            <TabsTrigger value="code">Code</TabsTrigger>
+            <TabsTrigger value="preview" onClick={highlightCode}>
+              Preview
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="code">
+            <FormField
+              control={form.control}
+              name="code"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="paragraph-3-medium">Title</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="paragraph-3-regular h-12 rounded border-none bg-black-700 pl-3"
+                      placeholder="Enter your code"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </TabsContent>
+          <TabsContent value="preview">
+            <pre className="line-numbers">
+              <code className="language-jsx">{code}</code>
+            </pre>
+          </TabsContent>
+        </Tabs>
 
-           {isCreateType === "component" && (
-        <div>
-          <div className="mb-[10px] flex gap-2">
-            <Button className="h-9 w-28 rounded bg-black-700">
-              <div className="flex gap-2">
-                <Image
-                  src="/assets/icons/codeArrows.svg"
-                  alt="plus"
-                  width={16}
-                  height={16}
-                />
-                <div className="paragraph-3-medium">Code</div>
-              </div>
-            </Button>
-            <Button className="h-9 w-28 rounded bg-black-700">
-              <div className="flex gap-2">
-                <Image
-                  src="/assets/icons/eye.png"
-                  alt="plus"
-                  width={16}
-                  height={16}
-                />
-                <div className="paragraph-3-medium">Preview</div>
-              </div>
-            </Button>
+        {isCreateType === "component" && (
+          <div>
+            <div className="mb-[10px] flex gap-2">
+              <Button className="h-9 w-28 rounded bg-black-700">
+                <div className="flex gap-2">
+                  <Image
+                    src="/assets/icons/codeArrows.svg"
+                    alt="plus"
+                    width={16}
+                    height={16}
+                  />
+                  <div className="paragraph-3-medium">Code</div>
+                </div>
+              </Button>
+              <Button className="h-9 w-28 rounded bg-black-700">
+                <div className="flex gap-2">
+                  <Image
+                    src="/assets/icons/eye.png"
+                    alt="plus"
+                    width={16}
+                    height={16}
+                  />
+                  <div className="paragraph-3-medium">Preview</div>
+                </div>
+              </Button>
+            </div>
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem className="flex w-full flex-col gap-3 ">
+                  <FormControl className=""></FormControl>
+
+                  <FormMessage className="text-red-500" />
+                </FormItem>
+              )}
+            />
           </div>
-          <FormField
-            control={form.control}
-            name="content"
-            render={({ field }) => (
-              <FormItem className="flex w-full flex-col gap-3 ">
-                <FormControl className=""></FormControl>
-
-                <FormMessage className="text-red-500" />
-              </FormItem>
-            )}
-          />
-        </div>
-           )}
+        )}
 
         <FormField
           control={form.control}
@@ -473,10 +517,10 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                       "table",
                     ],
                     toolbar:
-                      "undo redo | blocks | " +
-                      "codesample | bold italic forecolor | alignleft aligncenter " +
+                      "bold italic forecolor | alignleft aligncenter " +
                       "alignright alignjustify | bullist numlist",
-                    content_style: "body { font-family:Inter; font-size:16px }",
+                    content_style:
+                      "body { font-family:Inter; font-size:16px; background-color:#1D2032;}",
                     skin: "oxide-dark",
                     content_css: "dark",
                   }}

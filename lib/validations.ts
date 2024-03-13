@@ -20,6 +20,7 @@ export const PostSchema = z.object({
     message: "Title must be at least 2 characters.",
   }),
   createType: z.string(),
+  code: z.string(),
   tags: z.array(
     z.object({
       value: z.string(),
