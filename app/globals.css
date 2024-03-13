@@ -101,3 +101,7 @@ input:-webkit-autofill:active{
 .tox-toolbar__primary {
 	background-color: #2E3757 !important;
 }
+
+.tox-editor-header {
+ background-color: #2E3757 !important;
+}
