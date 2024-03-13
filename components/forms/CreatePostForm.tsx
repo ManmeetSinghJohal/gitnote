@@ -405,43 +405,11 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
             </Button>
           </div>
         )}
-        <Tabs defaultValue="preview" className="w-full">
-          <TabsList>
-            <TabsTrigger value="code">Code</TabsTrigger>
-            <TabsTrigger value="preview" onClick={highlightCode}>
-              Preview
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="code">
-            <FormField
-              control={form.control}
-              name="code"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="paragraph-3-medium">Title</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className="paragraph-3-regular h-12 rounded border-none bg-black-700 pl-3"
-                      placeholder="Enter your code"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </TabsContent>
-          <TabsContent value="preview">
-            <pre className="line-numbers">
-              <code className="language-jsx">{code}</code>
-            </pre>
-          </TabsContent>
-        </Tabs>
 
         {isCreateType === "component" && (
-          <div>
-            <div className="mb-[10px] flex gap-2">
-              <Button className="h-9 w-28 rounded bg-black-700">
+          <Tabs defaultValue="code" className="w-full">
+            <TabsList className="bg-black-800">
+              <TabsTrigger value="code">
                 <div className="flex gap-2">
                   <Image
                     src="/assets/icons/codeArrows.svg"
@@ -451,8 +419,8 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                   />
                   <div className="paragraph-3-medium">Code</div>
                 </div>
-              </Button>
-              <Button className="h-9 w-28 rounded bg-black-700">
+              </TabsTrigger>
+              <TabsTrigger value="preview" onClick={highlightCode}>
                 <div className="flex gap-2">
                   <Image
                     src="/assets/icons/eye.png"
@@ -462,20 +430,32 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                   />
                   <div className="paragraph-3-medium">Preview</div>
                 </div>
-              </Button>
-            </div>
-            <FormField
-              control={form.control}
-              name="content"
-              render={({ field }) => (
-                <FormItem className="flex w-full flex-col gap-3 ">
-                  <FormControl className=""></FormControl>
-
-                  <FormMessage className="text-red-500" />
-                </FormItem>
-              )}
-            />
-          </div>
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="code">
+              <FormField
+                control={form.control}
+                name="code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Textarea
+                        className="paragraph-3-regular h-12 rounded border-none bg-black-700 pl-3"
+                        placeholder="Enter your code"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
+            <TabsContent value="preview">
+              <pre className="line-numbers">
+                <code className="language-jsx">{code}</code>
+              </pre>
+            </TabsContent>
+          </Tabs>
         )}
 
         <FormField
