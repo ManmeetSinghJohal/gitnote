@@ -6,7 +6,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Prism from "prismjs";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import "prismjs/components/prism-jsx";
@@ -48,12 +48,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { createPost } from "@/lib/actions/post.action";
 import { queryTags } from "@/lib/actions/tag.actions";
 import { PostSchema } from "@/lib/validations";
-
-// import { postTags } from "@/constants/index";
-// import { ITag } from "@/database/tag.model";
-// import { createTag, getTags } from "@/lib/actions/tag.actions";
-// import { cn } from "@/lib/utils";
-
 
 const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
@@ -440,7 +434,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                   <FormItem>
                     <FormControl>
                       <Textarea
-                        className="paragraph-3-regular h-12 rounded border-none bg-black-700 pl-3"
+                        className="paragraph-3-regular h-[200px] rounded border-none bg-black-700 pl-3"
                         placeholder="Enter your code"
                         {...field}
                       />
