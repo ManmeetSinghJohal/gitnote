@@ -62,7 +62,7 @@ const LeftSideBar = ({posts}) => {
         <h4 className="mb-5 text-[10px] font-normal text-white-500">POST</h4>
         <div>
           <div className="space-y-5">
-            {posts.map((post) => (
+            {posts?.map((post) => (
               <div 
               key={post._id}
               className="flex items-center gap-3">
