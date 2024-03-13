@@ -61,7 +61,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
       createType: "",
       description: "",
       code: "",
-      learned: [{ lesson: "" }],
+      checkList: [{ step_lesson: "" }],
       content: "",
       resources: [{ label: "", resource: "" }],
       tags: [],
@@ -69,12 +69,12 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
   });
 
   const {
-    fields: learnedFields,
-    append: learnedAppend,
-    remove: learnedRemove,
+    fields: checkListFields,
+    append: checkListAppend,
+    remove: checkListRemove,
   } = useFieldArray({
     control: form.control,
-    name: "learned",
+    name: "checkList",
   });
 
   const {
@@ -143,7 +143,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
         title: values.title,
         createType: values.createType,
         description: values.description,
-        learned: values.learned,
+        checkList: values.checkList,
         content: values.content,
         resources: values.resources,
         tags: tagsIdArray,
@@ -344,11 +344,11 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
 
         {isCreateType !== "component" && (
           <div>
-            <div className="paragraph-3-medium">What you learned</div>
-            {learnedFields.map((field, index) => (
+            <div className="paragraph-3-medium">{isCreateType === "knowledge" ? "What you learned" : "Steps to follow"}</div>
+            {checkListFields.map((field, index) => (
               <FormField
                 control={form.control}
-                name={`learned.${index}.lesson`}
+                name={`checkList.${index}.step_lesson`}
                 key={field.id}
                 render={({ field }) => (
                   <FormItem>
@@ -370,7 +370,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                           alt="close"
                           width={9}
                           height={9}
-                          onClick={() => learnedRemove(index)}
+                          onClick={() => checkListRemove(index)}
                         />
                       </div>
                     </FormControl>
@@ -383,7 +383,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
             <Button
               className="mt-[6px] h-9 w-full rounded bg-black-600"
               type="button"
-              onClick={() => learnedAppend({ lesson: "" })}
+              onClick={() => checkListAppend({ lesson: "" })}
             >
               <div className="flex gap-2">
                 <Image
