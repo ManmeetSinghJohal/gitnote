@@ -20,6 +20,7 @@ export const PostSchema = z.object({
     message: "Title must be at least 2 characters.",
   }),
   createType: z.string(),
+  code: z.string(),
   tags: z.array(
     z.object({
       value: z.string(),
@@ -29,9 +30,9 @@ export const PostSchema = z.object({
   description: z
     .string()
     .min(2, { message: "Description must be at least 2 characters." }),
-  learned: z.array(
+  checkList: z.array(
     z.object({
-      lesson: z.string(),
+      step_lesson: z.string(),
     })
   ),
   content: z.string(),

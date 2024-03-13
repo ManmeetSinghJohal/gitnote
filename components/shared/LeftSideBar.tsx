@@ -11,7 +11,7 @@ import { Input } from "../ui/input";
 import Logo from "./Logo";
 import UserDetails from "./UserDetails";
 
-const LeftSideBar = () => {
+const LeftSideBar = ({posts}) => {
   const pathname = usePathname();
   return (
     <div className="w-[290px] bg-black-800 pt-10 lg:px-7 ">
@@ -62,87 +62,20 @@ const LeftSideBar = () => {
         <h4 className="mb-5 text-[10px] font-normal text-white-500">POST</h4>
         <div>
           <div className="space-y-5">
-            <div className="flex items-center gap-3">
-              <Image
-                src="/assets/icons/workflow.svg"
-                alt="workflow"
-                width={16}
-                height={16}
-              />
-              <h4 className="paragraph-3-medium">Project Setup</h4>
-            </div>
-            <div className="flex items-center gap-3">
-              <Image
-                src="/assets/icons/workflow.svg"
-                alt="workflow"
-                width={16}
-                height={16}
-              />
-              <h4 className="paragraph-3-medium">NextAuth OAuth Setup</h4>
-            </div>
-            <div className="flex items-center gap-3">
-              <Image
-                src="/assets/icons/component.svg"
-                alt="component"
-                width={16}
-                height={16}
-              />
-              <h4 className="paragraph-3-medium">Mobile Navigation</h4>
-            </div>
-            <div className="flex items-center gap-3">
-              <Image
-                src="/assets/icons/component.svg"
-                alt="component"
-                width={16}
-                height={16}
-              />
-              <h4 className="paragraph-3-medium">Header</h4>
-            </div>
-            <div className="flex items-center gap-3">
-              <Image
-                src="/assets/icons/component.svg"
-                alt="component"
-                width={16}
-                height={16}
-              />
-              <h4 className="paragraph-3-medium">Modal</h4>
-            </div>
-            <div className="flex items-center gap-3">
-              <Image
-                src="/assets/icons/component.svg"
-                alt="component"
-                width={16}
-                height={16}
-              />
-              <h4 className="paragraph-3-medium">Search Command</h4>
-            </div>
-            <div className="flex items-center gap-3">
-              <Image
-                src="/assets/icons/knowledge.svg"
-                alt="knowledge"
-                width={16}
-                height={16}
-              />
-              <h4 className="paragraph-3-medium">Design System</h4>
-            </div>
-            <div className="flex items-center gap-3">
-              <Image
-                src="/assets/icons/knowledge.svg"
-                alt="knowledge"
-                width={16}
-                height={16}
-              />
-              <h4 className="paragraph-3-medium">Naming Convention</h4>
-            </div>
-            <div className="flex items-center gap-3">
-              <Image
-                src="/assets/icons/knowledge.svg"
-                alt="knowledge"
-                width={16}
-                height={16}
-              />
-              <h4 className="paragraph-3-medium">Best Practices</h4>
-            </div>
+            {posts?.map((post) => (
+              <div 
+              key={post._id}
+              className="flex items-center gap-3">
+                <Image
+                  src={`/assets/icons/${post.createType}.svg`}
+                  alt={`${post.createType}`}
+                  width={16}
+                  height={16}
+                />
+                <h4 className="paragraph-3-medium">{post.title}</h4>
+              </div>
+            ))}
+           
           </div>
         </div>
       </div>

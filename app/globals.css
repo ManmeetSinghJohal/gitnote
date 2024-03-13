@@ -93,3 +93,24 @@ input:-webkit-autofill:active{
     @apply bg-background text-foreground;
   }
 }
+
+.tox-statusbar{
+  display: none !important;
+}
+
+.tox-toolbar__primary {
+	background-color: #2E3757 !important;
+}
+
+.tox-editor-header {
+ background-color: #2E3757 !important;
+ border-bottom: 0 !important;
+}
+
+.tox-tinymce {
+ Border: 1px solid #131625 !important;
+}
+
+.tox-edit-area__iframe {
+	background-color:  #131625 !important;
+}

@@ -11,7 +11,7 @@ export interface CreatePostParams {
   createType: string;
   tags: string[];
   description: string;
-  learned: object[];
+  checkList: object[];
   content: string;
   resources: object[];
 }

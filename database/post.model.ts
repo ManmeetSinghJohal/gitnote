@@ -5,7 +5,7 @@ export interface IPost extends Document {
   createType: string;
   tags: Schema.Types.ObjectId[];
   description: string;
-  learned: object[];
+  checkList: object[];
   content: string;
   resources: object[];
 }
@@ -15,7 +15,7 @@ const PostSchema = new Schema({
   createType: { type: String, required: true },
   tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
   description: { type: String, required: true },
-  learned: { type: Array, required: true },
+  checkList: { type: Array, required: true },
   content: { type: String, required: true },
   resources: { type: Array, required: true },
 });
