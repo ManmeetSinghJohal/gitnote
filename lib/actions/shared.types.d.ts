@@ -6,12 +6,17 @@ export interface CreateUserParams {
   password: string;
 }
 
+export interface CheckListItem {
+  step_lesson: string;
+}
+
 export interface CreatePostParams {
   title: string;
   createType: string;
   tags: string[];
   description: string;
-  checkList: object[];
+  checkList: CheckListItem[];
+  code: string;
   content: string;
   resources: object[];
 }

@@ -60,8 +60,8 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
       title: "",
       createType: "",
       description: "",
-      code: "",
       checkList: [{ step_lesson: "" }],
+      code: "",
       content: "",
       resources: [{ label: "", resource: "" }],
       tags: [],
@@ -144,6 +144,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
         createType: values.createType,
         description: values.description,
         checkList: values.checkList,
+        code: values.code,
         content: values.content,
         resources: values.resources,
         tags: tagsIdArray,
@@ -500,7 +501,6 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                   }}
                 />
               </FormControl>
-
               <FormMessage className="text-red-500" />
             </FormItem>
           )}

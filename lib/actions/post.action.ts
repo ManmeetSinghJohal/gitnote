@@ -1,7 +1,6 @@
 "use server";
 
 import Post from "@/database/post.model";
-import Tag from "@/database/tag.model";
 
 import { connectToDatabase } from "../mongoose";
 
@@ -16,16 +15,20 @@ export async function createPost(params: CreatePostParams) {
       createType,
       description,
       checkList,
+      code,
       content,
       resources,
       tags,
     } = params;
 
+  const checkListAsStringArray = checkList.map((item) => item.step_lesson);
+
     const post = await Post.create({
       title,
       createType,
       description,
-      checkList,
+      checkList: checkListAsStringArray,
+      code,
       content,
       resources,
       tags,
