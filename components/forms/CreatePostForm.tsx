@@ -136,9 +136,8 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
 
   async function onSubmit(values: z.infer<typeof PostSchema>) {
     try {
-      console.log("postTags", postTags);
+      console.log("values", values);
       const tagsIdArray = await queryTags(values.tags);
-      console.log("tagsIdArray", tagsIdArray);
       await createPost({
         title: values.title,
         createType: values.createType,
@@ -150,14 +149,13 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
         tags: tagsIdArray,
       });
       router.push("/dashboard");
-      console.log("values", values);
     } catch (error) {
       console.log("error", error);
     }
   }
 
   const isCreateType = form.watch("createType");
-  const code = form.watch("code");
+  const previewCode = form.watch("code");
 
   return (
     <Form {...form}>
@@ -447,7 +445,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
             </TabsContent>
             <TabsContent value="preview">
               <pre className="line-numbers">
-                <code className="language-jsx">{code}</code>
+                <code className="language-jsx">{previewCode}</code>
               </pre>
             </TabsContent>
           </Tabs>

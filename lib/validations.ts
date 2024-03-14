@@ -14,13 +14,11 @@ export const signUpSchema = z
 
 export type TSignUpSchema = z.infer<typeof signUpSchema>;
 
-
 export const PostSchema = z.object({
   title: z.string().min(2, {
     message: "Title must be at least 2 characters.",
   }),
   createType: z.string(),
-  code: z.string(),
   tags: z.array(
     z.object({
       value: z.string(),
@@ -35,6 +33,7 @@ export const PostSchema = z.object({
       step_lesson: z.string(),
     })
   ),
+  code: z.string(),
   content: z.string(),
   resources: z.array(
     z.object({
