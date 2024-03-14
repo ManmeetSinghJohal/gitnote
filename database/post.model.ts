@@ -17,7 +17,7 @@ const PostSchema = new Schema({
   tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
   description: { type: String, required: true },
   checkList: { type: Array, required: true },
-  code: { type: String, required: true },
+  code: { type: String, required: false },
   content: { type: String, required: true },
   resources: { type: Array, required: true },
 });
