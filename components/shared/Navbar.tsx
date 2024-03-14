@@ -10,7 +10,7 @@ import {
 import LeftSideBar from "./LeftSideBar";
 import Logo from "./Logo";
 
-const Navbar = () => {
+const Navbar = ({ posts }) => {
   return (
     <div className="h-[70px] bg-black-800">
       <div className="flex items-center justify-between px-[18px] py-6">
@@ -29,7 +29,7 @@ const Navbar = () => {
             side="right"
             className="w-[290px] border-none bg-black-800 lg:hidden"
           >
-            <LeftSideBar />
+            <LeftSideBar posts={posts}/>
           </SheetContent>
         </Sheet>
       </div>
