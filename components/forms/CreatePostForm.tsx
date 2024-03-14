@@ -383,7 +383,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
             <Button
               className="mt-[6px] h-9 w-full rounded bg-black-600"
               type="button"
-              onClick={() => checkListAppend({ lesson: "" })}
+              onClick={() => checkListAppend({ step_lesson: "" })}
             >
               <div className="flex gap-2">
                 <Image
