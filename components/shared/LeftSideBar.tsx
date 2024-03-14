@@ -5,13 +5,15 @@ import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import React from "react";
 
+import { PostParams } from "@/lib/actions/shared.types";
+
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
 import Logo from "./Logo";
 import UserDetails from "./UserDetails";
 
-const LeftSideBar = ({posts}) => {
+const LeftSideBar = ({ posts }: { posts: PostParams[] }) => {
   const pathname = usePathname();
   return (
     <div className="w-[290px] bg-black-800 pt-10 lg:px-7 ">
@@ -32,7 +34,9 @@ const LeftSideBar = ({posts}) => {
                 height={14}
                 className="mr-1"
               />
-              <div className="paragraph-4-medium text-white-100">Create Post</div>
+              <div className="paragraph-4-medium text-white-100">
+                Create Post
+              </div>
             </Button>
           </Link>
         )}
@@ -63,9 +67,7 @@ const LeftSideBar = ({posts}) => {
         <div>
           <div className="space-y-5">
             {posts?.map((post) => (
-              <div 
-              key={post._id}
-              className="flex items-center gap-3">
+              <div key={post._id} className="flex items-center gap-3">
                 <Image
                   src={`/assets/icons/${post.createType}.svg`}
                   alt={`${post.createType}`}
@@ -75,7 +77,6 @@ const LeftSideBar = ({posts}) => {
                 <h4 className="paragraph-3-medium">{post.title}</h4>
               </div>
             ))}
-           
           </div>
         </div>
       </div>

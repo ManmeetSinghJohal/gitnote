@@ -1,16 +1,13 @@
 import Image from "next/image";
 import React from "react";
 
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { PostParams } from "@/lib/actions/shared.types";
 
 import LeftSideBar from "./LeftSideBar";
 import Logo from "./Logo";
 
-const Navbar = ({ posts }) => {
+const Navbar = ({ posts }: { posts: PostParams[] }) => {
   return (
     <div className="h-[70px] bg-black-800">
       <div className="flex items-center justify-between px-[18px] py-6">
@@ -29,7 +26,7 @@ const Navbar = ({ posts }) => {
             side="right"
             className="w-[290px] border-none bg-black-800 lg:hidden"
           >
-            <LeftSideBar posts={posts}/>
+            <LeftSideBar posts={posts} />
           </SheetContent>
         </Sheet>
       </div>
