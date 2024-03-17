@@ -1,12 +1,79 @@
 "use client";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
+import { getFilteredPosts } from "@/lib/actions/post.action";
+import { getTags } from "@/lib/actions/tag.actions";
+
+type  Tag = {
+  _id: string;
+  value: string;
+  label: string;
+  __v: number;
+}
+
 
 const Dashboard = () => {
   const { data: session } = useSession();
+  const searchParams = useSearchParams();
+  const [allPostsWithTag, setAllPostsWithTag] = useState([]);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const postsWithTag = searchParams.get("tag");
+
+  useEffect(() => {
+    const fetchPostsAndTags = async () => {
+      const posts = await getFilteredPosts(postsWithTag as string);
+      setAllPostsWithTag(posts);
+
+      const allTagsString = await getTags();
+
+      if (typeof allTagsString !== "undefined") {
+        try {
+          const allTags = JSON.parse(allTagsString);
+          if (Array.isArray(allTags)) {
+            setTags(allTags); 
+          } else {
+            console.error("Expected allTags to be an array");
+            setTags([]); 
+          }
+        } catch (error) {
+          console.error("Failed to parse allTags:", error);
+          setTags([]); 
+        }
+      }
+    };
+
+    fetchPostsAndTags();
+  }, [postsWithTag]);
+
+
+  const renderPosts = JSON.parse(JSON.stringify(allPostsWithTag));
+
+  console.log("tags", tags);
+
+
+  function getCreateTypeTextColor(createType) {
+    switch (createType) {
+      case "component":
+        return "text-purple-500";
+      case "workFlow":
+        return "text-primary1-500";
+      case "knowledge":
+        return "text-green-500";
+      default:
+        return "text-primary1-500";
+    }
+  }
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+
+
   return (
     <div className="h-full">
       <div className="space-y-[10px]">
@@ -19,7 +86,7 @@ const Dashboard = () => {
           </p>
         </div>
       </div>
-      <div className="relative mt-[20px] h-[132px] w-full lg:mt-[30px]">
+      <div className="relative mt-[20px] h-[132px] lg:mt-[30px]">
         <Image
           src="/assets/icons/layout.png"
           alt="layout"
@@ -28,12 +95,12 @@ const Dashboard = () => {
         />
       </div>
       <div>
-        <div className="mt-[30px] items-center justify-between lg:mt-[36px] lg:flex">
+        <div className="mb-[26px] mt-[30px] items-center justify-between lg:mb-5 lg:mt-[36px] lg:flex">
           <div className="display-2-bold  mb-5 text-white-100 lg:mb-0">
             Recent Posts
           </div>
-          <div className="flex gap-[14px]">
-            <Badge className="flex gap-[5px]">
+          <div className="flex space-x-[14px]">
+            <Badge className="space-x-[5px]">
               <Image
                 src="/assets/icons/workflow.svg"
                 alt="workflow"
@@ -42,7 +109,7 @@ const Dashboard = () => {
               />
               <div className="text-sm text-primary1-500">WorkFlow</div>
             </Badge>
-            <Badge className="flex gap-[5px]">
+            <Badge className="space-x-[5px]">
               <Image
                 src="/assets/icons/component.svg"
                 alt="Component"
@@ -51,7 +118,7 @@ const Dashboard = () => {
               />
               <div className="text-sm text-purple-500">Component</div>
             </Badge>
-            <Badge className="flex gap-[5px]">
+            <Badge className="space-x-[5px]">
               <Image
                 src="/assets/icons/knowledge.svg"
                 alt="knowledge"
@@ -62,7 +129,46 @@ const Dashboard = () => {
             </Badge>
           </div>
         </div>
-        <div className="mt-5 lg:mt-6"></div>
+        {renderPosts.map((post) => (
+          <div
+            key={post._id + Math.random()}
+            className="mt-5 flex flex-col bg-black-800 px-[18px] py-6 lg:mt-6"
+          >
+            <div>
+              <Badge className="mb-[18px] space-x-[5px]">
+                <Image
+                  src={`/assets/icons/${post.createType}.svg`}
+                  alt="workflow"
+                  width={16}
+                  height={16}
+                />
+                <div
+                  className={`text-sm ${getCreateTypeTextColor(post.createType)}`}
+                >
+                  {capitalizeFirstLetter(post.createType)}
+                </div>
+              </Badge>
+            </div>
+            <h4 className="heading-1-medium mb-4 text-white-100">
+              {post.title}
+            </h4>
+            <div className="space-x-[10px]">
+              {post.tags.map((tag) => {
+                const tagName = tags.find((t) => t._id === tag);
+                return (
+                  <Badge
+                    key={tag + Math.random()}
+                    variant="secondary"
+                    className="paragraph-3-medium bg-black-700 text-white-300"
+                  >
+                    {tagName?.label}
+                  </Badge>
+                )
+              })}
+             
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
