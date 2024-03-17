@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import Post from "@/database/post.model";
 import Tag from "@/database/tag.model";
 
@@ -35,6 +37,7 @@ export async function createPost(params: CreatePostParams) {
       tags,
     });
 
+    revalidatePath("/dashboard");
     console.log("Post created: ", post);
     return JSON.stringify(post);
   } catch (error) {
@@ -56,14 +59,14 @@ export async function getPosts() {
 export async function getFilteredPosts(tag?: string) {
   try {
     await connectToDatabase();
-    const filterObject: any = { };
+    const filterObject: any = {};
     if (tag) {
       const tagToUse = await Tag.findOne({ value: tag });
-      filterObject.tags = tagToUse._id
+      filterObject.tags = tagToUse._id;
     }
 
     const posts = await Post.find(filterObject);
-    
+
     return JSON.parse(JSON.stringify(posts));
   } catch (error) {
     console.log("Error getting posts with tag", error);
