@@ -1,6 +1,7 @@
 "use server";
 
 import Post from "@/database/post.model";
+import Tag from "@/database/tag.model";
 
 import { connectToDatabase } from "../mongoose";
 
@@ -21,7 +22,7 @@ export async function createPost(params: CreatePostParams) {
       tags,
     } = params;
 
-  const checkListAsStringArray = checkList.map((item) => item.step_lesson);
+    const checkListAsStringArray = checkList.map((item) => item.step_lesson);
 
     const post = await Post.create({
       title,
@@ -49,5 +50,22 @@ export async function getPosts() {
     return posts;
   } catch (error) {
     console.log("Error getting posts", error);
+  }
+}
+
+export async function getFilteredPosts(tag?: string) {
+  try {
+    await connectToDatabase();
+    const filterObject: any = { };
+    if (tag) {
+      const tagToUse = await Tag.findOne({ value: tag });
+      filterObject.tags = tagToUse._id
+    }
+
+    const posts = await Post.find(filterObject);
+    
+    return JSON.parse(JSON.stringify(posts));
+  } catch (error) {
+    console.log("Error getting posts with tag", error);
   }
 }
