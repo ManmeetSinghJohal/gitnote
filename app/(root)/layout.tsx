@@ -25,7 +25,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
           </div>
         </section>
         <div className="hidden xl:flex">
-          <RightSideBar postTags={JSON.parse(JSON.stringify(postTags))} />
+          <RightSideBar postTags={JSON.parse(postTags ?? "")} />
         </div>
       </div>
       <Toaster />
