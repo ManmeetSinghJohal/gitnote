@@ -6,54 +6,23 @@ import React, { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { getFilteredPosts } from "@/lib/actions/post.action";
-import { getTags } from "@/lib/actions/tag.actions";
-
-type  Tag = {
-  _id: string;
-  value: string;
-  label: string;
-  __v: number;
-}
-
 
 const Dashboard = () => {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
   const [allPostsWithTag, setAllPostsWithTag] = useState([]);
-  const [tags, setTags] = useState<Tag[]>([]);
+
   const postsWithTag = searchParams.get("tag");
 
   useEffect(() => {
     const fetchPostsAndTags = async () => {
       const posts = await getFilteredPosts(postsWithTag as string);
       setAllPostsWithTag(posts);
-
-      const allTagsString = await getTags();
-
-      if (typeof allTagsString !== "undefined") {
-        try {
-          const allTags = JSON.parse(allTagsString);
-          if (Array.isArray(allTags)) {
-            setTags(allTags); 
-          } else {
-            console.error("Expected allTags to be an array");
-            setTags([]); 
-          }
-        } catch (error) {
-          console.error("Failed to parse allTags:", error);
-          setTags([]); 
-        }
-      }
     };
-
     fetchPostsAndTags();
   }, [postsWithTag]);
 
-
   const renderPosts = JSON.parse(JSON.stringify(allPostsWithTag));
-
-  console.log("tags", tags);
-
 
   function getCreateTypeTextColor(createType) {
     switch (createType) {
@@ -71,8 +40,6 @@ const Dashboard = () => {
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
-
-
 
   return (
     <div className="h-full">
@@ -153,19 +120,15 @@ const Dashboard = () => {
               {post.title}
             </h4>
             <div className="space-x-[10px]">
-              {post.tags.map((tag) => {
-                const tagName = tags.find((t) => t._id === tag);
-                return (
-                  <Badge
-                    key={tag + Math.random()}
-                    variant="secondary"
-                    className="paragraph-3-medium bg-black-700 text-white-300"
-                  >
-                    {tagName?.label}
-                  </Badge>
-                )
-              })}
-             
+              {post.tags.map((tag) => (
+                <Badge
+                  key={tag + Math.random()}
+                  variant="secondary"
+                  className="paragraph-3-medium bg-black-700 text-white-300"
+                >
+                  {tag.label}
+                </Badge>
+              ))}
             </div>
           </div>
         ))}
