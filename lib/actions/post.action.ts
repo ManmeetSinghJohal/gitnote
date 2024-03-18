@@ -65,7 +65,8 @@ export async function getFilteredPosts(tag?: string) {
       filterObject.tags = tagToUse._id;
     }
 
-    const posts = await Post.find(filterObject);
+    const posts = await Post.find(filterObject).populate("tags");
+    // console.log("Posts with tag", posts[0].tags);
 
     return JSON.parse(JSON.stringify(posts));
   } catch (error) {
