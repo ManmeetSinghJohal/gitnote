@@ -74,7 +74,7 @@ const LeftSideBar = ({ posts }: { posts: PostParams[] }) => {
                   width={16}
                   height={16}
                 />
-                <h4 className="paragraph-3-medium">{post.title}</h4>
+                <h4 className="paragraph-3-medium truncate">{post.title}</h4>
               </div>
             ))}
           </div>
