@@ -15,11 +15,11 @@ const Dashboard = () => {
   const postsWithTag = searchParams.get("tag");
 
   useEffect(() => {
-    const fetchPostsAndTags = async () => {
+    const fetchPosts = async () => {
       const posts = await getFilteredPosts(postsWithTag as string);
       setAllPostsWithTag(posts);
     };
-    fetchPostsAndTags();
+    fetchPosts();
   }, [postsWithTag]);
 
   const renderPosts = JSON.parse(JSON.stringify(allPostsWithTag));
