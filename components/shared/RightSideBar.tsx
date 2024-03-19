@@ -1,6 +1,5 @@
 "use client";
-
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import React from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +11,21 @@ type RightSideBarProps = {
 };
 
 const RightSideBar = ({ postTags }: RightSideBarProps) => {
+  const searchParams = useSearchParams();
   const router = useRouter();
+
+  const applyFilter = (type: string, value: string) => {
+    const mySearchParams = new URLSearchParams(searchParams.toString());
+
+    console.log(mySearchParams.toString());
+
+    mySearchParams.set(type, value);
+
+    console.log(mySearchParams.toString());
+
+    router.replace("/dashboard?" + mySearchParams.toString());
+  };
+
   return (
     <div className="min-w-[290px] bg-black-800 px-7 pt-10">
       <UserDetails />
@@ -23,10 +36,10 @@ const RightSideBar = ({ postTags }: RightSideBarProps) => {
           <div className="flex flex-col items-start gap-3">
             {postTags.map((tag) => (
               <Badge
+                key={tag.value + Math.random()}
                 variant="secondary"
                 className="paragraph-3-medium bg-black-700 text-white-300"
-                key={tag.value + Math.random()}
-                onClick={() => router.push('/dashboard?tag=' + tag.value)}
+                onClick={() => applyFilter("tag", tag.value)}
               >
                 {tag.label}
               </Badge>
