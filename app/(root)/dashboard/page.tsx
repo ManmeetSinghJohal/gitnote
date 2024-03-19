@@ -1,26 +1,50 @@
 "use client";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { getFilteredPosts } from "@/lib/actions/post.action";
 
+// /post/[id]/page.tsx
+// /category/[categoryId]/post/[postId]/
+// { categoryId: "cars", postId: "132" }
+// localhost:3000/post/132?showTags=true
+// Params: {id: 132}
+// Search Params: {showTags: true}
+
 const Dashboard = () => {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [allPostsWithTag, setAllPostsWithTag] = useState([]);
 
+  const applyFilter = (type: string, value: string) => {
+    const mySearchParams = new URLSearchParams(searchParams.toString());
+
+    console.log(mySearchParams.toString());
+
+    mySearchParams.set(type, value);
+
+    console.log(mySearchParams.toString());
+
+    router.replace("/dashboard?" + mySearchParams.toString());
+  };
+
   const postsWithTag = searchParams.get("tag");
+  const postsWithCreateType = searchParams.get("createType");
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const posts = await getFilteredPosts(postsWithTag as string);
+      const posts = await getFilteredPosts(
+        postsWithTag as string,
+        postsWithCreateType as string
+      );
       setAllPostsWithTag(posts);
     };
     fetchPosts();
-  }, [postsWithTag]);
+  }, [postsWithTag, postsWithCreateType]);
 
   const renderPosts = JSON.parse(JSON.stringify(allPostsWithTag));
 
@@ -67,7 +91,10 @@ const Dashboard = () => {
             Recent Posts
           </div>
           <div className="flex space-x-[14px]">
-            <Badge className="space-x-[5px]">
+            <Badge
+              className="space-x-[5px]"
+              onClick={() => applyFilter("createType", "workflow")}
+            >
               <Image
                 src="/assets/icons/workflow.svg"
                 alt="workflow"
@@ -76,7 +103,10 @@ const Dashboard = () => {
               />
               <div className="text-sm text-primary1-500">WorkFlow</div>
             </Badge>
-            <Badge className="space-x-[5px]">
+            <Badge
+              className="space-x-[5px]"
+              onClick={() => applyFilter("createType", "component")}
+            >
               <Image
                 src="/assets/icons/component.svg"
                 alt="Component"
@@ -85,7 +115,10 @@ const Dashboard = () => {
               />
               <div className="text-sm text-purple-500">Component</div>
             </Badge>
-            <Badge className="space-x-[5px]">
+            <Badge
+              className="space-x-[5px]"
+              onClick={() => applyFilter("createType", "knowledge")}
+            >
               <Image
                 src="/assets/icons/knowledge.svg"
                 alt="knowledge"
