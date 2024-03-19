@@ -19,7 +19,14 @@ const RightSideBar = ({ postTags }: RightSideBarProps) => {
 
     console.log(mySearchParams.toString());
 
-    mySearchParams.set(type, value);
+     if (mySearchParams.get(type) === value) {
+       mySearchParams.delete(type);
+       router.replace("/dashboard?" + mySearchParams.toString());
+       return;
+     } else {
+       mySearchParams.set(type, value);
+     }
+
 
     console.log(mySearchParams.toString());
 
