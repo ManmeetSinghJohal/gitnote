@@ -56,7 +56,7 @@ export async function getPosts() {
   }
 }
 
-export async function getFilteredPosts(tag?: string) {
+export async function getFilteredPosts(tag?: string, createType?: string) {
   try {
     await connectToDatabase();
     const filterObject: any = {};
@@ -65,8 +65,11 @@ export async function getFilteredPosts(tag?: string) {
       filterObject.tags = tagToUse._id;
     }
 
+    if (createType) {
+      filterObject.createType = createType;
+    }
+
     const posts = await Post.find(filterObject).populate("tags");
-    // console.log("Posts with tag", posts[0].tags);
 
     return JSON.parse(JSON.stringify(posts));
   } catch (error) {
