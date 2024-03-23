@@ -1,4 +1,5 @@
 "use client";
+import { nanoid } from "nanoid";
 import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -7,13 +8,6 @@ import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { IPost } from "@/database/post.model";
 import { getFilteredPosts } from "@/lib/actions/post.action";
-
-// /post/[id]/page.tsx
-// /category/[categoryId]/post/[postId]/
-// { categoryId: "cars", postId: "132" }
-// localhost:3000/post/132?showTags=true
-// Params: {id: 132}
-// Search Params: {showTags: true}
 
 const Dashboard = () => {
   const { data: session } = useSession();
@@ -76,9 +70,9 @@ const Dashboard = () => {
     return colorMap[createType] || "text-primary1-500";
   }
 
-function capitalizeFirstLetter(string: string): string {
-  return string ? `${string.charAt(0).toUpperCase()}${string.slice(1)}` : "";
-}
+  function capitalizeFirstLetter(string: string): string {
+    return string ? `${string.charAt(0).toUpperCase()}${string.slice(1)}` : "";
+  }
 
   return (
     <div className="h-full">
@@ -146,7 +140,7 @@ function capitalizeFirstLetter(string: string): string {
         </div>
         {renderPosts.map((post) => (
           <div
-            key={post._id + Math.random()}
+            key={nanoid()}
             className="mt-5 flex flex-col bg-black-800 px-[18px] py-6 lg:mt-6"
           >
             <div>
@@ -170,7 +164,7 @@ function capitalizeFirstLetter(string: string): string {
             <div className="space-x-[10px]">
               {post.tags.map((tag) => (
                 <Badge
-                  key={tag + Math.random()}
+                  key={nanoid()}
                   variant="secondary"
                   className="paragraph-3-medium bg-black-700 text-white-300"
                 >

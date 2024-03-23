@@ -1,4 +1,5 @@
 "use client";
+import { nanoid } from "nanoid";
 import { useSearchParams, useRouter } from "next/navigation";
 import React from "react";
 
@@ -19,14 +20,13 @@ const RightSideBar = ({ postTags }: RightSideBarProps) => {
 
     console.log(mySearchParams.toString());
 
-     if (mySearchParams.get(type) === value) {
-       mySearchParams.delete(type);
-       router.replace("/dashboard?" + mySearchParams.toString());
-       return;
-     } else {
-       mySearchParams.set(type, value);
-     }
-
+    if (mySearchParams.get(type) === value) {
+      mySearchParams.delete(type);
+      router.replace("/dashboard?" + mySearchParams.toString());
+      return;
+    } else {
+      mySearchParams.set(type, value);
+    }
 
     console.log(mySearchParams.toString());
 
@@ -43,7 +43,7 @@ const RightSideBar = ({ postTags }: RightSideBarProps) => {
           <div className="flex flex-col items-start gap-3">
             {postTags.map((tag) => (
               <Badge
-                key={tag.value + Math.random()}
+                key={nanoid()}
                 variant="secondary"
                 className="paragraph-3-medium bg-black-700 text-white-300"
                 onClick={() => applyFilter("tag", tag.value)}
