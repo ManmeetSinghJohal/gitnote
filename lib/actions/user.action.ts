@@ -1,5 +1,8 @@
 "use server";
 
+import { getServerSession } from "next-auth";
+
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import User from "@/database/user.model";
 
 import { connectToDatabase } from "../mongoose";
@@ -22,3 +25,10 @@ export async function createUser(userData: CreateUserParams) {
     throw error;
   }
 }
+
+export const getActiveUser = async () => {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) throw new Error("You are not logged in!");
+
+  return session.user;
+};
