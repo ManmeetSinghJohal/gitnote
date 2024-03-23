@@ -64,23 +64,19 @@ const Dashboard = () => {
     fetchPosts();
   }, [postsWithTag, postsWithCreateType, pageNumber, postsPerPage]);
 
-const renderPosts = postsData.posts;
+  const renderPosts = postsData.posts;
 
+  function getCreateTypeTextColor(createType: string) {
+    const colorMap: { [key: string]: string } = {
+      component: "text-purple-500",
+      workFlow: "text-primary1-500",
+      knowledge: "text-green-500",
+    };
 
-  function getCreateTypeTextColor(createType) {
-    switch (createType) {
-      case "component":
-        return "text-purple-500";
-      case "workFlow":
-        return "text-primary1-500";
-      case "knowledge":
-        return "text-green-500";
-      default:
-        return "text-primary1-500";
-    }
+    return colorMap[createType] || "text-primary1-500";
   }
 
-  function capitalizeFirstLetter(string) {
+  function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
