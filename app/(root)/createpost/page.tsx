@@ -14,7 +14,7 @@ const CreatePost = async () => {
       <div className="paragraph-3-medium mb-6 text-white-500">
         BASIC INFORMATION
       </div>
-      <CreatePostForm postTags={JSON.parse(JSON.stringify(postTags))}/>
+      <CreatePostForm postTags={JSON.parse(postTags ?? '')}/>
     </div>
   );
 };

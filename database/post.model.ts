@@ -9,6 +9,8 @@ export interface IPost extends Document {
   code: string;
   content: string;
   resources: object[];
+  ownerId: Schema.Types.ObjectId;
+  createdAt: Date;
 }
 
 const PostSchema = new Schema({
@@ -20,6 +22,8 @@ const PostSchema = new Schema({
   code: { type: String, required: false },
   content: { type: String, required: true },
   resources: { type: Array, required: true },
+  ownerId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  createdAt: { type: Date, default: new Date(), required: true },
 });
 
 const Post = models.Post || model("Post", PostSchema);

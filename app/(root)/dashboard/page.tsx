@@ -1,12 +1,88 @@
 "use client";
 import Image from "next/image";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
+import { Post } from "@/database/post.model.ts";
+import { getFilteredPosts } from "@/lib/actions/post.action";
+
+// /post/[id]/page.tsx
+// /category/[categoryId]/post/[postId]/
+// { categoryId: "cars", postId: "132" }
+// localhost:3000/post/132?showTags=true
+// Params: {id: 132}
+// Search Params: {showTags: true}
 
 const Dashboard = () => {
   const { data: session } = useSession();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [postsData, setPostsData] = useState<{
+    posts: Post[];
+    pageCount: number;
+  }>({ posts: [], pageCount: 1 });
+
+  const applyFilter = (type: string, value: string) => {
+    const mySearchParams = new URLSearchParams(searchParams.toString());
+
+    console.log(mySearchParams.toString());
+
+    if (mySearchParams.get(type) === value) {
+      mySearchParams.delete(type);
+      router.replace("/dashboard?" + mySearchParams.toString());
+      return;
+    } else {
+      mySearchParams.set(type, value);
+    }
+
+    console.log(mySearchParams.toString());
+
+    router.replace("/dashboard?" + mySearchParams.toString());
+  };
+
+  const postsWithTag = searchParams.get("tag");
+  const postsWithCreateType = searchParams.get("createType");
+  const pageNumber = parseInt(searchParams.get("page") || "0");
+  const postsPerPage = 5;
+  const prevPage = pageNumber - 1 > 0 ? pageNumber - 1 : 1;
+  const nextPage = pageNumber + 1;
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const postsAndCount = await getFilteredPosts(
+        postsWithTag as string,
+        postsWithCreateType as string,
+        pageNumber,
+        postsPerPage
+      );
+      if (!postsAndCount) return;
+
+      setPostsData(postsAndCount);
+    };
+    fetchPosts();
+  }, [postsWithTag, postsWithCreateType, pageNumber, postsPerPage]);
+
+  const renderPosts = JSON.parse(JSON.stringify(postsData.posts));
+
+  function getCreateTypeTextColor(createType) {
+    switch (createType) {
+      case "component":
+        return "text-purple-500";
+      case "workFlow":
+        return "text-primary1-500";
+      case "knowledge":
+        return "text-green-500";
+      default:
+        return "text-primary1-500";
+    }
+  }
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   return (
     <div className="h-full">
       <div className="space-y-[10px]">
@@ -19,7 +95,7 @@ const Dashboard = () => {
           </p>
         </div>
       </div>
-      <div className="relative mt-[20px] h-[132px] w-full lg:mt-[30px]">
+      <div className="relative mt-[20px] h-[132px] lg:mt-[30px]">
         <Image
           src="/assets/icons/layout.png"
           alt="layout"
@@ -28,12 +104,15 @@ const Dashboard = () => {
         />
       </div>
       <div>
-        <div className="mt-[30px] items-center justify-between lg:mt-[36px] lg:flex">
+        <div className="mb-[26px] mt-[30px] items-center justify-between lg:mb-5 lg:mt-[36px] lg:flex">
           <div className="display-2-bold  mb-5 text-white-100 lg:mb-0">
             Recent Posts
           </div>
-          <div className="flex gap-[14px]">
-            <Badge className="flex gap-[5px]">
+          <div className="flex space-x-[14px]">
+            <Badge
+              className="space-x-[5px]"
+              onClick={() => applyFilter("createType", "workflow")}
+            >
               <Image
                 src="/assets/icons/workflow.svg"
                 alt="workflow"
@@ -42,7 +121,10 @@ const Dashboard = () => {
               />
               <div className="text-sm text-primary1-500">WorkFlow</div>
             </Badge>
-            <Badge className="flex gap-[5px]">
+            <Badge
+              className="space-x-[5px]"
+              onClick={() => applyFilter("createType", "component")}
+            >
               <Image
                 src="/assets/icons/component.svg"
                 alt="Component"
@@ -51,7 +133,10 @@ const Dashboard = () => {
               />
               <div className="text-sm text-purple-500">Component</div>
             </Badge>
-            <Badge className="flex gap-[5px]">
+            <Badge
+              className="space-x-[5px]"
+              onClick={() => applyFilter("createType", "knowledge")}
+            >
               <Image
                 src="/assets/icons/knowledge.svg"
                 alt="knowledge"
@@ -62,7 +147,60 @@ const Dashboard = () => {
             </Badge>
           </div>
         </div>
-        <div className="mt-5 lg:mt-6"></div>
+        {renderPosts.map((post) => (
+          <div
+            key={post._id + Math.random()}
+            className="mt-5 flex flex-col bg-black-800 px-[18px] py-6 lg:mt-6"
+          >
+            <div>
+              <Badge className="mb-[18px] space-x-[5px]">
+                <Image
+                  src={`/assets/icons/${post.createType}.svg`}
+                  alt="workflow"
+                  width={16}
+                  height={16}
+                />
+                <div
+                  className={`text-sm ${getCreateTypeTextColor(post.createType)}`}
+                >
+                  {capitalizeFirstLetter(post.createType)}
+                </div>
+              </Badge>
+            </div>
+            <h4 className="heading-1-medium mb-4 text-white-100">
+              {post.title}
+            </h4>
+            <div className="space-x-[10px]">
+              {post.tags.map((tag) => (
+                <Badge
+                  key={tag + Math.random()}
+                  variant="secondary"
+                  className="paragraph-3-medium bg-black-700 text-white-300"
+                >
+                  {tag.label}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <div className="flex items-center justify-center gap-4  text-white-100">
+          <button
+            type="button"
+            onClick={() => applyFilter("page", pageNumber - 1 + "")}
+            disabled={pageNumber === 0}
+          >
+            Prev
+          </button>
+          <span>{pageNumber + 1}</span>
+          <button
+            type="button"
+            onClick={() => applyFilter("page", pageNumber + 1 + "")}
+            disabled={pageNumber + 1 === postsData.pageCount}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
