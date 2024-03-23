@@ -8,10 +8,13 @@ import Tag from "@/database/tag.model";
 import { connectToDatabase } from "../mongoose";
 
 import { CreatePostParams } from "./shared.types";
+import { getActiveUser } from "./user.action";
 
 export async function createPost(params: CreatePostParams) {
   try {
     await connectToDatabase();
+
+    const user = await getActiveUser();
 
     const {
       title,
@@ -35,6 +38,7 @@ export async function createPost(params: CreatePostParams) {
       content,
       resources,
       tags,
+      ownerId: user.id,
     });
 
     revalidatePath("/dashboard");
@@ -56,10 +60,18 @@ export async function getPosts() {
   }
 }
 
-export async function getFilteredPosts(tag?: string, createType?: string) {
+export async function getFilteredPosts(
+  tag?: string,
+  createType?: string,
+  page: number = 0,
+  postsPerPage: number = 5
+) {
   try {
     await connectToDatabase();
-    const filterObject: any = {};
+
+    const user = await getActiveUser();
+
+    const filterObject: any = {ownerId: user.id};
     if (tag) {
       const tagToUse = await Tag.findOne({ value: tag });
       filterObject.tags = tagToUse._id;
@@ -69,9 +81,18 @@ export async function getFilteredPosts(tag?: string, createType?: string) {
       filterObject.createType = createType;
     }
 
-    const posts = await Post.find(filterObject).populate("tags");
+    const posts = await Post.find(filterObject)
+      .populate("tags")
+      .skip(page * postsPerPage)
+      .limit(postsPerPage);
 
-    return JSON.parse(JSON.stringify(posts));
+    const itemCount = await Post.countDocuments(filterObject);
+    console.log(itemCount);
+
+    return {
+      posts: JSON.parse(JSON.stringify(posts)),
+      pageCount: Math.ceil(itemCount / postsPerPage),
+    };
   } catch (error) {
     console.log("Error getting posts with tag", error);
   }
