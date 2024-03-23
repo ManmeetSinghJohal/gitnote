@@ -1,5 +1,6 @@
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import bycrypt from "bcryptjs";
+import { AuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
@@ -7,7 +8,7 @@ import GoogleProvider from "next-auth/providers/google";
 
 import clientPromise from "@/lib/mongodb";
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID ?? "",
@@ -68,6 +69,15 @@ export const authOptions = {
       },
     }),
   ],
+
+  callbacks: {
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.sub;
+      }
+      return session;
+    },
+  },
   adapter: MongoDBAdapter(clientPromise, {
     databaseName: "gitnote",
   }),
