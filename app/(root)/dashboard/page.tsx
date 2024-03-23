@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
-import { Post } from "@/database/post.model.ts";
+import { IPost } from "@/database/post.model";
 import { getFilteredPosts } from "@/lib/actions/post.action";
 
 // /post/[id]/page.tsx
@@ -20,7 +20,7 @@ const Dashboard = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [postsData, setPostsData] = useState<{
-    posts: Post[];
+    posts: IPost[];
     pageCount: number;
   }>({ posts: [], pageCount: 1 });
 
@@ -64,7 +64,8 @@ const Dashboard = () => {
     fetchPosts();
   }, [postsWithTag, postsWithCreateType, pageNumber, postsPerPage]);
 
-  const renderPosts = JSON.parse(JSON.stringify(postsData.posts));
+const renderPosts = postsData.posts;
+
 
   function getCreateTypeTextColor(createType) {
     switch (createType) {
