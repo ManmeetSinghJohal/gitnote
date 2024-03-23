@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { IPost } from "@/database/post.model";
 import { getFilteredPosts } from "@/lib/actions/post.action";
 
@@ -57,6 +58,7 @@ const Dashboard = () => {
   }, [postsWithTag, postsWithCreateType, pageNumber, postsPerPage]);
 
   const renderPosts = postsData.posts;
+  const totalPages = postsData.pageCount;
 
   function getCreateTypeTextColor(createType: string) {
     const colorMap: { [key: string]: string } = {
@@ -136,7 +138,7 @@ const Dashboard = () => {
             </Badge>
           </div>
         </div>
-        {renderPosts.map((post : IPost) => (
+        {renderPosts.map((post: IPost) => (
           <div
             key={nanoid()}
             className="mt-5 flex flex-col bg-black-800 px-[18px] py-6 lg:mt-6"
@@ -173,22 +175,28 @@ const Dashboard = () => {
           </div>
         ))}
 
-        <div className="flex items-center justify-center gap-4  text-white-100">
-          <button
+        <div className="paragraph-4-medium mt-10 flex items-center justify-center gap-4 text-white-100">
+          <Button
             type="button"
             onClick={() => applyFilter("page", pageNumber - 1 + "")}
             disabled={pageNumber === 0}
+            className="bg-black-700 px-3.5 py-2.5"
           >
             Prev
-          </button>
-          <span>{pageNumber + 1}</span>
-          <button
+          </Button>
+          <div className="paragraph-3-medium mx-8">
+            <span>
+              {pageNumber + 1}/{totalPages}
+            </span>
+          </div>
+          <Button
             type="button"
             onClick={() => applyFilter("page", pageNumber + 1 + "")}
-            disabled={pageNumber + 1 === postsData.pageCount}
+            disabled={pageNumber + 1 === totalPages}
+            className="bg-black-700 px-3.5 py-2.5"
           >
             Next
-          </button>
+          </Button>
         </div>
       </div>
     </div>
