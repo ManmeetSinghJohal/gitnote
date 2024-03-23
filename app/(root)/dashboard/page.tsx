@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
+import { Post } from "@/database/post.model.ts";
 import { getFilteredPosts } from "@/lib/actions/post.action";
 
 // /post/[id]/page.tsx
@@ -18,21 +19,23 @@ const Dashboard = () => {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [allPostsWithTag, setAllPostsWithTag] = useState([]);
+  const [postsData, setPostsData] = useState<{
+    posts: Post[];
+    pageCount: number;
+  }>({ posts: [], pageCount: 1 });
 
   const applyFilter = (type: string, value: string) => {
     const mySearchParams = new URLSearchParams(searchParams.toString());
 
     console.log(mySearchParams.toString());
 
-    if(mySearchParams.get(type) === value) {
+    if (mySearchParams.get(type) === value) {
       mySearchParams.delete(type);
       router.replace("/dashboard?" + mySearchParams.toString());
       return;
     } else {
       mySearchParams.set(type, value);
     }
-
 
     console.log(mySearchParams.toString());
 
@@ -41,19 +44,27 @@ const Dashboard = () => {
 
   const postsWithTag = searchParams.get("tag");
   const postsWithCreateType = searchParams.get("createType");
+  const pageNumber = parseInt(searchParams.get("page") || "0");
+  const postsPerPage = 5;
+  const prevPage = pageNumber - 1 > 0 ? pageNumber - 1 : 1;
+  const nextPage = pageNumber + 1;
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const posts = await getFilteredPosts(
+      const postsAndCount = await getFilteredPosts(
         postsWithTag as string,
-        postsWithCreateType as string
+        postsWithCreateType as string,
+        pageNumber,
+        postsPerPage
       );
-      setAllPostsWithTag(posts);
+      if (!postsAndCount) return;
+
+      setPostsData(postsAndCount);
     };
     fetchPosts();
-  }, [postsWithTag, postsWithCreateType]);
+  }, [postsWithTag, postsWithCreateType, pageNumber, postsPerPage]);
 
-  const renderPosts = JSON.parse(JSON.stringify(allPostsWithTag));
+  const renderPosts = JSON.parse(JSON.stringify(postsData.posts));
 
   function getCreateTypeTextColor(createType) {
     switch (createType) {
@@ -172,6 +183,24 @@ const Dashboard = () => {
             </div>
           </div>
         ))}
+
+        <div className="flex items-center justify-center gap-4  text-white-100">
+          <button
+            type="button"
+            onClick={() => applyFilter("page", pageNumber - 1 + "")}
+            disabled={pageNumber === 0}
+          >
+            Prev
+          </button>
+          <span>{pageNumber + 1}</span>
+          <button
+            type="button"
+            onClick={() => applyFilter("page", pageNumber + 1 + "")}
+            disabled={pageNumber + 1 === postsData.pageCount}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
