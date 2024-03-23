@@ -40,8 +40,6 @@ const Dashboard = () => {
   const postsWithCreateType = searchParams.get("createType");
   const pageNumber = parseInt(searchParams.get("page") || "0");
   const postsPerPage = 5;
-  const prevPage = pageNumber - 1 > 0 ? pageNumber - 1 : 1;
-  const nextPage = pageNumber + 1;
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -138,7 +136,7 @@ const Dashboard = () => {
             </Badge>
           </div>
         </div>
-        {renderPosts.map((post) => (
+        {renderPosts.map((post : IPost) => (
           <div
             key={nanoid()}
             className="mt-5 flex flex-col bg-black-800 px-[18px] py-6 lg:mt-6"
@@ -164,7 +162,7 @@ const Dashboard = () => {
             <div className="space-x-[10px]">
               {post.tags.map((tag) => (
                 <Badge
-                  key={nanoid()}
+                  key={tag._id}
                   variant="secondary"
                   className="paragraph-3-medium bg-black-700 text-white-300"
                 >
