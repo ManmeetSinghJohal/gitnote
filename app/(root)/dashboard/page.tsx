@@ -76,9 +76,9 @@ const Dashboard = () => {
     return colorMap[createType] || "text-primary1-500";
   }
 
-  function capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+function capitalizeFirstLetter(string: string): string {
+  return string ? `${string.charAt(0).toUpperCase()}${string.slice(1)}` : "";
+}
 
   return (
     <div className="h-full">
