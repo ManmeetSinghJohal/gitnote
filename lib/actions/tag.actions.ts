@@ -15,7 +15,7 @@ export async function getTags() {
 }
 
 export async function queryTags(tags: { value: string }[]): Promise<string[]> {
-    const tagsArray: string[] = [];
+  const tagsArray: string[] = [];
   try {
     await connectToDatabase();
     for (const tag of tags) {
@@ -23,7 +23,7 @@ export async function queryTags(tags: { value: string }[]): Promise<string[]> {
       if (!foundTag) {
         foundTag = await Tag.create(tag);
       }
-      tagsArray.push(foundTag._id.toString())
+      tagsArray.push(foundTag._id.toString());
     }
   } catch (error) {
     console.log("Error querying tags", error);

@@ -1,26 +1,21 @@
 "use client";
+import { nanoid } from "nanoid";
 import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
-import { Post } from "@/database/post.model.ts";
+import { Button } from "@/components/ui/button";
+import { IPost } from "@/database/post.model";
 import { getFilteredPosts } from "@/lib/actions/post.action";
-
-// /post/[id]/page.tsx
-// /category/[categoryId]/post/[postId]/
-// { categoryId: "cars", postId: "132" }
-// localhost:3000/post/132?showTags=true
-// Params: {id: 132}
-// Search Params: {showTags: true}
 
 const Dashboard = () => {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [postsData, setPostsData] = useState<{
-    posts: Post[];
+    posts: IPost[];
     pageCount: number;
   }>({ posts: [], pageCount: 1 });
 
@@ -46,8 +41,6 @@ const Dashboard = () => {
   const postsWithCreateType = searchParams.get("createType");
   const pageNumber = parseInt(searchParams.get("page") || "0");
   const postsPerPage = 5;
-  const prevPage = pageNumber - 1 > 0 ? pageNumber - 1 : 1;
-  const nextPage = pageNumber + 1;
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -64,23 +57,21 @@ const Dashboard = () => {
     fetchPosts();
   }, [postsWithTag, postsWithCreateType, pageNumber, postsPerPage]);
 
-  const renderPosts = JSON.parse(JSON.stringify(postsData.posts));
+  const renderPosts = postsData.posts;
+  const totalPages = postsData.pageCount;
 
-  function getCreateTypeTextColor(createType) {
-    switch (createType) {
-      case "component":
-        return "text-purple-500";
-      case "workFlow":
-        return "text-primary1-500";
-      case "knowledge":
-        return "text-green-500";
-      default:
-        return "text-primary1-500";
-    }
+  function getCreateTypeColor(createType: string) {
+    const colorMap: { [key: string]: string } = {
+      component: "text-purple-500 bg-purple-500/10",
+      workFlow: "text-primary1-500 bg-primary1-500/10",
+      knowledge: "text-green-500 bg-green-500/10",
+    };
+
+    return colorMap[createType] || "text-primary1-500 bg-primary1-500/10";
   }
 
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  function capitalizeFirstLetter(string: string): string {
+    return string ? `${string.charAt(0).toUpperCase()}${string.slice(1)}` : "";
   }
 
   return (
@@ -110,7 +101,7 @@ const Dashboard = () => {
           </div>
           <div className="flex space-x-[14px]">
             <Badge
-              className="space-x-[5px]"
+              className="space-x-[5px] bg-primary1-500/10"
               onClick={() => applyFilter("createType", "workflow")}
             >
               <Image
@@ -122,7 +113,7 @@ const Dashboard = () => {
               <div className="text-sm text-primary1-500">WorkFlow</div>
             </Badge>
             <Badge
-              className="space-x-[5px]"
+              className="space-x-[5px] bg-purple-500/10"
               onClick={() => applyFilter("createType", "component")}
             >
               <Image
@@ -134,7 +125,7 @@ const Dashboard = () => {
               <div className="text-sm text-purple-500">Component</div>
             </Badge>
             <Badge
-              className="space-x-[5px]"
+              className="space-x-[5px] bg-green-500/10"
               onClick={() => applyFilter("createType", "knowledge")}
             >
               <Image
@@ -147,22 +138,22 @@ const Dashboard = () => {
             </Badge>
           </div>
         </div>
-        {renderPosts.map((post) => (
+        {renderPosts.map((post: IPost) => (
           <div
-            key={post._id + Math.random()}
+            key={nanoid()}
             className="mt-5 flex flex-col bg-black-800 px-[18px] py-6 lg:mt-6"
           >
             <div>
-              <Badge className="mb-[18px] space-x-[5px]">
+              <Badge
+                className={`mb-[18px] space-x-[5px] ${getCreateTypeColor(post.createType)}`}
+              >
                 <Image
                   src={`/assets/icons/${post.createType}.svg`}
                   alt="workflow"
                   width={16}
                   height={16}
                 />
-                <div
-                  className={`text-sm ${getCreateTypeTextColor(post.createType)}`}
-                >
+                <div className="text-sm">
                   {capitalizeFirstLetter(post.createType)}
                 </div>
               </Badge>
@@ -173,7 +164,7 @@ const Dashboard = () => {
             <div className="space-x-[10px]">
               {post.tags.map((tag) => (
                 <Badge
-                  key={tag + Math.random()}
+                  key={tag._id}
                   variant="secondary"
                   className="paragraph-3-medium bg-black-700 text-white-300"
                 >
@@ -184,26 +175,35 @@ const Dashboard = () => {
           </div>
         ))}
 
-        <div className="flex items-center justify-center gap-4  text-white-100">
-          <button
+        {totalPages === 0 && <div className="paragraph-4-medium mt-10 flex items-center justify-center gap-4 text-white-100">Create your first post.</div>}
+
+       {totalPages > 0 && <div className="paragraph-4-medium mt-10 flex items-center justify-center gap-4 text-white-100">
+          <Button
             type="button"
             onClick={() => applyFilter("page", pageNumber - 1 + "")}
             disabled={pageNumber === 0}
+            className="bg-black-700 px-3.5 py-2.5"
           >
             Prev
-          </button>
-          <span>{pageNumber + 1}</span>
-          <button
+          </Button>
+          <div className="paragraph-3-medium mx-8">
+            <span>
+              {pageNumber + 1}/{totalPages}
+            </span>
+          </div>
+          <Button
             type="button"
             onClick={() => applyFilter("page", pageNumber + 1 + "")}
-            disabled={pageNumber + 1 === postsData.pageCount}
+            disabled={pageNumber + 1 === totalPages}
+            className="bg-black-700 px-3.5 py-2.5"
           >
             Next
-          </button>
-        </div>
+          </Button>
+        </div>}
       </div>
     </div>
   );
 };
 
 export default Dashboard;
+

@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Editor } from "@tinymce/tinymce-react";
+import { nanoid } from "nanoid";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Prism from "prismjs";
@@ -95,8 +96,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
     name: "tags",
   });
 
-  const highlightCode = () =>
-    Prism.highlightAll();
+  const highlightCode = () => Prism.highlightAll();
 
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -269,7 +269,7 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                       {postTags.map((tag) => (
                         <CommandItem
                           value={tag.label}
-                          key={tag.value}
+                          key={nanoid()}
                           onSelect={() => {
                             setIsPopOverOpen(false);
                             const shouldAppendTag = !tagsFields.some(
@@ -343,7 +343,11 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
 
         {isCreateType !== "component" && (
           <div>
-            <div className="paragraph-3-medium">{isCreateType === "knowledge" ? "What you learned" : "Steps to follow"}</div>
+            <div className="paragraph-3-medium">
+              {isCreateType === "knowledge"
+                ? "What you learned"
+                : "Steps to follow"}
+            </div>
             {checkListFields.map((field, index) => (
               <FormField
                 control={form.control}

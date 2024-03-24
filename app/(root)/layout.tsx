@@ -11,9 +11,9 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   const postTags = await getTags();
   const posts = await getPosts();
   return (
-    <main className=" relative">
+    <main className="relative">
       <div className="lg:hidden">
-        <Navbar posts={JSON.parse(JSON.stringify(posts))} />
+        <Navbar posts={JSON.parse(JSON.stringify(posts))}/>
       </div>
       <div className="flex">
         <div className="hidden lg:flex">
