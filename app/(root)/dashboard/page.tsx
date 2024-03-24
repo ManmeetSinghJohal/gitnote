@@ -175,7 +175,9 @@ const Dashboard = () => {
           </div>
         ))}
 
-        <div className="paragraph-4-medium mt-10 flex items-center justify-center gap-4 text-white-100">
+        {totalPages === 0 && <div className="paragraph-4-medium mt-10 flex items-center justify-center gap-4 text-white-100">Create your first post.</div>}
+
+       {totalPages > 0 && <div className="paragraph-4-medium mt-10 flex items-center justify-center gap-4 text-white-100">
           <Button
             type="button"
             onClick={() => applyFilter("page", pageNumber - 1 + "")}
@@ -197,7 +199,7 @@ const Dashboard = () => {
           >
             Next
           </Button>
-        </div>
+        </div>}
       </div>
     </div>
   );
