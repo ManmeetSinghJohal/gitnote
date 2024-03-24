@@ -62,12 +62,12 @@ const Dashboard = () => {
 
   function getCreateTypeTextColor(createType: string) {
     const colorMap: { [key: string]: string } = {
-      component: "text-purple-500",
-      workFlow: "text-primary1-500",
-      knowledge: "text-green-500",
+      component: "text-purple-500 bg-purple-500/10",
+      workFlow: "text-primary1-500 bg-primary1-500/10",
+      knowledge: "text-green-500 bg-green-500/10",
     };
 
-    return colorMap[createType] || "text-primary1-500";
+    return colorMap[createType] || "text-primary1-500 bg-primary1-500/10";
   }
 
   function capitalizeFirstLetter(string: string): string {
@@ -101,7 +101,7 @@ const Dashboard = () => {
           </div>
           <div className="flex space-x-[14px]">
             <Badge
-              className="space-x-[5px]"
+              className="space-x-[5px] bg-primary1-500/10"
               onClick={() => applyFilter("createType", "workflow")}
             >
               <Image
@@ -113,7 +113,7 @@ const Dashboard = () => {
               <div className="text-sm text-primary1-500">WorkFlow</div>
             </Badge>
             <Badge
-              className="space-x-[5px]"
+              className="space-x-[5px] bg-purple-500/10"
               onClick={() => applyFilter("createType", "component")}
             >
               <Image
@@ -125,7 +125,7 @@ const Dashboard = () => {
               <div className="text-sm text-purple-500">Component</div>
             </Badge>
             <Badge
-              className="space-x-[5px]"
+              className="space-x-[5px] bg-green-500/10"
               onClick={() => applyFilter("createType", "knowledge")}
             >
               <Image
@@ -144,16 +144,16 @@ const Dashboard = () => {
             className="mt-5 flex flex-col bg-black-800 px-[18px] py-6 lg:mt-6"
           >
             <div>
-              <Badge className="mb-[18px] space-x-[5px]">
+              <Badge
+                className={`mb-[18px] space-x-[5px] ${getCreateTypeTextColor(post.createType)}`}
+              >
                 <Image
                   src={`/assets/icons/${post.createType}.svg`}
                   alt="workflow"
                   width={16}
                   height={16}
                 />
-                <div
-                  className={`text-sm ${getCreateTypeTextColor(post.createType)}`}
-                >
+                <div className="text-sm">
                   {capitalizeFirstLetter(post.createType)}
                 </div>
               </Badge>
@@ -204,3 +204,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
