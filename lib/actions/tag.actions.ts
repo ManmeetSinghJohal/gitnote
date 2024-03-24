@@ -9,7 +9,9 @@ import { getActiveUser } from "./user.action";
 export async function getTags() {
   try {
     await connectToDatabase();
-    const tags = await Tag.find();
+    const user = await getActiveUser();
+    const filterObject: any = { ownerId: user.id };
+    const tags = await Tag.find(filterObject);
     return JSON.stringify(tags);
   } catch (error) {
     console.log("Error getting tags", error);
