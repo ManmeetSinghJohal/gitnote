@@ -53,7 +53,9 @@ export async function createPost(params: CreatePostParams) {
 export async function getPosts() {
   try {
     await connectToDatabase();
-    const posts = await Post.find();
+    const user = await getActiveUser();
+    const filterObject: any = { ownerId: user.id };
+    const posts = await Post.find(filterObject);
     return posts;
   } catch (error) {
     console.log("Error getting posts", error);
@@ -71,7 +73,7 @@ export async function getFilteredPosts(
 
     const user = await getActiveUser();
 
-    const filterObject: any = {ownerId: user.id};
+    const filterObject: any = { ownerId: user.id };
     if (tag) {
       const tagToUse = await Tag.findOne({ value: tag });
       filterObject.tags = tagToUse._id;
