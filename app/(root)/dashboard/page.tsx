@@ -60,7 +60,7 @@ const Dashboard = () => {
   const renderPosts = postsData.posts;
   const totalPages = postsData.pageCount;
 
-  function getCreateTypeTextColor(createType: string) {
+  function getCreateTypeColor(createType: string) {
     const colorMap: { [key: string]: string } = {
       component: "text-purple-500 bg-purple-500/10",
       workFlow: "text-primary1-500 bg-primary1-500/10",
@@ -145,7 +145,7 @@ const Dashboard = () => {
           >
             <div>
               <Badge
-                className={`mb-[18px] space-x-[5px] ${getCreateTypeTextColor(post.createType)}`}
+                className={`mb-[18px] space-x-[5px] ${getCreateTypeColor(post.createType)}`}
               >
                 <Image
                   src={`/assets/icons/${post.createType}.svg`}
