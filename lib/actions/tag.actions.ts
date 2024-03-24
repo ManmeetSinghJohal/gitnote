@@ -4,14 +4,10 @@ import Tag from "@/database/tag.model";
 
 import { connectToDatabase } from "../mongoose";
 
-import { getActiveUser } from "./user.action";
-
 export async function getTags() {
   try {
     await connectToDatabase();
-    const user = await getActiveUser();
-    const filterObject: any = { ownerId: user.id };
-    const tags = await Tag.find(filterObject);
+    const tags = await Tag.find();
     return JSON.stringify(tags);
   } catch (error) {
     console.log("Error getting tags", error);
