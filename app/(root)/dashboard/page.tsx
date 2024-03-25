@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { createTypeBadge } from "@/constants";
-import { IPost } from "@/database/post.model";
+import { IPostWithTags } from "@/database/post.model";
 import { getFilteredPosts } from "@/lib/actions/post.action";
 import { getCreateTypeColor, capitalizeFirstLetter } from "@/lib/utils";
 
@@ -16,7 +16,7 @@ const Dashboard = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [postsData, setPostsData] = useState<{
-    posts: IPost[];
+    posts: IPostWithTags[];
     pageCount: number;
   }>({ posts: [], pageCount: 1 });
   const postsWithTag = searchParams.get("tag");
@@ -98,7 +98,7 @@ const Dashboard = () => {
             ))}
           </div>
         </div>
-        {renderPosts.map((post: IPost) => (
+        {renderPosts.map((post) => (
           <div
             key={post._id}
             className="mt-5 flex flex-col bg-black-800 px-[18px] py-6 lg:mt-6"
