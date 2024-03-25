@@ -1,5 +1,4 @@
 "use client";
-import { nanoid } from "nanoid";
 import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -121,7 +120,7 @@ const Dashboard = () => {
         </div>
         {renderPosts.map((post: IPost) => (
           <div
-            key={nanoid()}
+            key={post._id}
             className="mt-5 flex flex-col bg-black-800 px-[18px] py-6 lg:mt-6"
           >
             <div>
@@ -144,6 +143,7 @@ const Dashboard = () => {
             </h4>
             <div className="space-x-[10px]">
               {post.tags.map((tag) => (
+                console.log("tag", tag),
                 <Badge
                   key={tag._id}
                   variant="secondary"
