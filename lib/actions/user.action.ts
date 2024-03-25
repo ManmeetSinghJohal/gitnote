@@ -18,7 +18,6 @@ export async function createUser(userData: CreateUserParams) {
       throw new Error("User with this email already exists.");
     }
     const newUser = await User.create({ name, email, password });
-    console.log("newUser", newUser);
     return JSON.stringify(newUser);
   } catch (error) {
     console.log(error);
