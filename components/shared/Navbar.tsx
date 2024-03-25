@@ -19,7 +19,6 @@ const Navbar = ({ posts }: { posts: PostParams[] }) => {
               alt="hamburger"
               width={21}
               height={18}
-              className=""
             />
           </SheetTrigger>
           <SheetContent

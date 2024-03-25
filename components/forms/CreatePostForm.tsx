@@ -598,4 +598,3 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
 
 export default CreatePostForm;
 
-// send tags to the db
