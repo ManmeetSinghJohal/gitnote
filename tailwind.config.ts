@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
@@ -91,8 +91,7 @@ const config = {
         custom: "-0.02em",
       },
       backgroundImage: {
-        "custom-gradient":
-          "linear-gradient(to right, #43B7FE, #4F48E6)",
+        "custom-gradient": "linear-gradient(to right, #43B7FE, #4F48E6)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -118,4 +117,4 @@ const config = {
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
 
-export default config
+export default config;
