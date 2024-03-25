@@ -54,8 +54,9 @@ import { PostSchema } from "@/lib/validations";
 const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
   const router = useRouter();
-
   const editorRef = useRef(null);
+  const highlightCode = () => Prism.highlightAll();
+
   const form = useForm<z.infer<typeof PostSchema>>({
     resolver: zodResolver(PostSchema),
     defaultValues: {
@@ -97,7 +98,8 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
     name: "tags",
   });
 
-  const highlightCode = () => Prism.highlightAll();
+  const isCreateType = form.watch("createType");
+  const previewCode = form.watch("code");
 
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -154,9 +156,6 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
       console.log("error", error);
     }
   }
-
-  const isCreateType = form.watch("createType");
-  const previewCode = form.watch("code");
 
   return (
     <Form {...form}>
@@ -597,4 +596,3 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
 };
 
 export default CreatePostForm;
-
