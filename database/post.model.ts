@@ -1,5 +1,6 @@
-import {Model,  Schema, models, model, Document } from "mongoose";
-import {ITag} from './tag.model';
+import { Model, Schema, models, model, Document } from "mongoose";
+
+import { ITag } from "./tag.model";
 
 export interface IPost extends Document {
   title: string;
@@ -19,7 +20,7 @@ export interface ICheckListItem {
 }
 
 const CheckListItem = new Schema<ICheckListItem>({
-  step_lesson: {type: String, required: true}
+  step_lesson: { type: String, required: true },
 });
 
 export interface IResource {
@@ -28,13 +29,13 @@ export interface IResource {
 }
 
 const ResourceItem = new Schema<IResource>({
-  label: {type: String, required: true},
-  resource: {type: String, required: true}
+  label: { type: String, required: true },
+  resource: { type: String, required: true },
 });
 
 export type IPostWithTags = Omit<IPost, "tags"> & {
-  tags: ITag[]
-}
+  tags: ITag[];
+};
 
 const PostSchema = new Schema<IPost>({
   title: { type: String, required: true },
@@ -49,6 +50,6 @@ const PostSchema = new Schema<IPost>({
   createdAt: { type: Date, default: new Date(), required: true },
 });
 
-const Post = (models.Post as Model<IPost> ) || model<IPost>("Post", PostSchema);
+const Post = (models.Post as Model<IPost>) || model<IPost>("Post", PostSchema);
 
 export default Post;
