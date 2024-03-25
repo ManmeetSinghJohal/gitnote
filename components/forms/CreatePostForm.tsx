@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Editor } from "@tinymce/tinymce-react";
-import { nanoid } from "nanoid";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Prism from "prismjs";
@@ -46,12 +45,11 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { createTypeBadge } from "@/constants";
 import { ITag } from "@/database/tag.model";
 import { createPost } from "@/lib/actions/post.action";
 import { queryTags } from "@/lib/actions/tag.actions";
 import { PostSchema } from "@/lib/validations";
-import { create } from "domain";
-import { createTypeBadge } from "@/constants";
 
 const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
@@ -194,7 +192,10 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
                   </SelectTrigger>
                   <SelectContent className="border-none bg-black-700">
                     {createTypeBadge.map((badge) => (
-                      <SelectItem value={badge.createType} key={badge.createType}>
+                      <SelectItem
+                        value={badge.createType}
+                        key={badge.createType}
+                      >
                         <div className="flex gap-[5px]">
                           <Image
                             src={`/assets/icons/${badge.createType}.svg`}
@@ -250,7 +251,7 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
                       {postTags.map((tag) => (
                         <CommandItem
                           value={tag.label}
-                          key={nanoid()}
+                          key={tag._id}
                           onSelect={() => {
                             setIsPopOverOpen(false);
                             const shouldAppendTag = !tagsFields.some(
