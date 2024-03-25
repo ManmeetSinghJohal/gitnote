@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { createTypeBadge } from "@/constants";
 import { IPost } from "@/database/post.model";
 import { getFilteredPosts } from "@/lib/actions/post.action";
 import { getCreateTypeColor, capitalizeFirstLetter } from "@/lib/utils";
@@ -80,42 +81,21 @@ const Dashboard = () => {
             Recent Posts
           </div>
           <div className="flex space-x-[14px]">
-            <Badge
-              className="space-x-[5px] bg-primary1-500/10"
-              onClick={() => applyFilter("createType", "workflow")}
-            >
-              <Image
-                src="/assets/icons/workflow.svg"
-                alt="workflow"
-                width={16}
-                height={16}
-              />
-              <div className="text-sm text-primary1-500">WorkFlow</div>
-            </Badge>
-            <Badge
-              className="space-x-[5px] bg-purple-500/10"
-              onClick={() => applyFilter("createType", "component")}
-            >
-              <Image
-                src="/assets/icons/component.svg"
-                alt="Component"
-                width={16}
-                height={16}
-              />
-              <div className="text-sm text-purple-500">Component</div>
-            </Badge>
-            <Badge
-              className="space-x-[5px] bg-green-500/10"
-              onClick={() => applyFilter("createType", "knowledge")}
-            >
-              <Image
-                src="/assets/icons/knowledge.svg"
-                alt="knowledge"
-                width={16}
-                height={16}
-              />
-              <div className="text-sm text-green-500">Knowledge</div>
-            </Badge>
+            {createTypeBadge.map((badge) => (
+              <Badge
+                className={`space-x-[5px] ${badge.bgColor}`}
+                onClick={() => applyFilter("createType", badge.createType)}
+                key={badge.createType}
+              >
+                <Image
+                  src={`/assets/icons/${badge.createType}.svg`}
+                  alt={badge.createType}
+                  width={16}
+                  height={16}
+                />
+                <div className={`text-sm ${badge.textColor}`}>{badge.name}</div>
+              </Badge>
+            ))}
           </div>
         </div>
         {renderPosts.map((post: IPost) => (
@@ -143,7 +123,6 @@ const Dashboard = () => {
             </h4>
             <div className="space-x-[10px]">
               {post.tags.map((tag) => (
-                console.log("tag", tag),
                 <Badge
                   key={tag._id}
                   variant="secondary"
