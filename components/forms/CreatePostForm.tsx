@@ -247,7 +247,7 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
                       onKeyDown={(e) => handleInputKeyDown(e, field)}
                     />
                     <CommandEmpty>No tag found.</CommandEmpty>
-                    <CommandGroup className="">
+                    <CommandGroup>
                       {postTags.map((tag) => (
                         <CommandItem
                           value={tag.label}
