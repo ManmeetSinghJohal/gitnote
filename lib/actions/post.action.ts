@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import Post from "@/database/post.model";
+import Post, { IPostWithTags } from "@/database/post.model";
 import Tag from "@/database/tag.model";
 
 import { connectToDatabase } from "../mongoose";
@@ -92,7 +92,7 @@ export async function getFilteredPosts(
     console.log(itemCount);
 
     return {
-      posts: JSON.parse(JSON.stringify(posts)),
+      posts: JSON.parse(JSON.stringify(posts)) as IPostWithTags[],
       pageCount: Math.ceil(itemCount / postsPerPage),
     };
   } catch (error) {
