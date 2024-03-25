@@ -1,5 +1,4 @@
 "use client";
-import { nanoid } from "nanoid";
 import { useSearchParams, useRouter } from "next/navigation";
 import React from "react";
 
@@ -8,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import UserDetails from "./UserDetails";
 
 type RightSideBarProps = {
-  postTags: { label: string; value: string }[];
+  postTags: { label: string; value: string; _id: string }[];
 };
 
 const RightSideBar = ({ postTags }: RightSideBarProps) => {
@@ -18,8 +17,6 @@ const RightSideBar = ({ postTags }: RightSideBarProps) => {
   const applyFilter = (type: string, value: string) => {
     const mySearchParams = new URLSearchParams(searchParams.toString());
 
-    console.log(mySearchParams.toString());
-
     if (mySearchParams.get(type) === value) {
       mySearchParams.delete(type);
       router.replace("/dashboard?" + mySearchParams.toString());
@@ -27,8 +24,6 @@ const RightSideBar = ({ postTags }: RightSideBarProps) => {
     } else {
       mySearchParams.set(type, value);
     }
-
-    console.log(mySearchParams.toString());
 
     router.replace("/dashboard?" + mySearchParams.toString());
   };
@@ -43,7 +38,7 @@ const RightSideBar = ({ postTags }: RightSideBarProps) => {
           <div className="flex flex-col items-start gap-3">
             {postTags.map((tag) => (
               <Badge
-                key={nanoid()}
+                key={tag._id}
                 variant="secondary"
                 className="paragraph-3-medium bg-black-700 text-white-300"
                 onClick={() => applyFilter("tag", tag.value)}
