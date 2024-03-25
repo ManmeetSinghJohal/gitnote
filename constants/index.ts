@@ -8,7 +8,7 @@ export const createTypeBadge: CreateTypeBadge[] = [
     name: "Component",
   },
   {
-    createType: "workFlow",
+    createType: "workflow",
     textColor: "text-primary1-500",
     bgColor: "bg-primary1-500/10",
     name: "WorkFlow",
