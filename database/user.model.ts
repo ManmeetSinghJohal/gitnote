@@ -6,7 +6,7 @@ export interface IUser extends Document {
   password?: string;
 }
 
-const UserSchema = new Schema(
+const UserSchema = new Schema<IUser>(
   {
     name: { type: String, required: true, unique: false },
     email: {
@@ -14,13 +14,12 @@ const UserSchema = new Schema(
       required: true,
       unique: true,
     },
-    passwordHashed: { type: String },
+    password: { type: String },
   },
   {
     timestamps: true,
   }
 );
-
 
 const User = models.User || model("User", UserSchema);
 
