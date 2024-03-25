@@ -50,6 +50,8 @@ import { ITag } from "@/database/tag.model";
 import { createPost } from "@/lib/actions/post.action";
 import { queryTags } from "@/lib/actions/tag.actions";
 import { PostSchema } from "@/lib/validations";
+import { create } from "domain";
+import { createTypeBadge } from "@/constants";
 
 const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
@@ -139,7 +141,6 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
 
   async function onSubmit(values: z.infer<typeof PostSchema>) {
     try {
-      console.log("values", values);
       const tagsIdArray = await queryTags(values.tags);
       await createPost({
         title: values.title,
@@ -192,41 +193,21 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent className="border-none bg-black-700">
-                    <SelectItem value="component">
-                      <div className="flex gap-[5px]">
-                        <Image
-                          src="/assets/icons/component.svg"
-                          alt="Component"
-                          width={12}
-                          height={12}
-                        />
-                        <div className="text-xs text-purple-500">Component</div>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="knowledge">
-                      <div className="flex gap-[5px]">
-                        <Image
-                          src="/assets/icons/knowledge.svg"
-                          alt="knowledge"
-                          width={12}
-                          height={12}
-                        />
-                        <div className="text-xs text-green-500">Knowledge</div>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="workflow">
-                      <div className="flex gap-[5px]">
-                        <Image
-                          src="/assets/icons/workflow.svg"
-                          alt="workflow"
-                          width={12}
-                          height={12}
-                        />
-                        <div className="text-xs text-primary1-500">
-                          WorkFlow
+                    {createTypeBadge.map((badge) => (
+                      <SelectItem value={badge.createType} key={badge.createType}>
+                        <div className="flex gap-[5px]">
+                          <Image
+                            src={`/assets/icons/${badge.createType}.svg`}
+                            alt={badge.createType}
+                            width={12}
+                            height={12}
+                          />
+                          <div className={`text-xs ${badge.textColor}`}>
+                            {badge.name}
+                          </div>
                         </div>
-                      </div>
-                    </SelectItem>
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </FormControl>
