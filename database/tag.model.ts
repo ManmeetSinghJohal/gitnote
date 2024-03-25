@@ -6,7 +6,7 @@ export interface ITag extends Document {
   ownerId: Schema.Types.ObjectId;
 }
 
-const TagSchema = new Schema({
+const TagSchema = new Schema<ITag>({
   value: { type: String, required: true, unique: true },
   label: { type: String, required: true },
   ownerId: { type: Schema.Types.ObjectId, ref: "User", required: true },
