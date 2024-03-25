@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Editor } from "@tinymce/tinymce-react";
 import { nanoid } from "nanoid";
 import Image from "next/image";
@@ -46,11 +46,12 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { ITag } from "@/database/tag.model";
 import { createPost } from "@/lib/actions/post.action";
 import { queryTags } from "@/lib/actions/tag.actions";
 import { PostSchema } from "@/lib/validations";
 
-const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
+const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
   const router = useRouter();
 
@@ -284,14 +285,6 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
                           }}
                         >
                           {tag.label}
-                          {/* <CheckIcon
-                            className={cn(
-                              "ml-auto h-4 w-4",
-                              tag.value === field.value
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          /> */}
                         </CommandItem>
                       ))}
                     </CommandGroup>
@@ -605,4 +598,3 @@ const CreatePostForm = ({ postTags }: { postTags: string[] }) => {
 
 export default CreatePostForm;
 
-// send tags to the db

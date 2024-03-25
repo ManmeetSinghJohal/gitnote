@@ -1,76 +1,22 @@
-import { PostTags } from "@/types";
+import { CreateTypeBadge } from "../types";
 
-export const postTags: PostTags[] = [
+export const createTypeBadge: CreateTypeBadge[] = [
   {
-    value: "api",
-    label: "API",
+    createType: "component",
+    textColor: "text-purple-500",
+    bgColor: "bg-purple-500/10",
+    name: "Component",
   },
   {
-    value: "authentication",
-    label: "Authentication",
+    createType: "workFlow",
+    textColor: "text-primary1-500",
+    bgColor: "bg-primary1-500/10",
+    name: "WorkFlow",
   },
   {
-    value: "css ",
-    label: "CSS ",
-  },
-  {
-    value: "clerk",
-    label: "Clerk",
-  },
-  {
-    value: "javascript",
-    label: "JavaScript",
-  },
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "react",
-    label: "React",
-  },
-  {
-    value: "typescript",
-    label: "TypeScript",
-  },
-  {
-    value: "vercel",
-    label: "Vercel",
-  },
-  {
-    value: "zod",
-    label: "Zod",
-  },
-  {
-    value: "frontend",
-    label: "frontend",
-  },
-  {
-    value: "hooks",
-    label: "hooks",
-  },
-  {
-    value: "react-hook-form",
-    label: "react-hook-form",
-  },
-  {
-    value: "serverless",
-    label: "serverless",
-  },
-  {
-    value: "tailwindcss",
-    label: "tailwindcss",
-  },
-  {
-    value: "yup",
-    label: "yup",
-  },
-  {
-    value: "zustand",
-    label: "zustand",
-  },
-  {
-    value: "zustand-persist",
-    label: "zustand-persist",
+    createType: "knowledge",
+    textColor: "text-green-500",
+    bgColor: "bg-green-500/10",
+    name: "Knowledge",
   },
 ];
