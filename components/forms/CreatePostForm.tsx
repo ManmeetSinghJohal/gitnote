@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Editor } from "@tinymce/tinymce-react";
-import { nanoid } from "nanoid";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Prism from "prismjs";
@@ -46,16 +45,17 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { createTypeBadge } from "@/constants";
 import { ITag } from "@/database/tag.model";
 import { createPost } from "@/lib/actions/post.action";
-import { queryTags } from "@/lib/actions/tag.actions";
 import { PostSchema } from "@/lib/validations";
 
 const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
   const router = useRouter();
-
   const editorRef = useRef(null);
+  const highlightCode = () => Prism.highlightAll();
+
   const form = useForm<z.infer<typeof PostSchema>>({
     resolver: zodResolver(PostSchema),
     defaultValues: {
@@ -97,7 +97,8 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
     name: "tags",
   });
 
-  const highlightCode = () => Prism.highlightAll();
+  const isCreateType = form.watch("createType");
+  const previewCode = form.watch("code");
 
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -137,26 +138,14 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
 
   async function onSubmit(values: z.infer<typeof PostSchema>) {
     try {
-      console.log("values", values);
-      const tagsIdArray = await queryTags(values.tags);
       await createPost({
-        title: values.title,
-        createType: values.createType,
-        description: values.description,
-        checkList: values.checkList,
-        code: values.code,
-        content: values.content,
-        resources: values.resources,
-        tags: tagsIdArray,
+        ...values,
       });
       router.push("/dashboard");
     } catch (error) {
       console.log("error", error);
     }
   }
-
-  const isCreateType = form.watch("createType");
-  const previewCode = form.watch("code");
 
   return (
     <Form {...form}>
@@ -193,41 +182,24 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent className="border-none bg-black-700">
-                    <SelectItem value="component">
-                      <div className="flex gap-[5px]">
-                        <Image
-                          src="/assets/icons/component.svg"
-                          alt="Component"
-                          width={12}
-                          height={12}
-                        />
-                        <div className="text-xs text-purple-500">Component</div>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="knowledge">
-                      <div className="flex gap-[5px]">
-                        <Image
-                          src="/assets/icons/knowledge.svg"
-                          alt="knowledge"
-                          width={12}
-                          height={12}
-                        />
-                        <div className="text-xs text-green-500">Knowledge</div>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="workflow">
-                      <div className="flex gap-[5px]">
-                        <Image
-                          src="/assets/icons/workflow.svg"
-                          alt="workflow"
-                          width={12}
-                          height={12}
-                        />
-                        <div className="text-xs text-primary1-500">
-                          WorkFlow
+                    {createTypeBadge.map((badge) => (
+                      <SelectItem
+                        value={badge.createType}
+                        key={badge.createType}
+                      >
+                        <div className="flex gap-[5px]">
+                          <Image
+                            src={`/assets/icons/${badge.createType}.svg`}
+                            alt={badge.createType}
+                            width={12}
+                            height={12}
+                          />
+                          <div className={`text-xs ${badge.textColor}`}>
+                            {badge.name}
+                          </div>
                         </div>
-                      </div>
-                    </SelectItem>
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -266,11 +238,11 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
                       onKeyDown={(e) => handleInputKeyDown(e, field)}
                     />
                     <CommandEmpty>No tag found.</CommandEmpty>
-                    <CommandGroup className="">
+                    <CommandGroup>
                       {postTags.map((tag) => (
                         <CommandItem
                           value={tag.label}
-                          key={nanoid()}
+                          key={tag._id}
                           onSelect={() => {
                             setIsPopOverOpen(false);
                             const shouldAppendTag = !tagsFields.some(
@@ -597,4 +569,3 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
 };
 
 export default CreatePostForm;
-

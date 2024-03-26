@@ -6,8 +6,7 @@ import React, { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { createTypeBadge } from "@/constants";
-import { IPost } from "@/database/post.model";
+import { IPostWithTags } from "@/database/post.model";
 import { getFilteredPosts } from "@/lib/actions/post.action";
 import { getCreateTypeColor, capitalizeFirstLetter } from "@/lib/utils";
 
@@ -16,7 +15,7 @@ const Dashboard = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [postsData, setPostsData] = useState<{
-    posts: IPost[];
+    posts: IPostWithTags[];
     pageCount: number;
   }>({ posts: [], pageCount: 1 });
   const postsWithTag = searchParams.get("tag");
@@ -81,24 +80,45 @@ const Dashboard = () => {
             Recent Posts
           </div>
           <div className="flex space-x-[14px]">
-            {createTypeBadge.map((badge) => (
-              <Badge
-                className={`space-x-[5px] ${badge.bgColor}`}
-                onClick={() => applyFilter("createType", badge.createType)}
-                key={badge.createType}
-              >
-                <Image
-                  src={`/assets/icons/${badge.createType}.svg`}
-                  alt={badge.createType}
-                  width={16}
-                  height={16}
-                />
-                <div className={`text-sm ${badge.textColor}`}>{badge.name}</div>
-              </Badge>
-            ))}
+            <Badge
+              className="space-x-[5px] bg-primary1-500/10"
+              onClick={() => applyFilter("createType", "workflow")}
+            >
+              <Image
+                src="/assets/icons/workflow.svg"
+                alt="workflow"
+                width={16}
+                height={16}
+              />
+              <div className="text-sm text-primary1-500">WorkFlow</div>
+            </Badge>
+            <Badge
+              className="space-x-[5px] bg-purple-500/10"
+              onClick={() => applyFilter("createType", "component")}
+            >
+              <Image
+                src="/assets/icons/component.svg"
+                alt="Component"
+                width={16}
+                height={16}
+              />
+              <div className="text-sm text-purple-500">Component</div>
+            </Badge>
+            <Badge
+              className="space-x-[5px] bg-green-500/10"
+              onClick={() => applyFilter("createType", "knowledge")}
+            >
+              <Image
+                src="/assets/icons/knowledge.svg"
+                alt="knowledge"
+                width={16}
+                height={16}
+              />
+              <div className="text-sm text-green-500">Knowledge</div>
+            </Badge>
           </div>
         </div>
-        {renderPosts.map((post: IPost) => (
+        {renderPosts.map((post) => (
           <div
             key={post._id}
             className="mt-5 flex flex-col bg-black-800 px-[18px] py-6 lg:mt-6"

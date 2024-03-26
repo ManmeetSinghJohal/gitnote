@@ -1,13 +1,15 @@
 "use server";
 
+import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
 
-import Post from "@/database/post.model";
+import Post, { IPost, IPostWithTags } from "@/database/post.model";
 import Tag from "@/database/tag.model";
 
 import { connectToDatabase } from "../mongoose";
 
 import { CreatePostParams } from "./shared.types";
+import { queryTags } from "./tag.actions";
 import { getActiveUser } from "./user.action";
 
 export async function createPost(params: CreatePostParams) {
@@ -27,6 +29,8 @@ export async function createPost(params: CreatePostParams) {
       tags,
     } = params;
 
+    const tagIds = await queryTags(tags);
+
     const checkListAsStringArray = checkList.map((item) => item.step_lesson);
 
     const post = await Post.create({
@@ -37,7 +41,7 @@ export async function createPost(params: CreatePostParams) {
       code,
       content,
       resources,
-      tags,
+      tags: tagIds,
       ownerId: user.id,
     });
 
@@ -73,7 +77,7 @@ export async function getFilteredPosts(
 
     const user = await getActiveUser();
 
-    const filterObject: any = { ownerId: user.id };
+    const filterObject: FilterQuery<IPost> = { ownerId: user.id };
     if (tag) {
       const tagToUse = await Tag.findOne({ value: tag });
       filterObject.tags = tagToUse._id;
@@ -89,10 +93,9 @@ export async function getFilteredPosts(
       .limit(postsPerPage);
 
     const itemCount = await Post.countDocuments(filterObject);
-    console.log(itemCount);
 
     return {
-      posts: JSON.parse(JSON.stringify(posts)),
+      posts: JSON.parse(JSON.stringify(posts)) as IPostWithTags[],
       pageCount: Math.ceil(itemCount / postsPerPage),
     };
   } catch (error) {

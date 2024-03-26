@@ -11,7 +11,7 @@ export interface CheckListItem {
 export interface CreatePostParams {
   title: string;
   createType: string;
-  tags: string[];
+  tags: { value: string; label: string }[];
   description: string;
   checkList: CheckListItem[];
   code: string;
