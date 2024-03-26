@@ -48,7 +48,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { createTypeBadge } from "@/constants";
 import { ITag } from "@/database/tag.model";
 import { createPost } from "@/lib/actions/post.action";
-import { queryTags } from "@/lib/actions/tag.actions";
 import { PostSchema } from "@/lib/validations";
 
 const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
@@ -139,16 +138,8 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
 
   async function onSubmit(values: z.infer<typeof PostSchema>) {
     try {
-      const tagsIdArray = await queryTags(values.tags);
       await createPost({
-        title: values.title,
-        createType: values.createType,
-        description: values.description,
-        checkList: values.checkList,
-        code: values.code,
-        content: values.content,
-        resources: values.resources,
-        tags: tagsIdArray,
+        ...values,
       });
       router.push("/dashboard");
     } catch (error) {
