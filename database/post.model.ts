@@ -19,10 +19,6 @@ export interface ICheckListItem {
   step_lesson: string;
 }
 
-const CheckListItem = new Schema<ICheckListItem>({
-  step_lesson: { type: String, required: true },
-});
-
 export interface IResource {
   label: string;
   resource: string;
@@ -42,7 +38,7 @@ const PostSchema = new Schema<IPost>({
   createType: { type: String, required: true },
   tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
   description: { type: String, required: true },
-  checkList: [{ type: CheckListItem, required: true }],
+  checkList: [{ type: String, required: true }],
   code: { type: String, required: false },
   content: { type: String, required: true },
   resources: [{ type: ResourceItem, required: true }],
