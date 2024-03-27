@@ -1,6 +1,8 @@
 "use server";
 
-import Tag from "@/database/tag.model";
+import { FilterQuery } from "mongoose";
+
+import Tag, { ITag } from "@/database/tag.model";
 
 import { connectToDatabase } from "../mongoose";
 
@@ -10,7 +12,7 @@ export async function getTags() {
   try {
     await connectToDatabase();
     const user = await getActiveUser();
-    const filterObject: any = { ownerId: user.id };
+    const filterObject: FilterQuery<ITag> = { ownerId: user.id };
     const tags = await Tag.find(filterObject);
     return JSON.stringify(tags);
   } catch (error) {
@@ -24,14 +26,13 @@ export async function queryTags(tags: { value: string }[]): Promise<string[]> {
     await connectToDatabase();
     const user = await getActiveUser();
     for (const tag of tags) {
-      console.log("tag", tag);
       let foundTag = await Tag.findOne({ value: tag.value });
       if (!foundTag) {
-           foundTag = await Tag.create({
-             value: tag.value,
-             label: tag.value,
-             ownerId: user.id,
-           });
+        foundTag = await Tag.create({
+          value: tag.value,
+          label: tag.value,
+          ownerId: user.id,
+        });
       }
       tagsArray.push(foundTag._id.toString());
     }

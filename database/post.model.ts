@@ -2,9 +2,11 @@ import { Model, Schema, models, model, Document } from "mongoose";
 
 import { ITag } from "./tag.model";
 
+export type POST_TYPE = "component" | "workflow" | "knowledge";
+
 export interface IPost extends Document {
   title: string;
-  createType: string;
+  createType: POST_TYPE;
   tags: Schema.Types.ObjectId[];
   description: string;
   checkList: object[];
@@ -35,10 +37,14 @@ export type IPostWithTags = Omit<IPost, "tags"> & {
 
 const PostSchema = new Schema<IPost>({
   title: { type: String, required: true },
-  createType: { type: String, required: true },
+  createType: {
+    type: String,
+    enum: ["component", "workflow", "knowledge"] as POST_TYPE[],
+    required: true,
+  },
   tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
   description: { type: String, required: true },
-  checkList: [{ type: String, required: true }],
+  checkList: [{ type: String }],
   code: { type: String, required: false },
   content: { type: String, required: true },
   resources: [{ type: ResourceItem, required: true }],

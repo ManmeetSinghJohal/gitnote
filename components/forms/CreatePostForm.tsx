@@ -45,10 +45,12 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { createTypeBadge } from "@/constants";
+import { createTypeNames } from "@/constants";
 import { ITag } from "@/database/tag.model";
 import { createPost } from "@/lib/actions/post.action";
 import { PostSchema } from "@/lib/validations";
+
+import { CreateTypeBadge } from "../ui/createTypeBadge";
 
 const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
@@ -182,22 +184,31 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent className="border-none bg-black-700">
-                    {createTypeBadge.map((badge) => (
+                    {createTypeNames.map((badge) => (
                       <SelectItem
                         value={badge.createType}
                         key={badge.createType}
                       >
-                        <div className="flex gap-[5px]">
+                        <CreateTypeBadge
+                          className="flex gap-[5px]"
+                          variant={
+                            badge.createType as
+                              | "component"
+                              | "knowledge"
+                              | "outline"
+                              | "workflow"
+                              | null
+                              | undefined
+                          }
+                        >
                           <Image
                             src={`/assets/icons/${badge.createType}.svg`}
                             alt={badge.createType}
                             width={12}
                             height={12}
                           />
-                          <div className={`text-xs ${badge.textColor}`}>
-                            {badge.name}
-                          </div>
-                        </div>
+                          <div className={`text-xs`}>{badge.name}</div>
+                        </CreateTypeBadge>
                       </SelectItem>
                     ))}
                   </SelectContent>

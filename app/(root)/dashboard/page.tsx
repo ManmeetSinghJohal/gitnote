@@ -6,9 +6,10 @@ import React, { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CreateTypeBadge } from "@/components/ui/createTypeBadge";
+import { createTypeNames } from "@/constants";
 import { IPostWithTags } from "@/database/post.model";
 import { getFilteredPosts } from "@/lib/actions/post.action";
-import { getCreateTypeColor, capitalizeFirstLetter } from "@/lib/utils";
 
 const Dashboard = () => {
   const { data: session } = useSession();
@@ -80,42 +81,14 @@ const Dashboard = () => {
             Recent Posts
           </div>
           <div className="flex space-x-[14px]">
-            <Badge
-              className="space-x-[5px] bg-primary1-500/10"
-              onClick={() => applyFilter("createType", "workflow")}
-            >
-              <Image
-                src="/assets/icons/workflow.svg"
-                alt="workflow"
-                width={16}
-                height={16}
+            {createTypeNames.map((badge) => (
+              <CreateTypeBadge
+                key={badge.createType}
+                variant={badge.createType}
+                className="space-x-[5px]"
+                onClick={() => applyFilter("createType", badge.createType)}
               />
-              <div className="text-sm text-primary1-500">WorkFlow</div>
-            </Badge>
-            <Badge
-              className="space-x-[5px] bg-purple-500/10"
-              onClick={() => applyFilter("createType", "component")}
-            >
-              <Image
-                src="/assets/icons/component.svg"
-                alt="Component"
-                width={16}
-                height={16}
-              />
-              <div className="text-sm text-purple-500">Component</div>
-            </Badge>
-            <Badge
-              className="space-x-[5px] bg-green-500/10"
-              onClick={() => applyFilter("createType", "knowledge")}
-            >
-              <Image
-                src="/assets/icons/knowledge.svg"
-                alt="knowledge"
-                width={16}
-                height={16}
-              />
-              <div className="text-sm text-green-500">Knowledge</div>
-            </Badge>
+            ))}
           </div>
         </div>
         {renderPosts.map((post) => (
@@ -124,19 +97,10 @@ const Dashboard = () => {
             className="mt-5 flex flex-col bg-black-800 px-[18px] py-6 lg:mt-6"
           >
             <div>
-              <Badge
-                className={`mb-[18px] space-x-[5px] ${getCreateTypeColor(post.createType)}`}
-              >
-                <Image
-                  src={`/assets/icons/${post.createType}.svg`}
-                  alt="workflow"
-                  width={16}
-                  height={16}
-                />
-                <div className="text-sm">
-                  {capitalizeFirstLetter(post.createType)}
-                </div>
-              </Badge>
+              <CreateTypeBadge
+                variant={post.createType}
+                className="space-x-[5px]"
+              />
             </div>
             <h4 className="heading-1-medium mb-4 text-white-100">
               {post.title}

@@ -21,12 +21,12 @@ export async function createPost(params: CreatePostParams) {
     const {
       title,
       createType,
+      tags,
       description,
       checkList,
       code,
       content,
       resources,
-      tags,
     } = params;
 
     const tagIds = await queryTags(tags);
@@ -36,17 +36,16 @@ export async function createPost(params: CreatePostParams) {
     const post = await Post.create({
       title,
       createType,
+      tags: tagIds,
       description,
       checkList: checkListAsStringArray,
       code,
       content,
       resources,
-      tags: tagIds,
       ownerId: user.id,
     });
 
     revalidatePath("/dashboard");
-    console.log("Post created: ", post);
     return JSON.stringify(post);
   } catch (error) {
     console.error(error);
@@ -58,7 +57,7 @@ export async function getPosts() {
   try {
     await connectToDatabase();
     const user = await getActiveUser();
-    const filterObject: any = { ownerId: user.id };
+    const filterObject: FilterQuery<IPost> = { ownerId: user.id };
     const posts = await Post.find(filterObject);
     return posts;
   } catch (error) {
@@ -80,7 +79,9 @@ export async function getFilteredPosts(
     const filterObject: FilterQuery<IPost> = { ownerId: user.id };
     if (tag) {
       const tagToUse = await Tag.findOne({ value: tag });
-      filterObject.tags = tagToUse._id;
+      if (tagToUse) {
+        filterObject.tags = tagToUse._id;
+      }
     }
 
     if (createType) {
