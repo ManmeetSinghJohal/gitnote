@@ -190,25 +190,10 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
                         key={badge.createType}
                       >
                         <CreateTypeBadge
-                          className="flex gap-[5px]"
-                          variant={
-                            badge.createType as
-                              | "component"
-                              | "knowledge"
-                              | "outline"
-                              | "workflow"
-                              | null
-                              | undefined
-                          }
-                        >
-                          <Image
-                            src={`/assets/icons/${badge.createType}.svg`}
-                            alt={badge.createType}
-                            width={12}
-                            height={12}
-                          />
-                          <div className={`text-xs`}>{badge.name}</div>
-                        </CreateTypeBadge>
+                          key={badge.createType}
+                          variant={badge.createType}
+                          className="space-x-[5px]"
+                        />
                       </SelectItem>
                     ))}
                   </SelectContent>
