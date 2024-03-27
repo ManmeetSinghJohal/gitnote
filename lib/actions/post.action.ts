@@ -4,7 +4,7 @@ import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
 
 import Post, { IPost, IPostWithTags } from "@/database/post.model";
-import Tag, { ITag } from "@/database/tag.model";
+import Tag from "@/database/tag.model";
 
 import { connectToDatabase } from "../mongoose";
 
@@ -76,7 +76,7 @@ export async function getFilteredPosts(
 
     const user = await getActiveUser();
 
-    const filterObject: FilterQuery<ITag | IPost> = { ownerId: user.id };
+    const filterObject: FilterQuery<IPost> = { ownerId: user.id };
     if (tag) {
       const tagToUse = await Tag.findOne({ value: tag });
       if (tagToUse) {
