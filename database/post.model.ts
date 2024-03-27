@@ -38,7 +38,7 @@ const PostSchema = new Schema<IPost>({
   createType: { type: String, required: true },
   tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
   description: { type: String, required: true },
-  checkList: [{ type: String, required: true }],
+  checkList: [{ type: String }],
   code: { type: String, required: false },
   content: { type: String, required: true },
   resources: [{ type: ResourceItem, required: true }],
