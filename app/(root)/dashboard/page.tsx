@@ -102,7 +102,7 @@ const Dashboard = () => {
                 className="space-x-[5px]"
               />
             </div>
-            <h4 className="heading-1-medium mb-4 text-white-100">
+            <h4 className="heading-1-medium my-4 ml-1 text-white-100">
               {post.title}
             </h4>
             <div className="space-x-[10px]">
