@@ -1,4 +1,4 @@
-import { Schema, model, models, Document } from "mongoose";
+import { Model, Schema, model, models, Document } from "mongoose";
 
 export interface ITag extends Document {
   value: string;
@@ -12,6 +12,6 @@ const TagSchema = new Schema<ITag>({
   ownerId: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
-const Tag = models.Tag || model("Tag", TagSchema);
+const Tag = (models.Tag as Model<ITag>) || model<ITag>("Tag", TagSchema);
 
 export default Tag;
