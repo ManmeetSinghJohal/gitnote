@@ -3,9 +3,7 @@ export interface PostTags {
   label: string;
 }
 
-export interface CreateTypeBadge {
+export interface CreateTypeNames {
   createType: string;
-  textColor: string;
-  bgColor: string;
   name: string;
 }
