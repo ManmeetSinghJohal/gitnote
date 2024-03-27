@@ -5,5 +5,6 @@ export interface PostTags {
 
 export interface CreateTypeNames {
   createType: string;
+  textColor: string;
   name: string;
 }
