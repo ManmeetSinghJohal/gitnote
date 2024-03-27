@@ -1,4 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
+import Image from "next/image";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
@@ -14,7 +15,6 @@ const badgeVariants = cva(
           "border-transparent bg-purple-500/10 text-purple-500 shadow hover:bg-primary/80",
         knowledge:
           "border-transparent bg-green-500/10 text-green-500 shadow hover:bg-primary/80",
-        outline: "text-foreground",
       },
     },
     defaultVariants: {
@@ -28,8 +28,18 @@ export interface BadgeProps
     VariantProps<typeof badgeVariants> {}
 
 function CreateTypeBadge({ className, variant, ...props }: BadgeProps) {
+  if (!variant) return <span className="text-3xl text-[red]">BROKEN TAG</span>;
+
   return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+    <div className={cn(badgeVariants({ variant }), className)} {...props}>
+      <Image
+        src={`/assets/icons/${variant}.svg`}
+        alt={variant ?? ""}
+        width={16}
+        height={16}
+      />
+      <div className="text-sm capitalize">{variant}</div>{" "}
+    </div>
   );
 }
 
