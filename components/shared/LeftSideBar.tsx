@@ -67,7 +67,11 @@ const LeftSideBar = ({ posts }: { posts: PostParams[] }) => {
         <div>
           <div className="space-y-5">
             {posts?.map((post) => (
-              <div key={post._id} className="flex items-center gap-3">
+              <Link
+                key={post._id}
+                className="flex items-center gap-3"
+                href={`/details/${post._id}`}
+              >
                 <Image
                   src={`/assets/icons/${post.createType}.svg`}
                   alt={`${post.createType}`}
@@ -75,7 +79,7 @@ const LeftSideBar = ({ posts }: { posts: PostParams[] }) => {
                   height={16}
                 />
                 <h4 className="paragraph-3-medium truncate">{post.title}</h4>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
