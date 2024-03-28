@@ -65,6 +65,19 @@ export async function getPosts() {
   }
 }
 
+export async function getPost(postId: string) {
+  try {
+    await connectToDatabase();
+    const user = await getActiveUser();
+    const filterObject: FilterQuery<IPost> = { ownerId: user.id };
+    filterObject._id = postId;
+    const post = await Post.findOne(filterObject).populate("tags");
+    return post;
+  } catch (error) {
+    console.log("Error getting posts", error);
+  }
+}
+
 export async function getFilteredPosts(
   tag?: string,
   createType?: string,
