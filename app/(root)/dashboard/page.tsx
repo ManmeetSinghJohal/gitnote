@@ -109,7 +109,7 @@ const Dashboard = () => {
                   <Badge
                     key={tag._id}
                     variant="secondary"
-                    className="paragraph-3-medium bg-black-700 text-white-300"
+                    className="paragraph-3-medium bg-black-700 capitalize text-white-300"
                   >
                     {tag.label}
                   </Badge>
