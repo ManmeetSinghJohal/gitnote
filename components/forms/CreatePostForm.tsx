@@ -455,7 +455,7 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
                       "table",
                     ],
                     toolbar:
-                      "bold italic forecolor | alignleft aligncenter " +
+                      "codesample | bold italic forecolor | alignleft aligncenter " +
                       "alignright alignjustify | bullist numlist",
                     content_style:
                       "body { font-family:Inter; font-size:16px; background-color:#1D2032;}",
