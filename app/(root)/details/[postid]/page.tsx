@@ -93,6 +93,29 @@ const DetailsPage = async ({ params }: { params: { postid: string } }) => {
           <Preview code={post.code} />
         </div>
       )}
+
+      {post.createType === "knowledge" && (
+        <div className="mt-[40px]">
+          <div className="paragraph-1-bold mb-2.5 text-white-100">
+            Key Takeaways
+          </div>
+
+          <div className="space-y-2">
+            {post.checkList.map((check, i) => (
+              <div className="flex space-x-1.5" key={i}>
+                <Image
+                  src="/assets/icons/checkMarkGreen.svg"
+                  alt="check"
+                  width={15}
+                  height={15}
+                />
+                <div className="paragraph-2-regular">{check.toString()}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      <div className="paragraph-2-regular mt-[54px]">{post.content}</div>
     </div>
   );
 };
