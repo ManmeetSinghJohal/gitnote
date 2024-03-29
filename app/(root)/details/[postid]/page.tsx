@@ -1,10 +1,12 @@
 "use server";
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 
 import Preview from "@/components/Preview";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { CreateTypeBadge } from "@/components/ui/createTypeBadge";
 import { getPost } from "@/lib/actions/post.action";
 
@@ -115,7 +117,58 @@ const DetailsPage = async ({ params }: { params: { postid: string } }) => {
           </div>
         </div>
       )}
-      <div className="paragraph-2-regular mt-[54px]">{post.content}</div>
+      <div
+        className="paragraph-2-regular prose prose-invert mt-[54px]"
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      />
+
+      {post.createType === "workflow" && (
+        <div className="mt-5">
+          <div className="paragraph-2-bold mb-2.5 text-white-100">
+            Task Checklist
+          </div>
+          <div className="space-y-2">
+            {post.resources.map((resource, i) => (
+              <div className="flex items-center space-x-1.5" key={i}>
+                <Checkbox id={resource.label} />
+                <label className="paragraph-2-regular" htmlFor={resource.label}>{resource.label}</label>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="mt-5">
+        <div className="paragraph-2-bold mb-2.5 text-white-100">
+          Resources & Links
+        </div>
+        <div className="space-y-2">
+          {post.resources.map((resource, i) => (
+            <div className="flex space-x-1.5" key={i}>
+              <Image
+                src="/assets/icons/checkMarkGreen.svg"
+                alt="check"
+                width={15}
+                height={15}
+              />
+              <Link
+                href={`http://${resource.resource}`}
+                className="paragraph-2-regular"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {resource.label}
+              </Link>
+              <Image
+                src="/assets/icons/icn-external-link.svg"
+                alt="check"
+                width={15}
+                height={15}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
