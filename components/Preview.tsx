@@ -54,10 +54,12 @@ const Preview = ({ code }) => {
         </div>
       </div>
       {activeElement === "preview" && (
-        <div className="max-xl:max-w-[425px]">
-          <pre className="line-numbers">
-            <code className="language-jsx">{code}</code>
-          </pre>
+        <div className="">
+          <div className="max-w-[350px] sm:max-w-[550px] md:max-w-[650px] 2xl:max-w-[900px]">
+            <pre className="line-numbers">
+              <code className="language-jsx">{code}</code>
+            </pre>
+          </div>
         </div>
       )}
     </div>
