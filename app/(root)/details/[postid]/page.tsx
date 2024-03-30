@@ -74,20 +74,15 @@ const DetailsPage = async ({ params }: { params: { postid: string } }) => {
           </div>
         </div>
         <div className="mt-6 space-x-3">
-          {post.tags.map(
-            (tag) => (
-              console.log(tag),
-              (
-                <Badge
-                  key={tag._id}
-                  variant="secondary"
-                  className="paragraph-3-medium bg-black-700 capitalize text-white-300"
-                >
-                  {tag.label}
-                </Badge>
-              )
-            )
-          )}
+          {post.tags.map((tag) => (
+            <Badge
+              key={tag._id}
+              variant="secondary"
+              className="paragraph-3-medium bg-black-700 capitalize text-white-300"
+            >
+              {tag.label}
+            </Badge>
+          ))}
         </div>
       </div>
       {post.createType === "component" && (
@@ -117,8 +112,9 @@ const DetailsPage = async ({ params }: { params: { postid: string } }) => {
           </div>
         </div>
       )}
+
       <div
-        className="paragraph-2-regular prose prose-invert mt-[54px]"
+        className="paragraph-2-regular prose prose-invert mt-[54px] max-w-[350px] sm:max-w-[550px] md:max-w-[650px] 2xl:max-w-[900px]"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
 
@@ -131,7 +127,9 @@ const DetailsPage = async ({ params }: { params: { postid: string } }) => {
             {post.resources.map((resource, i) => (
               <div className="flex items-center space-x-1.5" key={i}>
                 <Checkbox id={resource.label} />
-                <label className="paragraph-2-regular" htmlFor={resource.label}>{resource.label}</label>
+                <label className="paragraph-2-regular" htmlFor={resource.label}>
+                  {resource.label}
+                </label>
               </div>
             ))}
           </div>
