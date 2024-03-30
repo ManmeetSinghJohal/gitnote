@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
@@ -92,31 +93,30 @@ const Dashboard = () => {
           </div>
         </div>
         {renderPosts.map((post) => (
-          <div
-            key={post._id}
-            className="mt-5 flex flex-col bg-black-800 px-[18px] py-6 lg:mt-6"
-          >
-            <div>
-              <CreateTypeBadge
-                variant={post.createType}
-                className="space-x-[5px]"
-              />
+          <Link key={post._id} href={`/details/${post._id}`}>
+            <div className="mt-5 flex flex-col bg-black-800 px-[18px] py-6 lg:mt-6">
+              <div>
+                <CreateTypeBadge
+                  variant={post.createType}
+                  className="space-x-[5px]"
+                />
+              </div>
+              <h4 className="heading-1-medium my-4 ml-1 text-white-100">
+                {post.title}
+              </h4>
+              <div className="space-x-[10px]">
+                {post.tags.map((tag) => (
+                  <Badge
+                    key={tag._id}
+                    variant="secondary"
+                    className="paragraph-3-medium bg-black-700 capitalize text-white-300"
+                  >
+                    {tag.label}
+                  </Badge>
+                ))}
+              </div>
             </div>
-            <h4 className="heading-1-medium my-4 ml-1 text-white-100">
-              {post.title}
-            </h4>
-            <div className="space-x-[10px]">
-              {post.tags.map((tag) => (
-                <Badge
-                  key={tag._id}
-                  variant="secondary"
-                  className="paragraph-3-medium bg-black-700 text-white-300"
-                >
-                  {tag.label}
-                </Badge>
-              ))}
-            </div>
-          </div>
+          </Link>
         ))}
 
         {totalPages === 0 && (
