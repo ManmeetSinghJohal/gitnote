@@ -142,28 +142,29 @@ const DetailsPage = async ({ params }: { params: { postid: string } }) => {
         </div>
         <div className="space-y-2">
           {post.resources.map((resource, i) => (
-            <div className="flex space-x-1.5" key={i}>
+            <Link
+              className="flex space-x-1.5"
+              key={i}
+              href={`http://${resource.resource}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Image
                 src="/assets/icons/checkMarkGreen.svg"
                 alt="check"
                 width={15}
                 height={15}
               />
-              <Link
-                href={`http://${resource.resource}`}
-                className="paragraph-2-regular"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <div className="paragraph-2-regular underline decoration-1 underline-offset-4">
                 {resource.label}
-              </Link>
+              </div>
               <Image
                 src="/assets/icons/icn-external-link.svg"
                 alt="check"
                 width={15}
                 height={15}
               />
-            </div>
+            </Link>
           ))}
         </div>
       </div>
