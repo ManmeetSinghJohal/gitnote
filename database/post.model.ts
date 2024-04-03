@@ -35,6 +35,10 @@ export type IPostWithTags = Omit<IPost, "tags"> & {
   tags: ITag[];
 };
 
+export type IPostWithTagsAndResources = Omit<IPostWithTags, "resources"> & {
+  resources: IResource[];
+};
+
 const PostSchema = new Schema<IPost>({
   title: { type: String, required: true },
   createType: {
