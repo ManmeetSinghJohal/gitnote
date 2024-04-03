@@ -9,12 +9,11 @@ import React, { useEffect, useState } from "react";
 
 const Preview = ({ code }) => {
   const [activeElement, setActiveElement] = useState("preview");
-    useEffect(() => {
-      if (activeElement === "preview") {
-        Prism.highlightAll();
-      }
-    }, [activeElement]);
-
+  useEffect(() => {
+    if (activeElement === "preview") {
+      Prism.highlightAll();
+    }
+  }, [activeElement]);
 
   const onClickHandler = (element: string) => {
     setActiveElement(element);
@@ -54,12 +53,10 @@ const Preview = ({ code }) => {
         </div>
       </div>
       {activeElement === "preview" && (
-        <div className="">
-          <div className="max-w-[350px] sm:max-w-[550px] md:max-w-[650px] 2xl:max-w-[900px]">
-            <pre className="line-numbers">
-              <code className="language-jsx">{code}</code>
-            </pre>
-          </div>
+        <div className="max-md:max-w-[620px] max-sm:max-w-[420px]">
+          <pre className="line-numbers">
+            <code className="language-jsx">{code}</code>
+          </pre>
         </div>
       )}
     </div>

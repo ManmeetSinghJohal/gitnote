@@ -45,6 +45,8 @@ const Dashboard = () => {
   const applyFilter = (type: string, value: string) => {
     const mySearchParams = new URLSearchParams(searchParams.toString());
 
+    mySearchParams.set("page", "0");
+
     if (mySearchParams.get(type) === value) {
       mySearchParams.delete(type);
       router.replace("/dashboard?" + mySearchParams.toString());
