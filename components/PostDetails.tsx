@@ -2,68 +2,26 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React from "react";
+import ReactHtmlParser, { convertNodeToElement } from "react-html-parser";
 
+import { useToast } from "@/components/ui/use-toast";
 import { IPostWithTagsAndResources } from "@/database/post.model";
 
-import Preview from "./Preview";
+import ParseHTML from "./shared/ParseHTML";
 import { Badge } from "./ui/badge";
 import { Checkbox } from "./ui/checkbox";
 import { CreateTypeBadge } from "./ui/createTypeBadge";
 
-function decodeHtmlEntities(input) {
-  const txt = document.createElement("textarea");
-  txt.innerHTML = input;
-  return txt.value;
-}
-
 const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
-  console.log("post", post);
+   const { toast } = useToast();
 
-  useEffect(() => {
-    const allPres = document.querySelectorAll("pre");
-    allPres.forEach((pre) => {
-      pre.style.position = "relative";
-
-      const tickImg = document.createElement("img");
-      tickImg.src = "/assets/icons/tick-gray.svg";
-      tickImg.style.height = "16px";
-      tickImg.style.width = "16px";
-      tickImg.style.display = "none";
-
-      const img = document.createElement("img");
-      img.src = "/assets/icons/copy.svg";
-      img.style.height = "16px";
-      img.style.width = "16px";
-
-      const button = document.createElement("button");
-      button.appendChild(img);
-      button.appendChild(tickImg);
-      button.style.position = "absolute";
-      button.style.top = "0";
-      button.style.right = "0";
-      button.style.padding = "20px";
-
-      const codeBlockInThePre = pre.children[0];
-
-      button.onclick = () => {
-        navigator.clipboard.writeText(
-          decodeHtmlEntities(
-            codeBlockInThePre.innerHTML.replace(/<[^>]*>/g, "")
-          )
-        );
-        img.style.display = "none";
-        tickImg.style.display = "block";
-        setTimeout(() => {
-          tickImg.style.display = "none";
-          img.style.display = "block";
-        }, 5000);
-      };
-      pre.appendChild(button);
-    });
-  }, []);
-
-  const postContentWithButton = post.content;
+   const copyCode = (code: string) => {
+     navigator.clipboard.writeText(code);
+     toast({
+       title: "Copied to clipboard",
+     });
+   };
 
   return (
     <div className="h-full">
@@ -157,9 +115,20 @@ const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
         </div>
       )}
 
-      {post.createType === "component" && (
+      {post.createType === "component" && post.code.length > 0 && (
         <div className="mt-[40px]">
-          <Preview code={post.code} />
+          <div className="flex h-9 items-center gap-2">
+            <div>
+              <Image
+                src="/assets/icons/codeArrows.svg"
+                alt="code"
+                width={16}
+                height={16}
+              />
+            </div>
+            <div className="paragraph-3-medium text-white-100">Code</div>
+          </div>
+          <ParseHTML data={post.code} />
         </div>
       )}
 
@@ -187,10 +156,39 @@ const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
       )}
 
       <div className="">
-        <div
-          className="paragraph-2-regular prose prose-invert mt-[54px]"
-          dangerouslySetInnerHTML={{ __html: postContentWithButton }}
-        />
+        <div className="paragraph-2-regular mt-[54px]">
+          {ReactHtmlParser(post.content, {
+            transform: (node, index) => {
+              if (node.type === "tag" && node.name === "pre") {
+                node.attribs.class += " relative";
+
+                return convertNodeToElement(node, index, (childNode) => {
+                  if (childNode.name === "code") {
+                    const codeContent = childNode.children[0].data;
+                    return (
+                      <div key={index}>
+                        <code>{codeContent}</code>
+                        <button
+                          onClick={() => copyCode(codeContent)}
+                          className="absolute right-0 top-0 rounded-sm bg-black-800 p-4"
+                        >
+                          <Image
+                            src="/assets/icons/copy.svg"
+                            alt="Copy Code Block"
+                            className="m-0"
+                            width={16}
+                            height={16}
+                          />
+                        </button>
+                      </div>
+                    );
+                  }
+                });
+              }
+              return undefined;
+            },
+          })}
+        </div>
       </div>
 
       <div className="mt-5">

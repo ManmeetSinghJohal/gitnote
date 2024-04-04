@@ -1,6 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+// import { useToast } from "@/components/ui/use-toast";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -15,6 +17,8 @@ export function getCreateTypeColor(createType: string) {
   return colorMap[createType] || "text-primary1-500 bg-primary1-500/10";
 }
 
-  export function capitalizeFirstLetter(string: string): string {
-    return string ? `${string.charAt(0).toUpperCase()}${string.slice(1)}` : "";
-  }
+export function capitalizeFirstLetter(string: string): string {
+  return string ? `${string.charAt(0).toUpperCase()}${string.slice(1)}` : "";
+}
+
+
