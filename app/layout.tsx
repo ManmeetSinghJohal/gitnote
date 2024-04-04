@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "../styles/prism.css";
 import React from "react";
 
 import { AuthProvider } from "@/components/SessionProvider";
