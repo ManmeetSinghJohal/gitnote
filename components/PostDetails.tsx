@@ -14,14 +14,14 @@ import { Checkbox } from "./ui/checkbox";
 import { CreateTypeBadge } from "./ui/createTypeBadge";
 
 const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
-   const { toast } = useToast();
+  const { toast } = useToast();
 
-   const copyCode = (code: string) => {
-     navigator.clipboard.writeText(code);
-     toast({
-       title: "Copied to clipboard",
-     });
-   };
+  const copyCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    toast({
+      title: "Copied to clipboard",
+    });
+  };
 
   return (
     <div className="h-full">
@@ -33,7 +33,7 @@ const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
           <div className="flex h-6 justify-between sm:space-x-2.5">
             <CreateTypeBadge
               variant={post.createType}
-              className="space-x-[5px]"
+              className="ml-2 flex justify-center space-x-[5px]"
             />
             <Image
               src="/assets/icons/more.svg"
