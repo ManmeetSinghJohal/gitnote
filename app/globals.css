@@ -127,9 +127,49 @@ input:-webkit-autofill:active {
   background-position: center;
   color: white;
   margin-left: 8px;
-  margin-right: 8px;
+  margin-right: 14px;
   width: 16px;
   height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.error-box a {
+  color: #FF4C3F;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.error-box::before {
+  content: "";
+  background: url("/assets/icons/red-x.svg");
+  background-size: contain;
+  background-position: center;
+  color: white;
+  margin-left: 8px;
+  margin-right: 14px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.information-box a {
+  color: #2E3757;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.information-box::before {
+  content: "";
+  background: url("/assets/icons/information.svg");
+  background-size: contain;
+  background-position: center;
+  color: white;
+  margin-left: 8px;
+  margin-right: 14px;
+  width: 22px;
+  height: 22px;
   display: inline-block;
   vertical-align: middle;
 }
