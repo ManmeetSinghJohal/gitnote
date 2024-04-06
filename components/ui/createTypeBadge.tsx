@@ -14,7 +14,7 @@ const badgeVariants = cva(
         component:
           "border-transparent bg-purple-500/10 px-3 py-1 text-purple-500 shadow hover:bg-purple-500/20",
         knowledge:
-          "border-transparent bg-green-500/10 px-3 py-1 text-green-500 shadow hover:bg-green-500/10",
+          "border-transparent bg-green-500/10 px-3 py-1 text-green-500 shadow hover:bg-green-500/20",
       },
     },
     defaultVariants: {
