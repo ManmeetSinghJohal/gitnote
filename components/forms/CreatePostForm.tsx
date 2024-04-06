@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon } from "@radix-ui/react-icons";
-import { Editor } from "@tinymce/tinymce-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Prism from "prismjs";
@@ -50,6 +49,7 @@ import { ITag } from "@/database/tag.model";
 import { createPost } from "@/lib/actions/post.action";
 import { PostSchema } from "@/lib/validations";
 
+import TinyMCEEditor from "../shared/TinyMCEEditor";
 import { CreateTypeBadge } from "../ui/createTypeBadge";
 
 const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
@@ -425,44 +425,7 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
                 CONTENT
               </FormLabel>
               <FormControl className="mt-3.5">
-                <Editor
-                  apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
-                  onInit={(evt, editor) => {
-                    // @ts-ignore
-                    editorRef.current = editor;
-                  }}
-                  onBlur={field.onBlur}
-                  onEditorChange={field.onChange}
-                  initialValue=""
-                  init={{
-                    height: 216,
-                    menubar: false,
-                    plugins: [
-                      "advlist",
-                      "autolink",
-                      "lists",
-                      "link",
-                      "image",
-                      "charmap",
-                      "preview",
-                      "anchor",
-                      "searchreplace",
-                      "visualblocks",
-                      "codesample",
-                      "fullscreen",
-                      "insertdatetime",
-                      "media",
-                      "table",
-                    ],
-                    toolbar:
-                      "codesample | bold italic forecolor | alignleft aligncenter " +
-                      "alignright alignjustify | bullist numlist",
-                    content_style:
-                      "body { font-family:Inter; font-size:16px; background-color:#1D2032;}",
-                    skin: "oxide-dark",
-                    content_css: "dark",
-                  }}
-                />
+                <TinyMCEEditor field={field} editorRef={editorRef} />
               </FormControl>
               <FormMessage className="text-red-500" />
             </FormItem>

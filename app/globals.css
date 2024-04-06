@@ -74,15 +74,14 @@ body,
   }
 }
 
-
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active{
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: #ADB3CC;
-    transition: background-color 5000s ease-in-out 0s;
-    box-shadow: inset 0 0 20px 20px #23232329;
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #adb3cc;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #23232329;
 }
 
 @layer base {
@@ -94,23 +93,83 @@ input:-webkit-autofill:active{
   }
 }
 
-.tox-statusbar{
+.tox-statusbar {
   display: none !important;
 }
 
 .tox-toolbar__primary {
-	background-color: #2E3757 !important;
+  background-color: #2e3757 !important;
 }
 
 .tox-editor-header {
- background-color: #2E3757 !important;
- border-bottom: 0 !important;
+  background-color: #2e3757 !important;
+  border-bottom: 0 !important;
 }
 
 .tox-tinymce {
- Border: 1px solid #131625 !important;
+  border: 1px solid #131625 !important;
 }
 
 .tox-edit-area__iframe {
-	background-color:  #131625 !important;
+  background-color: #131625 !important;
+}
+
+.warning-box a {
+  color: #42bbff;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.warning-box::before {
+  content: "";
+  background: url("/assets/icons/warning.svg");
+  background-size: contain;
+  background-position: center;
+  color: white;
+  margin-left: 8px;
+  margin-right: 14px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.error-box a {
+  color: #FF4C3F;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.error-box::before {
+  content: "";
+  background: url("/assets/icons/red-x.svg");
+  background-size: contain;
+  background-position: center;
+  color: white;
+  margin-left: 8px;
+  margin-right: 14px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.information-box a {
+  color: #2E3757;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.information-box::before {
+  content: "";
+  background: url("/assets/icons/information.svg");
+  background-size: contain;
+  background-position: center;
+  color: white;
+  margin-left: 8px;
+  margin-right: 14px;
+  width: 22px;
+  height: 22px;
+  display: inline-block;
+  vertical-align: middle;
 }
