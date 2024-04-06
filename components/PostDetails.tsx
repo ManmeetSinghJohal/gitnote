@@ -33,7 +33,7 @@ const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
           <div className="flex h-6 justify-between sm:space-x-2.5">
             <CreateTypeBadge
               variant={post.createType}
-              className="ml-2 flex justify-center space-x-[5px]"
+              className=" flex justify-center space-x-[5px] sm:ml-2"
             />
             <Image
               src="/assets/icons/more.svg"
