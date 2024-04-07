@@ -30,7 +30,9 @@ const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
           <div className="display-2-bold mb-2.5 text-white-100">
             {post.title}
           </div>
-          <div className="flex h-6 justify-between sm:space-x-2.5">
+          <Link 
+          href={`/post/${post._id}`}
+          className="flex h-6 justify-between sm:space-x-2.5">
             <CreateTypeBadge
               variant={post.createType}
               className=" flex justify-center space-x-[5px] sm:ml-2"
@@ -41,7 +43,7 @@ const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
               width={16}
               height={16}
             />
-          </div>
+          </Link>
         </div>
         <div className="paragraph-3-regular mt-5">{post.description}</div>
         <div className="mt-7 flex space-x-3.5 lg:mt-5">
