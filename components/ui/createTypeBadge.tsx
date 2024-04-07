@@ -10,11 +10,11 @@ const badgeVariants = cva(
     variants: {
       variant: {
         workflow:
-          "border-transparent bg-primary1-500/10 text-primary1-500 shadow hover:bg-primary/80",
+          "border-transparent bg-primary1-500/10 px-3 py-1 text-primary1-500 shadow hover:bg-primary1-500/20",
         component:
-          "border-transparent bg-purple-500/10 text-purple-500 shadow hover:bg-primary/80",
+          "border-transparent bg-purple-500/10 px-3 py-1 text-purple-500 shadow hover:bg-purple-500/20",
         knowledge:
-          "border-transparent bg-green-500/10 text-green-500 shadow hover:bg-primary/80",
+          "border-transparent bg-green-500/10 px-3 py-1 text-green-500 shadow hover:bg-green-500/20",
       },
     },
     defaultVariants: {
@@ -38,7 +38,7 @@ function CreateTypeBadge({ className, variant, ...props }: BadgeProps) {
         width={16}
         height={16}
       />
-      <div className="text-sm capitalize">{variant}</div>{" "}
+      <div className="text-sm capitalize">{variant}</div>
     </div>
   );
 }
