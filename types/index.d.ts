@@ -10,3 +10,7 @@ export interface CreateTypeNames {
   textColor: string;
   name: string;
 }
+
+export interface ParamsProps {
+  params: { postid: string };
+}
