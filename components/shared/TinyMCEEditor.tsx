@@ -1,7 +1,7 @@
 import { Editor } from "@tinymce/tinymce-react";
 import React from "react";
 
-const TinyMCEEditor: React.FC = ({ field, editorRef }) => {
+const TinyMCEEditor: React.FC = ({ field, editorRef, defaultValue }) => {
   return (
     <Editor
       apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
@@ -10,7 +10,7 @@ const TinyMCEEditor: React.FC = ({ field, editorRef }) => {
       }}
       onBlur={field.onBlur}
       onEditorChange={field.onChange}
-      initialValue={field.value}
+      initialValue={defaultValue}
       init={{
         height: 216,
         menubar: false,
