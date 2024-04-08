@@ -57,7 +57,6 @@ const ParseHTML = ({ data }: Props) => {
           <Image
             src="/assets/icons/copy.svg"
             alt="Copy Code Block"
-            className="m-0"
             width={16}
             height={16}
           />
