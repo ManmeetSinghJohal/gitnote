@@ -15,6 +15,7 @@ import UserDetails from "./UserDetails";
 
 const LeftSideBar = ({ posts }: { posts: PostParams[] }) => {
   const pathname = usePathname();
+  const startsWithPost = /^\/post/.test(pathname);
   return (
     <div className="w-[290px] bg-black-800 pt-10 lg:px-7 ">
       <div className="mb-12 hidden lg:flex">
@@ -24,8 +25,8 @@ const LeftSideBar = ({ posts }: { posts: PostParams[] }) => {
         <UserDetails />
       </div>
       <div className="space-y-4">
-        {pathname !== "/createpost" && (
-          <Link href="/createpost">
+        {!startsWithPost &&(
+          <Link href="/post">
             <Button className="w-[235px] bg-custom-gradient">
               <Image
                 src="/assets/icons/plus.svg"

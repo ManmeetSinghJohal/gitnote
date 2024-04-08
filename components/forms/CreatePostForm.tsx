@@ -45,6 +45,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { createTypeNames } from "@/constants";
+import { IPostWithTagsAndResources } from "@/database/post.model";
 import { ITag } from "@/database/tag.model";
 import { createPost } from "@/lib/actions/post.action";
 import { PostSchema } from "@/lib/validations";
@@ -52,23 +53,31 @@ import { PostSchema } from "@/lib/validations";
 import TinyMCEEditor from "../shared/TinyMCEEditor";
 import { CreateTypeBadge } from "../ui/createTypeBadge";
 
-const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
+const CreatePostForm = ({
+  postTags,
+  post,
+}: {
+  postTags: ITag[];
+  post: IPostWithTagsAndResources;
+}) => {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
   const router = useRouter();
   const editorRef = useRef(null);
   const highlightCode = () => Prism.highlightAll();
+  const selectedPost = post;
+  console.log("selectedPost", selectedPost);
 
   const form = useForm<z.infer<typeof PostSchema>>({
     resolver: zodResolver(PostSchema),
     defaultValues: {
-      title: "",
-      createType: "",
-      description: "",
-      checkList: [{ step_lesson: "" }],
-      code: "",
-      content: "",
-      resources: [{ label: "", resource: "" }],
-      tags: [],
+      title: selectedPost?.title || "",
+      createType: selectedPost?.createType || "",
+      description: selectedPost?.description || "",
+      checkList: selectedPost?.checkList || [{ step_lesson: "" }],
+      code: selectedPost?.code || "",
+      content: selectedPost?.content || "",
+      resources: selectedPost?.resources || [{ label: "", resource: "" }],
+      tags: selectedPost?.tags || [],
     },
   });
 
@@ -519,7 +528,13 @@ const CreatePostForm = ({ postTags }: { postTags: ITag[] }) => {
             type="submit"
             disabled={form.formState.isSubmitting}
           >
-            {form.formState.isSubmitting ? "Creating Post..." : "Create Post"}
+            {selectedPost
+              ? form.formState.isSubmitting
+                ? "Updating Post..."
+                : "Update Post"
+              : form.formState.isSubmitting
+                ? "Creating Post..."
+                : "Create Post"}
           </Button>
         </div>
       </form>

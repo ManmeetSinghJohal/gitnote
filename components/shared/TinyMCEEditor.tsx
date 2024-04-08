@@ -10,7 +10,7 @@ const TinyMCEEditor: React.FC = ({ field, editorRef }) => {
       }}
       onBlur={field.onBlur}
       onEditorChange={field.onChange}
-      initialValue=""
+      initialValue={field.value}
       init={{
         height: 216,
         menubar: false,
