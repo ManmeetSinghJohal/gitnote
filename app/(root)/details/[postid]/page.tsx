@@ -5,8 +5,9 @@ import React from "react";
 
 import PostDetails from "@/components/PostDetails";
 import { getPost } from "@/lib/actions/post.action";
+import { ParamsProps } from "@/types";
 
-const DetailsPage = async ({ params }: { params: { postid: string } }) => {
+const DetailsPage = async ({ params }: ParamsProps) => {
   const post = await getPost(params.postid);
 
   if (!post) return redirect("/");
