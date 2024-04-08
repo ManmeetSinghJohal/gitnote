@@ -1,9 +1,10 @@
 "use client";
 
+import parse, { domToReact } from "html-react-parser";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import ReactHtmlParser, { convertNodeToElement } from "react-html-parser";
+// import ReactHtmlParser, { convertNodeToElement } from "react-html-parser";
 
 import { useToast } from "@/components/ui/use-toast";
 import { IPostWithTagsAndResources } from "@/database/post.model";
@@ -23,6 +24,41 @@ const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
     });
   };
 
+  const transformNode = (node, index) => {
+    if (node.type === "tag" && node.name === "pre") {
+      const updatedAttributes = {
+        ...node.attribs,
+        class: `${node.attribs.class || ""} relative`,
+      };
+      const children = node.children.map((childNode, childIndex) => {
+        if (childNode.type === "tag" && childNode.name === "code") {
+          const codeContent = childNode.children.find(
+            (child) => child.type === "text"
+          )?.data;
+          return (
+            <div key={childIndex} style={{ position: "relative" }}>
+              <code>{domToReact(childNode.children)}</code>
+              <button
+                onClick={() => copyCode(codeContent)}
+                className="absolute right-0 top-0 rounded-sm bg-black-800"
+              >
+                <Image
+                  src="/assets/icons/copy.svg"
+                  alt="Copy Code Block"
+                  width={16}
+                  height={16}
+                />
+              </button>
+            </div>
+          );
+        }
+        return domToReact(childNode);
+      });
+
+      return <pre {...updatedAttributes}>{children}</pre>;
+    }
+  };
+
   return (
     <div className="h-full">
       <div className="">
@@ -30,9 +66,10 @@ const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
           <div className="display-2-bold mb-2.5 text-white-100">
             {post.title}
           </div>
-          <Link 
-          href={`/post/${post._id}`}
-          className="flex h-6 justify-between sm:space-x-2.5">
+          <Link
+            href={`/post/${post._id}`}
+            className="flex h-6 justify-between sm:space-x-2.5"
+          >
             <CreateTypeBadge
               variant={post.createType}
               className=" flex justify-center space-x-[5px] sm:ml-2"
@@ -159,36 +196,8 @@ const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
 
       <div className="">
         <div className="paragraph-2-regular mt-[54px]">
-          {ReactHtmlParser(post.content, {
-            transform: (node, index) => {
-              if (node.type === "tag" && node.name === "pre") {
-                node.attribs.class += " relative";
-
-                return convertNodeToElement(node, index, (childNode) => {
-                  if (childNode.name === "code") {
-                    const codeContent = childNode.children[0].data;
-                    return (
-                      <div key={index}>
-                        <code>{codeContent}</code>
-                        <button
-                          onClick={() => copyCode(codeContent)}
-                          className="absolute right-0 top-0 rounded-sm bg-black-800 p-4"
-                        >
-                          <Image
-                            src="/assets/icons/copy.svg"
-                            alt="Copy Code Block"
-                            className="m-0"
-                            width={16}
-                            height={16}
-                          />
-                        </button>
-                      </div>
-                    );
-                  }
-                });
-              }
-              return undefined;
-            },
+          {parse(post.content, {
+            replace: transformNode,
           })}
         </div>
       </div>
