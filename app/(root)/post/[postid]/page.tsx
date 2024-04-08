@@ -4,11 +4,12 @@ import React from "react";
 import CreatePostForm from "@/components/forms/CreatePostForm";
 import { getPost } from "@/lib/actions/post.action";
 import { getTags } from "@/lib/actions/tag.actions";
+import { ParamsProps } from "@/types";
 
-const EditPost = async ({ params }: { params: { postid: string } }) => {
+const EditPost = async ({ params }: ParamsProps) => {
   const post = await getPost(params.postid);
   const postTags = await getTags();
-// console.log("posttttt", post)
+  
   if (!post) return redirect("/");
 
   return (
@@ -19,7 +20,10 @@ const EditPost = async ({ params }: { params: { postid: string } }) => {
       <div className="paragraph-3-medium mb-6 text-white-500">
         BASIC INFORMATION
       </div>
-      <CreatePostForm postTags={JSON.parse(postTags ?? "")} post={JSON.parse(JSON.stringify(post))}/>
+      <CreatePostForm
+        postTags={JSON.parse(postTags ?? "")}
+        post={JSON.parse(JSON.stringify(post))}
+      />
     </div>
   );
 };
