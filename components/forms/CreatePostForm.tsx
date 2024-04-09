@@ -47,7 +47,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { createTypeNames } from "@/constants";
 import { IPostWithTagsAndResources } from "@/database/post.model";
 import { ITag } from "@/database/tag.model";
-import { createPost } from "@/lib/actions/post.action";
+import { createPost, updatePost } from "@/lib/actions/post.action";
 import { PostSchema } from "@/lib/validations";
 
 import TinyMCEEditor from "../shared/TinyMCEEditor";
@@ -65,7 +65,11 @@ const CreatePostForm = ({
   const editorRef = useRef(null);
   const highlightCode = () => Prism.highlightAll();
   const selectedPost = post;
-  console.log("selectedPost", selectedPost);
+
+  console.log(post?.checkList);
+  const checkListObject = post?.checkList.map((stepLesson) => ({
+    step_lesson: stepLesson,
+  }));
 
   const form = useForm<z.infer<typeof PostSchema>>({
     resolver: zodResolver(PostSchema),
@@ -73,7 +77,7 @@ const CreatePostForm = ({
       title: selectedPost?.title || "",
       createType: selectedPost?.createType || "",
       description: selectedPost?.description || "",
-      checkList: selectedPost?.checkList || [{ step_lesson: "" }],
+      checkList: checkListObject || [{ step_lesson: "" }],
       code: selectedPost?.code || "",
       content: selectedPost?.content || "",
       resources: selectedPost?.resources || [{ label: "", resource: "" }],
@@ -147,16 +151,21 @@ const CreatePostForm = ({
     }
   };
 
-  async function onSubmit(values: z.infer<typeof PostSchema>) {
-    try {
-      await createPost({
-        ...values,
-      });
-      router.push("/dashboard");
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
+ async function onSubmit(values: z.infer<typeof PostSchema>) {
+   try {
+     if (selectedPost) {
+       await updatePost(post._id, values);
+        router.push("/details/" + post._id);
+     } else {
+       const newPost = await createPost({
+         ...values,
+       });
+        router.push("/details/" + newPost._id);
+     }
+   } catch (error) {
+     console.log("error", error);
+   }
+ }
 
   return (
     <Form {...form}>
@@ -434,7 +443,7 @@ const CreatePostForm = ({
                 CONTENT
               </FormLabel>
               <FormControl className="mt-3.5">
-                <TinyMCEEditor field={field} editorRef={editorRef} />
+                <TinyMCEEditor field={field} editorRef={editorRef} defaultValue={post?.content} />
               </FormControl>
               <FormMessage className="text-red-500" />
             </FormItem>

@@ -9,7 +9,7 @@ export interface IPost extends Document {
   createType: POST_TYPE;
   tags: Schema.Types.ObjectId[];
   description: string;
-  checkList: object[];
+  checkList: string[];
   code: string;
   content: string;
   resources: object[];

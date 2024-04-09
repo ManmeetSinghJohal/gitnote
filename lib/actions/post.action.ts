@@ -12,6 +12,48 @@ import { CreatePostParams } from "./shared.types";
 import { queryTags } from "./tag.actions";
 import { getActiveUser } from "./user.action";
 
+export async function updatePost(id: string, values: CreatePostParams) {
+  try {
+    await connectToDatabase();
+    const user = await getActiveUser();
+
+    const post = await Post.findById(id);
+
+    if (post?.ownerId.toString() !== user.id) throw new Error("You are not the owner of this post");
+    
+    const {
+      title,
+      createType,
+      tags,
+      description,
+      checkList,
+      code,
+      content,
+      resources,
+    } = values;
+
+    const tagIds = await queryTags(tags);
+
+    const checkListAsStringArray = checkList.map((item) => item.step_lesson);
+
+    await Post.updateOne({id}, {
+      title,
+      createType,
+      tags: tagIds,
+      description,
+      checkList: checkListAsStringArray,
+      code,
+      content,
+      resources,
+    });
+
+    revalidatePath("/dashboard");
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error updating post");
+  }
+}
+
 export async function createPost(params: CreatePostParams) {
   try {
     await connectToDatabase();

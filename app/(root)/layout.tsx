@@ -13,11 +13,11 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="relative">
       <div className="lg:hidden">
-        <Navbar posts={JSON.parse(JSON.stringify(posts))} />
+        <Navbar posts={posts ? JSON.parse(JSON.stringify(posts)) : []} />
       </div>
       <div className="flex">
         <div className="hidden lg:flex">
-          <LeftSideBar posts={JSON.parse(JSON.stringify(posts))} />
+          <LeftSideBar posts={posts ? JSON.parse(JSON.stringify(posts)) : []} />
         </div>
         <section className="flex min-h-full flex-1 bg-black-900">
           <div className="w-full px-5 py-[30px] lg:px-[30px] lg:py-10">
@@ -25,7 +25,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
           </div>
         </section>
         <div className="hidden xl:flex">
-          <RightSideBar postTags={JSON.parse(postTags ?? "")} />
+          <RightSideBar postTags={postTags ? JSON.parse(postTags ?? ""): []} />
         </div>
       </div>
       <Toaster />
