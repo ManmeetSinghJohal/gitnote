@@ -1,16 +1,21 @@
 "use client";
-import Image from "next/image";
+
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
+import CalendarHeatmap from "react-calendar-heatmap";
+import { Tooltip } from "react-tooltip";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CreateTypeBadge } from "@/components/ui/createTypeBadge";
 import { createTypeNames } from "@/constants";
 import { IPostWithTags } from "@/database/post.model";
-import { getFilteredPosts } from "@/lib/actions/post.action";
+import {
+  getFilteredPosts,
+  getPostsCountPerDayForUser,
+} from "@/lib/actions/post.action";
 
 const Dashboard = () => {
   const { data: session } = useSession();
@@ -20,12 +25,27 @@ const Dashboard = () => {
     posts: IPostWithTags[];
     pageCount: number;
   }>({ posts: [], pageCount: 1 });
+  const [createdAtData, setCreatedAtData] = useState<any>([]);
   const postsWithTag = searchParams.get("tag");
   const postsWithCreateType = searchParams.get("createType");
   const pageNumber = parseInt(searchParams.get("page") || "0");
   const postsPerPage = 5;
   const renderPosts = postsData.posts;
   const totalPages = postsData.pageCount;
+  const endDate = new Date();
+  const startDate = new Date();
+
+  useEffect(() => {
+    const fetchCreatedAt = async () => {
+      const createdData = await getPostsCountPerDayForUser();
+      if (!createdData) return;
+
+      setCreatedAtData(createdData);
+    };
+    fetchCreatedAt();
+  }, []);
+
+  console.log("createdAtData", createdAtData);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -41,6 +61,19 @@ const Dashboard = () => {
     };
     fetchPosts();
   }, [postsWithTag, postsWithCreateType, pageNumber, postsPerPage]);
+
+  const postCountsPerDay = createdAtData.reduce((acc, post) => {
+    const date = post.createdAt.split("T")[0];
+    const existingEntry = acc.find((entry) => entry.date === date);
+    if (existingEntry) {
+      existingEntry.count += 1;
+    } else {
+      acc.push({ date, count: 1 });
+    }
+    return acc;
+  }, []);
+
+  console.log("postCountsPerDay", postCountsPerDay);
 
   const applyFilter = (type: string, value: string) => {
     const mySearchParams = new URLSearchParams(searchParams.toString());
@@ -60,7 +93,7 @@ const Dashboard = () => {
 
   return (
     <div className="h-full">
-      <div className="space-y-[10px]">
+      <div className="mb-[52px] space-y-[10px]">
         <div className="display-1-bold text-white-100">
           Hello {session?.user?.name},
         </div>
@@ -70,14 +103,46 @@ const Dashboard = () => {
           </p>
         </div>
       </div>
-      <div className="relative mt-[20px] h-[132px] lg:mt-[30px]">
-        <Image
-          src="/assets/icons/layout.png"
-          alt="layout"
-          layout="fill"
-          objectFit="cover"
-        />
-      </div>
+      <CalendarHeatmap
+        startDate={startDate.setFullYear(endDate.getFullYear() - 1)}
+        endDate={endDate}
+        showWeekdayLabels={true}
+        gutterSize={5}
+        tooltipDataAttrs={(value) => {
+          if (!value?.date) {
+            return null;
+          }
+
+          return {
+            "data-tooltip-id": "my-tooltip",
+            "data-tooltip-content": `${value.date} has count: ${value.count}`,
+          };
+        }}
+        classForValue={(value) => {
+          if (!value || value.count === 0) {
+            return "color-github-0";
+          }
+
+          const thresholds = [1, 10, 20, 50];
+
+          let className = "color-github-";
+          if (value.count >= thresholds[3]) {
+            className += "4";
+          } else if (value.count >= thresholds[2]) {
+            className += "3";
+          } else if (value.count >= thresholds[1]) {
+            className += "2";
+          } else if (value.count >= thresholds[0]) {
+            className += "1";
+          } else {
+            className += "0";
+          }
+
+          return className;
+        }}
+        values={postCountsPerDay}
+      />
+      <Tooltip id="my-tooltip" />
       <div>
         <div className="mb-[26px] mt-[30px] items-center justify-between lg:mb-5 lg:mt-[36px] lg:flex">
           <div className="display-2-bold  mb-5 text-white-100 lg:mb-0">
