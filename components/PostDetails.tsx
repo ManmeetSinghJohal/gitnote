@@ -4,10 +4,15 @@ import parse, { domToReact } from "html-react-parser";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-// import ReactHtmlParser, { convertNodeToElement } from "react-html-parser";
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popoverEdit";
 import { useToast } from "@/components/ui/use-toast";
 import { IPostWithTagsAndResources } from "@/database/post.model";
+import { deletePost } from "@/lib/actions/post.action";
 
 import ParseHTML from "./shared/ParseHTML";
 import { Badge } from "./ui/badge";
@@ -66,21 +71,58 @@ const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
           <div className="display-2-bold mb-2.5 text-white-100">
             {post.title}
           </div>
-          <Link
-            href={`/post/${post._id}`}
-            className="flex h-6 justify-between sm:space-x-2.5"
-          >
+          <div className="flex h-6 justify-between sm:space-x-2.5">
             <CreateTypeBadge
               variant={post.createType}
               className=" flex justify-center space-x-[5px] sm:ml-2"
             />
-            <Image
-              src="/assets/icons/more.svg"
-              alt="more"
-              width={16}
-              height={16}
-            />
-          </Link>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Image
+                  src="/assets/icons/more.svg"
+                  alt="more"
+                  width={16}
+                  height={16}
+                  className="hover:cursor-pointer hover:opacity-70 "
+                />
+              </PopoverTrigger>
+              <PopoverContent className="mt-[-10px] w-[220px] bg-transparent text-white-100">
+                <div>
+                  <div className="flex space-x-2 rounded-t-md bg-black-700 py-2 pl-6 pr-12 hover:bg-black-600">
+                    <Image
+                      src="/assets/icons/update.svg"
+                      alt="update"
+                      width={16}
+                      height={16}
+                    />
+                    <Link
+                      href={`/post/${post._id}`}
+                      className="paragraph-3-medium"
+                    >
+                      Update Post
+                    </Link>
+                  </div>
+                  <div className="flex space-x-2 rounded-b-md bg-black-700 py-2 pl-6 pr-12 hover:bg-black-600">
+                    <Image
+                      src="/assets/icons/trash.svg"
+                      alt="trash"
+                      width={16}
+                      height={16}
+                    />
+                    <Link
+                      href={`/dashboard`}
+                      className="paragraph-3-medium"
+                      onClick={() => {
+                        deletePost(post._id);
+                      }}
+                    >
+                      Delete Post
+                    </Link>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
         <div className="paragraph-3-regular mt-5">{post.description}</div>
         <div className="mt-7 flex space-x-3.5 lg:mt-5">
