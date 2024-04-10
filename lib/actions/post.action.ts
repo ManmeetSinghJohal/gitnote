@@ -16,11 +16,10 @@ export async function updatePost(id: string, values: CreatePostParams) {
   try {
     await connectToDatabase();
     const user = await getActiveUser();
-
     const post = await Post.findById(id);
+    if (post?.ownerId.toString() !== user.id)
+      throw new Error("You are not the owner of this post");
 
-    if (post?.ownerId.toString() !== user.id) throw new Error("You are not the owner of this post");
-    
     const {
       title,
       createType,
@@ -36,16 +35,19 @@ export async function updatePost(id: string, values: CreatePostParams) {
 
     const checkListAsStringArray = checkList.map((item) => item.step_lesson);
 
-    await Post.updateOne({id}, {
-      title,
-      createType,
-      tags: tagIds,
-      description,
-      checkList: checkListAsStringArray,
-      code,
-      content,
-      resources,
-    });
+    await Post.updateOne(
+      { _id: id },
+      {
+        title,
+        createType,
+        tags: tagIds,
+        description,
+        checkList: checkListAsStringArray,
+        code,
+        content,
+        resources,
+      }
+    );
 
     revalidatePath("/dashboard");
   } catch (error) {
@@ -88,7 +90,7 @@ export async function createPost(params: CreatePostParams) {
     });
 
     revalidatePath("/dashboard");
-    return JSON.stringify(post);
+    return JSON.parse(JSON.stringify(post));
   } catch (error) {
     console.error(error);
     throw new Error("Error creating post");
@@ -117,6 +119,41 @@ export async function getPost(postId: string) {
     return post;
   } catch (error) {
     console.log("Error getting posts", error);
+  }
+}
+
+export async function deletePost(postId: string) {
+  try {
+    await connectToDatabase();
+    const user = await getActiveUser();
+    const post = await Post.findById(postId);
+    if (post?.ownerId.toString() !== user.id)
+      throw new Error("You are not the owner of this post");
+
+    await Post.deleteOne({ _id: postId });
+    revalidatePath("/dashboard");
+  } catch (error) {
+    console.error("Error deleting post", error);
+    throw new Error("Error deleting post");
+  }
+}
+
+export async function getPostsCountPerDayForUser() {
+  try {
+    await connectToDatabase();
+    const user = await getActiveUser();
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+    const posts = await Post.find({
+      ownerId: user.id,
+      createdAt: { $gte: oneYearAgo, $lte: new Date() },
+    }).select("createdAt");
+
+    return JSON.parse(JSON.stringify(posts)) as IPostWithTags[];
+  } catch (error) {
+    console.error("Error getting posts count per day for user", error);
+    throw error;
   }
 }
 
