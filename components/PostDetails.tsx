@@ -10,57 +10,29 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popoverEdit";
-import { useToast } from "@/components/ui/use-toast";
 import { IPostWithTagsAndResources } from "@/database/post.model";
 import { deletePost } from "@/lib/actions/post.action";
 
-import ParseHTML from "./shared/ParseHTML";
+import HighlightedCode from "./shared/HighlightedCode";
 import { Badge } from "./ui/badge";
 import { Checkbox } from "./ui/checkbox";
 import { CreateTypeBadge } from "./ui/createTypeBadge";
 
 const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
-  const { toast } = useToast();
-
-  const copyCode = (code: string) => {
-    navigator.clipboard.writeText(code);
-    toast({
-      title: "Copied to clipboard",
-    });
-  };
-
   const transformNode = (node, index) => {
     if (node.type === "tag" && node.name === "pre") {
-      const updatedAttributes = {
-        ...node.attribs,
-        class: `${node.attribs.class || ""} relative`,
-      };
-      const children = node.children.map((childNode, childIndex) => {
+      let codeContent;
+      node.children.map((childNode, childIndex) => {
         if (childNode.type === "tag" && childNode.name === "code") {
-          const codeContent = childNode.children.find(
+          codeContent = childNode.children.find(
             (child) => child.type === "text"
           )?.data;
-          return (
-            <div key={childIndex} style={{ position: "relative" }}>
-              <code>{domToReact(childNode.children)}</code>
-              <button
-                onClick={() => copyCode(codeContent)}
-                className="absolute right-0 top-0 rounded-sm bg-black-800"
-              >
-                <Image
-                  src="/assets/icons/copy.svg"
-                  alt="Copy Code Block"
-                  width={16}
-                  height={16}
-                />
-              </button>
-            </div>
-          );
         }
-        return domToReact(childNode);
       });
 
-      return <pre {...updatedAttributes}>{children}</pre>;
+      if (!codeContent) return domToReact(node);
+
+      return <HighlightedCode data={codeContent} />;
     }
   };
 
@@ -209,7 +181,7 @@ const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
             </div>
             <div className="paragraph-3-medium text-white-100">Code</div>
           </div>
-          <ParseHTML data={post.code} />
+          <HighlightedCode data={post.code} />
         </div>
       )}
 
