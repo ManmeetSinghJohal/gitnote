@@ -45,8 +45,6 @@ const Dashboard = () => {
     fetchCreatedAt();
   }, []);
 
-  console.log("createdAtData", createdAtData);
-
   useEffect(() => {
     const fetchPosts = async () => {
       const postsAndCount = await getFilteredPosts(
@@ -72,8 +70,6 @@ const Dashboard = () => {
     }
     return acc;
   }, []);
-
-  console.log("postCountsPerDay", postCountsPerDay);
 
   const applyFilter = (type: string, value: string) => {
     const mySearchParams = new URLSearchParams(searchParams.toString());
@@ -106,7 +102,8 @@ const Dashboard = () => {
       <CalendarHeatmap
         startDate={startDate.setFullYear(endDate.getFullYear() - 1)}
         endDate={endDate}
-        showWeekdayLabels={true}
+        showWeekdayLabels={false}
+        showOutOfRangeDays={true}
         gutterSize={5}
         tooltipDataAttrs={(value) => {
           if (!value?.date) {
