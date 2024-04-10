@@ -8,13 +8,12 @@ import GoogleProvider from "next-auth/providers/google";
 
 import clientPromise from "@/lib/mongodb";
 
-export const authOptions: AuthOptions = {
+const authOptions: AuthOptions = {
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID ?? "",
       clientSecret: process.env.GITHUB_SECRET ?? "",
       profile(profile) {
-        // console.log("profile", profile);
         return {
           id: profile.id.toString(),
           name: profile.name,
@@ -26,7 +25,6 @@ export const authOptions: AuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
       profile(profile) {
-        // console.log("profile", profile);
         return {
           id: profile.sub,
           name: profile.name,
@@ -53,10 +51,8 @@ export const authOptions: AuthOptions = {
 
         const adapter = authOptions.adapter;
 
-        // adapter's functionality is available here
         const user: any = await adapter?.getUserByEmail(credentials.email);
 
-        // here i am using bcryptjs for password hashing and comparing
         if (user) {
           const match = await bycrypt.compare(
             credentials.password,
