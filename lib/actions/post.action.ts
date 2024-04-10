@@ -102,7 +102,7 @@ export async function getPosts() {
     await connectToDatabase();
     const user = await getActiveUser();
     const filterObject: FilterQuery<IPost> = { ownerId: user.id };
-    const posts = await Post.find(filterObject);
+    const posts = await Post.find(filterObject).sort( {createdAt: -1 }).limit(5)
     return posts;
   } catch (error) {
     console.log("Error getting posts", error);

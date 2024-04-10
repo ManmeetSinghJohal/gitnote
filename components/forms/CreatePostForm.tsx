@@ -4,14 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Prism from "prismjs";
 import React, { useRef, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
-import "prismjs/components/prism-jsx";
-import "prism-themes/themes/prism-one-dark.css";
-import "prismjs/plugins/line-numbers/prism-line-numbers";
-import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -63,7 +58,6 @@ const CreatePostForm = ({
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
   const router = useRouter();
   const editorRef = useRef(null);
-  const highlightCode = () => Prism.highlightAll();
   const selectedPost = post;
 
   console.log(post?.checkList);
@@ -151,21 +145,21 @@ const CreatePostForm = ({
     }
   };
 
- async function onSubmit(values: z.infer<typeof PostSchema>) {
-   try {
-     if (selectedPost) {
-       await updatePost(post._id, values);
+  async function onSubmit(values: z.infer<typeof PostSchema>) {
+    try {
+      if (selectedPost) {
+        await updatePost(post._id, values);
         router.push("/details/" + post._id);
-     } else {
-       const newPost = await createPost({
-         ...values,
-       });
+      } else {
+        const newPost = await createPost({
+          ...values,
+        });
         router.push("/details/" + newPost._id);
-     }
-   } catch (error) {
-     console.log("error", error);
-   }
- }
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
 
   return (
     <Form {...form}>
@@ -396,7 +390,7 @@ const CreatePostForm = ({
                   <div className="paragraph-3-medium">Code</div>
                 </div>
               </TabsTrigger>
-              <TabsTrigger value="preview" onClick={highlightCode}>
+              <TabsTrigger value="preview">
                 <div className="flex gap-2">
                   <Image
                     src="/assets/icons/eye.png"
@@ -443,7 +437,11 @@ const CreatePostForm = ({
                 CONTENT
               </FormLabel>
               <FormControl className="mt-3.5">
-                <TinyMCEEditor field={field} editorRef={editorRef} defaultValue={post?.content} />
+                <TinyMCEEditor
+                  field={field}
+                  editorRef={editorRef}
+                  defaultValue={post?.content}
+                />
               </FormControl>
               <FormMessage className="text-red-500" />
             </FormItem>
