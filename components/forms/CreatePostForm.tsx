@@ -421,8 +421,8 @@ const CreatePostForm = ({
               />
             </TabsContent>
             <TabsContent value="preview">
-              <pre className="line-numbers">
-                <code className="language-jsx">{previewCode}</code>
+              <pre>
+                <code>{previewCode}</code>
               </pre>
             </TabsContent>
           </Tabs>

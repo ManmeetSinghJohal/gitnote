@@ -138,6 +138,11 @@ export async function deletePost(postId: string) {
   }
 }
 
+type CreatedAtData = {
+  _id: string;
+  createdAt: string;
+};
+
 export async function getPostsCountPerDayForUser() {
   try {
     await connectToDatabase();
@@ -150,7 +155,7 @@ export async function getPostsCountPerDayForUser() {
       createdAt: { $gte: oneYearAgo, $lte: new Date() },
     }).select("createdAt");
 
-    return JSON.parse(JSON.stringify(posts)) as IPostWithTags[];
+    return JSON.parse(JSON.stringify(posts)) as CreatedAtData[];
   } catch (error) {
     console.error("Error getting posts count per day for user", error);
     throw error;

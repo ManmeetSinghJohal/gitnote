@@ -2,8 +2,8 @@
 
 import { getServerSession } from "next-auth";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import User from "@/database/user.model";
+import { authOptions } from "@/lib/auth";
 
 import { connectToDatabase } from "../mongoose";
 

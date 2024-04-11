@@ -1,6 +1,7 @@
 "use client";
 
-import parse, { domToReact } from "html-react-parser";
+import parse from "html-react-parser";
+import type { DOMNode } from "html-react-parser";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -19,18 +20,19 @@ import { Checkbox } from "./ui/checkbox";
 import { CreateTypeBadge } from "./ui/createTypeBadge";
 
 const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
-  const transformNode = (node, index) => {
+  const transformNode = (node: DOMNode) => {
     if (node.type === "tag" && node.name === "pre") {
-      let codeContent;
-      node.children.map((childNode, childIndex) => {
+      let codeContent: string | undefined;
+      node.children.forEach((childNode) => {
         if (childNode.type === "tag" && childNode.name === "code") {
-          codeContent = childNode.children.find(
-            (child) => child.type === "text"
-          )?.data;
+          const textChild = childNode.children.find(
+            (child)=> child.type === "text"
+          );
+          codeContent = textChild?.data;
         }
       });
 
-      if (!codeContent) return domToReact(node);
+      if (!codeContent) return;
 
       return <HighlightedCode data={codeContent} />;
     }

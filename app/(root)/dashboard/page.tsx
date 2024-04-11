@@ -17,6 +17,11 @@ import {
   getPostsCountPerDayForUser,
 } from "@/lib/actions/post.action";
 
+type CreatedAtData = {
+  _id: string;
+  createdAt: string;
+};
+
 const Dashboard = () => {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
@@ -25,7 +30,7 @@ const Dashboard = () => {
     posts: IPostWithTags[];
     pageCount: number;
   }>({ posts: [], pageCount: 1 });
-  const [createdAtData, setCreatedAtData] = useState<any>([]);
+  const [createdAtData, setCreatedAtData] = useState<CreatedAtData[]>([]);
   const postsWithTag = searchParams.get("tag");
   const postsWithCreateType = searchParams.get("createType");
   const pageNumber = parseInt(searchParams.get("page") || "0");
@@ -60,7 +65,7 @@ const Dashboard = () => {
     fetchPosts();
   }, [postsWithTag, postsWithCreateType, pageNumber, postsPerPage]);
 
-  const postCountsPerDay = createdAtData.reduce((acc, post) => {
+  const postCountsPerDay = createdAtData.reduce((acc: {date: string; count: number}[], post) => {
     const date = post.createdAt.split("T")[0];
     const existingEntry = acc.find((entry) => entry.date === date);
     if (existingEntry) {
@@ -70,6 +75,8 @@ const Dashboard = () => {
     }
     return acc;
   }, []);
+
+  console.log(postCountsPerDay)
 
   const applyFilter = (type: string, value: string) => {
     const mySearchParams = new URLSearchParams(searchParams.toString());
@@ -105,7 +112,7 @@ const Dashboard = () => {
         showWeekdayLabels={false}
         showOutOfRangeDays={true}
         gutterSize={5}
-        tooltipDataAttrs={(value) => {
+        tooltipDataAttrs={(value: {date: string, count: number}) => {
           if (!value?.date) {
             return null;
           }
