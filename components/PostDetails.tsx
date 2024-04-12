@@ -19,6 +19,7 @@ import { Badge } from "./ui/badge";
 import { Checkbox } from "./ui/checkbox";
 import { CreateTypeBadge } from "./ui/createTypeBadge";
 
+
 const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
   const transformNode = (node: DOMNode) => {
     if (node.type === "tag" && node.name === "pre") {
@@ -28,6 +29,7 @@ const PostDetails = ({ post }: { post: IPostWithTagsAndResources }) => {
           const textChild = childNode.children.find(
             (child)=> child.type === "text"
           );
+          if(textChild && "data" in textChild)
           codeContent = textChild?.data;
         }
       });
