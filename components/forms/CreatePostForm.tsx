@@ -2,10 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon } from "@radix-ui/react-icons";
+import { Editor } from "@tinymce/tinymce-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { Editor as TinyMCEEditor } from "tinymce";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -45,7 +47,6 @@ import { ITag } from "@/database/tag.model";
 import { createPost, updatePost } from "@/lib/actions/post.action";
 import { PostSchema } from "@/lib/validations";
 
-import TinyMCEEditor from "../shared/TinyMCEEditor";
 import { CreateTypeBadge } from "../ui/createTypeBadge";
 
 const CreatePostForm = ({
@@ -53,14 +54,12 @@ const CreatePostForm = ({
   post,
 }: {
   postTags: ITag[];
-  post: IPostWithTagsAndResources;
+  post?: IPostWithTagsAndResources;
 }) => {
   const [isPopOverOpen, setIsPopOverOpen] = useState(false);
   const router = useRouter();
-  const editorRef = useRef(null);
+  const editorRef = useRef<TinyMCEEditor | null>(null);
   const selectedPost = post;
-
-  console.log(post?.checkList);
   const checkListObject = post?.checkList.map((stepLesson) => ({
     step_lesson: stepLesson,
   }));
@@ -437,10 +436,77 @@ const CreatePostForm = ({
                 CONTENT
               </FormLabel>
               <FormControl className="mt-3.5">
-                <TinyMCEEditor
-                  field={field}
-                  editorRef={editorRef}
-                  defaultValue={post?.content}
+                <Editor
+                  apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
+                  onInit={(evt, editor) => {
+                    editorRef.current = editor;
+                  }}
+                  onBlur={field.onBlur}
+                  onEditorChange={field.onChange}
+                  initialValue={post?.content}
+                  init={{
+                    height: 216,
+                    menubar: false,
+                    plugins: [
+                      "advlist",
+                      "autolink",
+                      "lists",
+                      "link",
+                      "image",
+                      "charmap",
+                      "preview",
+                      "anchor",
+                      "searchreplace",
+                      "visualblocks",
+                      "codesample",
+                      "fullscreen",
+                      "insertdatetime",
+                      "media",
+                      "table",
+                    ],
+                    toolbar:
+                      "codesample | bold italic forecolor | alignleft aligncenter " +
+                      "alignright alignjustify | bullist numlist | warningButton | errorButton | informationButton | link image media | removeformat | fullscreen",
+                    content_style:
+                      "body { font-family:Inter; font-size:16px; background-color:#1D2032;}",
+                    skin: "oxide-dark",
+                    content_css: "dark",
+                    setup: (editor) => {
+                      const toWarningHtml = function () {
+                        return `&#8203;<div class="warning-box" style="background-color: #20201E; border: 1px solid #FFC700; border-radius: 6px; margin: 20px 0; padding: 14px; color: #FFFFFF;">Add warning here....</div>&#8203;`;
+                      };
+
+                      const toErrorHtml = function () {
+                        return `&#8203;<div class="error-box" style="background-color: rgba(255, 76, 63, 0.15); border: 1px solid #FF4C3F; border-radius: 6px; margin: 20px 0; padding: 14px; color: #FFFFFF;">Add error here....</div>&#8203;`;
+                      };
+
+                      const toInformationHtml = function () {
+                        return `&#8203;<div class="information-box" style="background-color: rgb(66,187,255, 0.1); border: 1px solid #42BBFF; border-radius: 6px; margin: 20px 0; padding: 14px; color: #FFFFFF;">Add information here....</div>&#8203;`;
+                      };
+
+                      editor.ui.registry.addButton("warningButton", {
+                        text: "Warning",
+                        tooltip: "Warning Label",
+                        onAction: function (_) {
+                          editor.insertContent(toWarningHtml());
+                        },
+                      });
+                      editor.ui.registry.addButton("errorButton", {
+                        text: "Error",
+                        tooltip: "Error Label",
+                        onAction: function (_) {
+                          editor.insertContent(toErrorHtml());
+                        },
+                      });
+                      editor.ui.registry.addButton("informationButton", {
+                        text: "Information",
+                        tooltip: "Information Label",
+                        onAction: function (_) {
+                          editor.insertContent(toInformationHtml());
+                        },
+                      });
+                    },
+                  }}
                 />
               </FormControl>
               <FormMessage className="text-red-500" />
