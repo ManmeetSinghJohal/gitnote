@@ -2,6 +2,7 @@ import React from "react";
 
 import CreatePostForm from "@/components/forms/CreatePostForm";
 import { getTags } from "@/lib/actions/tag.actions";
+export const dynamic = "force-dynamic";
 
 const CreatePost = async () => {
   const postTags = await getTags();
@@ -14,7 +15,7 @@ const CreatePost = async () => {
       <div className="paragraph-3-medium mb-6 text-white-500">
         BASIC INFORMATION
       </div>
-      <CreatePostForm postTags={JSON.parse(postTags ?? "")}/>
+      <CreatePostForm postTags={JSON.parse(postTags ?? "")} />
     </div>
   );
 };
