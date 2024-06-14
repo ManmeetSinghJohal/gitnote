@@ -1,10 +1,4 @@
 <div align="center">
-  <br />
-    <a href="https://youtu.be/B91wc5dCEBA" target="_blank">
-      <img src="https://github.com/JavaScript-Mastery-Pro/gitnote/assets/153497998/a3ff8f02-9045-4320-b2b8-51a78176927b" alt="Project Banner">
-    </a>
-  <br />
-
   <div>
     <img src="https://img.shields.io/badge/-Node_JS-black?style=for-the-badge&logoColor=white&logo=nodedotjs&color=339933" alt="nodedotjs" />
     <img src="https://img.shields.io/badge/-Next_JS-black?style=for-the-badge&logoColor=white&logo=nextdotjs&color=000000" alt="nextdotjs" />
@@ -13,10 +7,6 @@
   </div>
 
   <h3 align="center">Developer's GitNote</h3>
-
-   <div align="center">
-     Build this project step by step with our mentor's guidance. Head on to <a href="https://www.jsmastery.pro/full-stack-web-development-bootcamp" target="_blank"><b>JavaScript Mastery</b> Masterclass Coaching</a>.
-    </div>
 </div>
 
 ## 📋 <a name="table">Table of Contents</a>
@@ -33,10 +23,6 @@
 ## <a name="introduction">🤖 Introduction</a>
 
 GitNote - Your all-in-one solution for developers, designed to be their second brain, a comprehensive learning tool, and an efficient progress tracker. Seamlessly capture and organize knowledge, set and track learning goals, and monitor study habits with ease. Developed as part of the masterclass, GitNote empowers developers to enhance their productivity and knowledge management skills effortlessly.
-
-If you're getting started and need assistance or face any bugs, join our active Discord community with over 27k+ members. It's a place where people help each other out.
-
-<a href="https://discord.com/invite/n6EdbFJ" target="_blank"><img src="https://github.com/sujatagunale/EasyRead/assets/151519281/618f4872-1e10-42da-8213-1d69e486d02e" /></a>
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 
@@ -654,25 +640,6 @@ const config = {
 
 </details>
 
-## <a name="more">🚀 More</a>
 
-**Advance your skills with Next.js 14 Pro Course**
 
-Enjoying GitNote? Take your learning journey to the next level with our PRO courses. They're packed with detailed explanations, cool features, and exercises to boost your skills. Give it a go!
 
-<a href="https://jsmastery.pro/next14" target="_blank">
-<img src="https://github.com/sujatagunale/EasyRead/assets/151519281/557837ce-f612-4530-ab24-189e75133c71" alt="Project Banner">
-</a>
-
-<br />
-<br />
-
-**Accelerate your professional journey with the Expert Training program**
-
-And if you're hungry for more than just a course and want to understand how we learn and tackle tech challenges, hop into our personalized masterclass. We cover best practices, different web skills, and offer mentorship to boost your confidence. Let's learn and grow together!
-
-<a href="https://www.jsmastery.pro/masterclass" target="_blank">
-<img src="https://github.com/sujatagunale/EasyRead/assets/151519281/fed352ad-f27b-400d-9b8f-c7fe628acb84" alt="Project Banner">
-</a>
-
-#
