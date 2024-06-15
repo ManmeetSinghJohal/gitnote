@@ -15,7 +15,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 1. 🌐 [Demo](#demo)
 2. 🤖 [Introduction](#introduction)
-3. 📝 [Description] (#description)
+3. 📝 [Description](#description)
 4. ⚙️ [Tech Stack](#tech-stack)
 5. 🔋 [Features](#features)
 6. 🤸 [Quick Start](#quick-start)
