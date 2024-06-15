@@ -30,7 +30,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 Here is a working live demo:  [GitNote](https://gitnote-six.vercel.app/) 
 
 ## <a name="introduction">🤖 Introduction</a>
-GitNote - Your all-in-one solution for developers, designed to be their second brain, a comprehensive learning tool, and an efficient progress tracker. Seamlessly capture and organize knowledge, set and track learning goals, and monitor study habits with ease. Developed as part of the masterclass, GitNote empowers developers to enhance their productivity and knowledge management skills effortlessly.
+GitNote - Your all-in-one solution for developers, designed to be their second brain, a comprehensive learning tool, and an efficient progress tracker. Seamlessly capture and organize knowledge, set and track learning goals, and monitor study habits with ease.  GitNote empowers developers to enhance their productivity and knowledge management skills effortlessly.
 
 ## <a name="description">📝 Description</a>
 Welcome to my project! Here, I'll provide you with a brief overview of what inspired me to create it, why it solves a problem, and what I've learned throughout its development.
