@@ -47,13 +47,27 @@ Welcome to my project! Here, I'll provide you with a brief overview of what insp
 - Shadcn
 - Tailwind CSS
 
-## 📖 Table of Contents (Optional)
-If your README is long, add a table of contents to make it easy for users to find what they need.
+## <a name="features">🔋 Features</a>
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Credits](#credits)
-- [License](#license)
+👉 **Authentication & Onboarding**: Seamlessly log in or sign up and personalize your experience with smooth onboarding.
+
+👉 **Profile Management**: Easily update profile details and link social media accounts for enhanced connectivity.
+
+👉 **Creating Learning Posts**: Document knowledge, components, or workflows effortlessly, enriched with resources and links.
+
+👉 **Related Posts**: Connect related content seamlessly for improved information accessibility.
+
+👉 **Tagging for Context**: Enhance post context and retrieval efficiency with intuitive tagging.
+
+👉 **Contribution Grid**: Track progress visually as the grid dynamically updates with each post similar to Github.
+
+👉 **Goals & Experience Tracking**: Monitor and reflect on learning goals conveniently from your profile.
+
+👉 **Search & Filter**: Retrieve past notes and tutorials swiftly with global search and filtering.
+
+👉 **Post Collection**: Explore content easily with pagination features, witnessing your learning progression firsthand.
+
+👉 **Responsive**: Ensures seamless functionality and aesthetics across all devices and many more, including code architecture and reusability
 
 ## 🛠️ Setup Project
 To get this project up and running in your development environment, follow these step-by-step instructions.
