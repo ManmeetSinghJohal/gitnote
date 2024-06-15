@@ -19,7 +19,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 4. ⚙️ [Tech Stack](#tech-stack)
 5. 🔋 [Features](#features)
 6. 🛠️ [Setup](#setup)
-7. 🕸️ [Snippets](#snippets)
+7. 🔍 [Usage](#usage)
 8. 🚀 [More](#more)
 9. 🔗 [Links](#links)
 10. 🚀 [More](#more)
@@ -124,7 +124,7 @@ NEXT_PUBLIC_TINY_EDITOR_API_KEY='12kr.........'
 npm run dev
 ```
 
-## 🔍 Usage
+## <a name="usage">🔍 Usage</a>
 
 ### How To Use
 
