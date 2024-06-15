@@ -20,9 +20,11 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 5. 🔋 [Features](#features)
 6. 🛠️ [Setup](#setup)
 7. 🔍 [Usage](#usage)
-8. 🚀 [More](#more)
-9. 🔗 [Links](#links)
-10. 🚀 [More](#more)
+8. ✅ [To-do](#todo)
+9. 📜 [Credits](#credits)
+10. 📚 [References](#references)
+11. 📞 [Contact](#contact)
+12. 📋 [License](#license)
 
 ## <a name="demo">🌐 Demo</a>
 Here is a working live demo:  [GitNote](https://gitnote-six.vercel.app/) 
@@ -166,22 +168,22 @@ If you find a bug (the website couldn't handle the query and / or gave undesired
 
 If you'd like to request a new function, feel free to do so by opening an issue [here](https://github.com/ManmeetSinghJohal/gitnote/issues/new). Please include sample queries and their corresponding results.
 
-## ✅ To-do
+## <a name="todo">✅ To-do</a>
 
 Will update soon!
 
-## 📜 Credits
+## <a name="credits">📜 Credits</a>
 
 None for this project.
 
-## 📚 References
+## <a name="references">📚 References</a>
 
 None at the moment.
 
-## 📞 Contact Me
+## <a name="contact">📞 Contact Me</a>
 
 [![Follow us on LinkedIn](https://img.shields.io/badge/LinkedIn-ManmeetSinghJohal-blue?style=flat&logo=linkedin&logoColor=b0c0c0&labelColor=363D44)](https://www.linkedin.com/in/manmeetsinghjohal/)
 
-## 📋 License
+## <a name="license">📋 License</a>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
