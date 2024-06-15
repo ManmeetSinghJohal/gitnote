@@ -15,19 +15,27 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 1. 🌐 [Demo](#demo)
 2. 🤖 [Introduction](#introduction)
-3. ⚙️ [Tech Stack](#tech-stack)
-4. 🔋 [Features](#features)
-5. 🤸 [Quick Start](#quick-start)
-6. 🕸️ [Snippets](#snippets)
-7. 🚀 [More](#more)
-8. 🔗 [Links](#links)
-9. 🚀 [More](#more)
+3. 📝 [Description] (#description)
+4. ⚙️ [Tech Stack](#tech-stack)
+5. 🔋 [Features](#features)
+6. 🤸 [Quick Start](#quick-start)
+7. 🕸️ [Snippets](#snippets)
+8. 🚀 [More](#more)
+9. 🔗 [Links](#links)
+10. 🚀 [More](#more)
 
 ## <a name="demo">🌐 Demo</a>
 Here is a working live demo:  [GitNote](https://gitnote-six.vercel.app/) 
 
 ## <a name="introduction">🤖 Introduction</a>
 GitNote - Your all-in-one solution for developers, designed to be their second brain, a comprehensive learning tool, and an efficient progress tracker. Seamlessly capture and organize knowledge, set and track learning goals, and monitor study habits with ease. Developed as part of the masterclass, GitNote empowers developers to enhance their productivity and knowledge management skills effortlessly.
+
+## <a name="description">📝 Description</a>
+Welcome to my project! Here, I'll provide you with a brief overview of what inspired me to create it, why it solves a problem, and what I've learned throughout its development.
+- Motivation: I was motivated to build this project to address a specific issue and to enhance my coding skills.
+- Why I Built This Project: My main goal was to create a practical and user-friendly solution to a real-world problem.
+- Problem Solved: This project aims to simplify a particular task, making it more efficient and accessible.
+- What I Learned: Throughout the development process, I gained valuable insights into various technologies and programming concepts.
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 
@@ -38,14 +46,6 @@ GitNote - Your all-in-one solution for developers, designed to be their second b
 - MongoDB
 - Shadcn
 - Tailwind CSS
-
-## 📝 Description
-Welcome to my project! Here, I'll provide you with a brief overview of what inspired me to create it, why it solves a problem, and what I've learned throughout its development.
-- Motivation: I was motivated to build this project to address a specific issue and to enhance my coding skills.
-- Why I Built This Project: My main goal was to create a practical and user-friendly solution to a real-world problem.
-- Problem Solved: This project aims to simplify a particular task, making it more efficient and accessible.
-- What I Learned: Throughout the development process, I gained valuable insights into various technologies and programming concepts.
-
 
 ## 📖 Table of Contents (Optional)
 If your README is long, add a table of contents to make it easy for users to find what they need.
