@@ -18,7 +18,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 3. 📝 [Description](#description)
 4. ⚙️ [Tech Stack](#tech-stack)
 5. 🔋 [Features](#features)
-6. 🤸 [Quick Start](#quick-start)
+6. 🛠️ [Setup](#setup)
 7. 🕸️ [Snippets](#snippets)
 8. 🚀 [More](#more)
 9. 🔗 [Links](#links)
@@ -46,6 +46,11 @@ Welcome to my project! Here, I'll provide you with a brief overview of what insp
 - MongoDB
 - Shadcn
 - Tailwind CSS
+- Mongoose ORM
+- Clerk
+- AuthO 
+- React-Hook form
+- Zod 
 
 ## <a name="features">🔋 Features</a>
 
@@ -69,7 +74,7 @@ Welcome to my project! Here, I'll provide you with a brief overview of what insp
 
 👉 **Responsive**: Ensures seamless functionality and aesthetics across all devices and many more, including code architecture and reusability
 
-## 🛠️ Setup Project
+## <a name="setup">🛠️ Setup Project</a>
 To get this project up and running in your development environment, follow these step-by-step instructions.
 
 ### 🍴 Prerequisites
@@ -78,14 +83,6 @@ We need to install or make sure that these tools are pre-installed on your machi
 
 - [NodeJS](https://nodejs.org/en/download/): It is a JavaScript runtime build. 
 - [Git](https://git-scm.com/downloads): It is an open source version control system. 
-
-## ✨ Features
-
-- Next.js 14, Tailwind responsive web app.
-- Backend built using Next.js, Mongoose ORM, MongoDB and TypeScript seamlessly integrating it with the frontend.
-- Implemented Clerk and AuthO to manage user authentication and maintain persistent session states.
-- React-Hook form for forms.
-- Zod for validations.
 
 ### 🚀 Install Project
 
