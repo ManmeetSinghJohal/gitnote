@@ -27,12 +27,12 @@ const Home = async () => {
       </div>
       <div className="flex w-2/3 flex-col items-center gap-3 lg:gap-6">
         <Link href={"/signin"}>
-          <Button className="transition-transform duration-300 hover:scale-105 w-52 lg:w-96">
+          <Button className="w-52 transition-transform duration-300 hover:scale-105 lg:w-96">
             Sign In
           </Button>
         </Link>
         <Link href={"/signup"}>
-          <Button className="transition-transform duration-300 hover:scale-105 w-52 lg:w-96">
+          <Button className="w-52 transition-transform duration-300 hover:scale-105 lg:w-96">
             Sign up
           </Button>
         </Link>
